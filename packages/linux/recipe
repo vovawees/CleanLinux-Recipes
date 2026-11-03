@@ -1,0 +1,55 @@
+name=linux
+version=7.3.1
+release=1
+summary="The Linux kernel and modules (CleanLinux defaults + profile GPU drivers)"
+homepage=https://www.kernel.org/
+license=(GPL-2.0-only)
+category=kernel
+build_type=custom
+# host tools needed to build: bc perl flex bison openssl libelf (recipes: see ROADMAP)
+makedepends=(bison)
+source=(kernel://kernel/v${version%%.*}.x/linux-$version.tar.xz cleanlinux.config)
+sha256=(fa595aad93734f829c963c2a90ef7c3673224fd7fdae7b49406e397cde2de231 6040dac47dc471c0d254e3e62c1adc0b6757b69deb3d5848b6f9bdcddd6d7231)
+options=(!lto !strip !hardening)
+
+_kmake() {
+	local -a cross=()
+	if ((CROSS)); then cross=(CROSS_COMPILE="$CHOST-"); fi
+	env -u CFLAGS -u CXXFLAGS -u LDFLAGS make ARCH="$KARCH" HOSTCC=gcc "${cross[@]}" "$@"
+}
+
+do_configure() {
+	local v
+	# start from the profile's config (KERNEL_CONFIG=/path/to/config) or the arch defconfig
+	if [[ -n $KERNEL_CONFIG ]]; then cp "$KERNEL_CONFIG" .config; else _kmake defconfig; fi
+	cp "$FILES/cleanlinux.config" "$WORK/fragment.config"
+	for v in $VIDEO_CARDS; do
+		case $v in
+			amd) printf '%s\n' CONFIG_DRM_AMDGPU=m CONFIG_DRM_AMDGPU_CIK=y CONFIG_DRM_AMDGPU_SI=y CONFIG_DRM_AMD_DC=y ;;
+			intel) printf '%s\n' CONFIG_DRM_I915=m CONFIG_DRM_XE=m ;;
+			nouveau) printf '%s\n' CONFIG_DRM_NOUVEAU=m ;;
+			freedreno) printf '%s\n' CONFIG_DRM_MSM=m ;;
+			panfrost) printf '%s\n' CONFIG_DRM_PANFROST=m CONFIG_DRM_PANTHOR=m ;;
+			v3d) printf '%s\n' CONFIG_DRM_V3D=m CONFIG_DRM_VC4=m ;;
+			lima) printf '%s\n' CONFIG_DRM_LIMA=m ;;
+			etnaviv) printf '%s\n' CONFIG_DRM_ETNAVIV=m ;;
+			virgl) printf '%s\n' CONFIG_DRM_VIRTIO_GPU=m ;;
+		esac
+	done >>"$WORK/fragment.config"
+	scripts/kconfig/merge_config.sh -m .config "$WORK/fragment.config"
+	_kmake olddefconfig
+}
+
+do_build() { _kmake all; }
+
+do_install() {
+	local kver image
+	kver=$(_kmake -s kernelrelease)
+	image=$(_kmake -s image_name)
+	_kmake INSTALL_MOD_PATH="$DESTDIR/usr" INSTALL_MOD_STRIP=1 modules_install
+	rm -f "$DESTDIR/usr/lib/modules/$kver/build" "$DESTDIR/usr/lib/modules/$kver/source"
+	install -Dm644 "$image" "$DESTDIR/usr/lib/modules/$kver/vmlinuz"
+	install -Dm644 .config "$DESTDIR/usr/lib/modules/$kver/config"
+	if [[ $KARCH == arm64 ]]; then _kmake INSTALL_DTBS_PATH="$DESTDIR/usr/lib/modules/$kver/dtbs" dtbs_install; fi
+	if [[ -n $KERNEL_CMDLINE ]]; then printf '%s\n' "$KERNEL_CMDLINE" >"$DESTDIR/usr/lib/modules/$kver/cmdline"; fi
+}

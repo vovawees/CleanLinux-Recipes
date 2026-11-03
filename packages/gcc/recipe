@@ -1,0 +1,66 @@
+name=gcc
+version=16.2.0
+release=1
+summary="GNU Compiler Collection: C and C++ compilers and their runtime libraries"
+homepage=https://gcc.gnu.org/
+license=(GPL-3.0-or-later GPL-3.0-with-GCC-exception)
+category=devel
+depends=(glibc binutils zlib-ng zstd)
+features=(-fortran +nls)
+_gmp=6.3.0 _mpfr=4.2.2 _mpc=1.4.1
+source=(
+	gnu://gcc/gcc-$version/gcc-$version.tar.xz
+	gnu://gmp/gmp-$_gmp.tar.xz
+	gnu://mpfr/mpfr-$_mpfr.tar.xz
+	gnu://mpc/mpc-$_mpc.tar.xz
+)
+sha256=(
+	e6738e29597f733270731aa90600f37ffdc045079dfc27ec7e8192cc81085c3e
+	a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898
+	b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01
+	91204cd32f164bd3b7c992d4a6a8ce6519511aadab30f78b6982d0bf8d73e931
+)
+out_of_tree=1
+# GCC builds itself with its own flags; the profile flags still reach the target libraries
+options=(!lto)
+configure_args=(
+	--enable-shared --enable-threads=posix --enable-__cxa_atexit --enable-clocale=gnu
+	--enable-gnu-unique-object --enable-gnu-indirect-function --enable-linker-build-id
+	--enable-default-pie --enable-default-ssp --enable-plugin --enable-lto --enable-checking=release
+	--enable-libstdcxx-backtrace --disable-libstdcxx-pch --disable-multilib --disable-bootstrap
+	--disable-werror --with-system-zlib --with-linker-hash-style=gnu
+)
+
+configure_extra() {
+	local langs=c,c++
+	if use fortran; then langs+=,fortran; fi
+	printf '%s\n' "--enable-languages=$langs" "--target=$CHOST"
+	use_enable nls
+	# Cortex-A53 errata workarounds are on by default for every arm64 build
+	if [[ $CARCH == aarch64 ]]; then printf '%s\n' --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419; fi
+	if ((CROSS)); then printf '%s\n' "--with-build-sysroot=$SYSROOT"; fi
+}
+
+do_prepare() {
+	ln -sfn "../gmp-$_gmp" gmp
+	ln -sfn "../mpfr-$_mpfr" mpfr
+	ln -sfn "../mpc-$_mpc" mpc
+	# merged /usr: 64-bit libraries live in /usr/lib, not lib64
+	case $CARCH in
+		x86_64) sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64 ;;
+		aarch64) sed -i '/mabi.lp64=/s/lib64/lib/' gcc/config/aarch64/t-aarch64-linux ;;
+	esac
+}
+
+do_configure() {
+	export CFLAGS_FOR_TARGET=$CFLAGS CXXFLAGS_FOR_TARGET=$CXXFLAGS
+	bt_configure
+}
+
+do_install() {
+	bt_install
+	ln -sf gcc "$DESTDIR/usr/bin/cc"
+	# let ar/nm/ranlib read LTO objects
+	mkdir -p "$DESTDIR/usr/lib/bfd-plugins"
+	ln -sf "../gcc/$CHOST/$version/liblto_plugin.so" "$DESTDIR/usr/lib/bfd-plugins/"
+}

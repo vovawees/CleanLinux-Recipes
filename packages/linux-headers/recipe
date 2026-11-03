@@ -1,0 +1,21 @@
+name=linux-headers
+version=7.3.1
+release=1
+summary="Linux kernel userspace API headers"
+homepage=https://www.kernel.org/
+license=(GPL-2.0-only)
+category=core
+build_type=custom
+source=(kernel://kernel/v${version%%.*}.x/linux-$version.tar.xz)
+sha256=(fa595aad93734f829c963c2a90ef7c3673224fd7fdae7b49406e397cde2de231)
+options=(!lto)
+
+do_build() {
+	env -u CFLAGS -u CXXFLAGS -u LDFLAGS make ARCH="$KARCH" HOSTCC=gcc headers
+}
+
+do_install() {
+	find usr/include -type f ! -name '*.h' -delete
+	mkdir -p "$DESTDIR/usr"
+	cp -r usr/include "$DESTDIR/usr/"
+}

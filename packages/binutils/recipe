@@ -1,0 +1,22 @@
+name=binutils
+version=2.47
+release=1
+summary="GNU assembler, linker and binary utilities"
+homepage=https://www.gnu.org/software/binutils/
+license=(GPL-3.0-or-later)
+category=devel
+depends=(glibc zlib-ng zstd)
+features=(+nls)
+source=(gnu://binutils/binutils-$version.tar.xz)
+sha256=(154ab23b60070e8f27013c22977f1129425d67d1e8acd6e13010e617811e4cff)
+out_of_tree=1
+configure_args=(
+	--enable-ld=default --enable-plugins --enable-shared --enable-64-bit-bfd --enable-threads
+	--enable-new-dtags --enable-default-hash-style=gnu --enable-deterministic-archives
+	--enable-gprofng=no --disable-werror --with-system-zlib --with-zstd
+)
+configure_extra() {
+	use_enable nls
+	printf '%s\n' "--target=$CHOST"
+}
+make_args=(tooldir=/usr)

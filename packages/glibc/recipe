@@ -1,0 +1,34 @@
+name=glibc
+version=2.44
+release=1
+summary="GNU C library: libc, the dynamic loader and friends"
+homepage=https://www.gnu.org/software/libc/
+license=(LGPL-2.1-or-later GPL-2.0-or-later)
+category=core
+makedepends=(linux-headers)
+source=(gnu://glibc/glibc-$version.tar.xz)
+sha256=(37f600f2bef3c5e8300147059568b2a2e40a7ad6ccc65ce942556d49429cc667)
+out_of_tree=1
+# glibc cannot be built with LTO and brings its own hardening (fortify, stack protector, bind-now)
+options=(!lto !hardening)
+configure_args=(
+	--enable-kernel=5.15 --enable-stack-protector=strong --enable-bind-now --enable-fortify-source
+	--disable-nscd --disable-profile --disable-werror
+	libc_cv_slibdir=/usr/lib
+)
+
+configure_extra() {
+	if ((CROSS)); then printf '%s\n' "--with-headers=$SYSROOT/usr/include"; fi
+}
+
+do_prepare() {
+	# merged /usr layout; the ABI loader paths (/lib64/ld-linux-x86-64.so.2,
+	# /lib/ld-linux-aarch64.so.1) resolve through the symlinks of the filesystem package
+	printf '%s\n' slibdir=/usr/lib rtlddir=/usr/lib sbindir=/usr/bin rootsbindir=/usr/bin >"$BUILD/configparms"
+}
+
+do_install() {
+	bt_install
+	rm -f "$DESTDIR/etc/ld.so.cache"
+	# C.UTF-8 is built in; more locales: localedef -i ru_RU -f UTF-8 ru_RU.UTF-8
+}
