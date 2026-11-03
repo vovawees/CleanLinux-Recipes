@@ -1,0 +1,12 @@
+name=bison
+version=3.8.2
+release=1
+summary="GNU parser generator (yacc replacement)"
+homepage=https://www.gnu.org/software/bison/
+license=(GPL-3.0-or-later)
+category=devel
+depends=(glibc m4)
+features=(+nls)
+source=(gnu://bison/bison-$version.tar.xz)
+sha256=(9bba0214ccf7f1079c5d59210045227bcf619519840ebfa80cd3849cff5a5bf2)
+configure_extra() { use_enable nls; }

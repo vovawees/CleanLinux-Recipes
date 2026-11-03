@@ -1,0 +1,11 @@
+name=patch
+version=2.8.1
+release=1
+summary="GNU patch: apply diff files"
+homepage=https://www.gnu.org/software/patch/
+license=(GPL-3.0-or-later)
+category=devel
+depends=(glibc)
+source=(gnu://patch/patch-$version.tar.xz)
+sha256=(3240c7959c5347c8ed347e3c4201c0337bf4240d5cf09d68889e58eeaba30e17)
+configure_args=(--disable-xattr)

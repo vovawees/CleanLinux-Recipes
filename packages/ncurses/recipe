@@ -1,0 +1,42 @@
+name=ncurses
+version=6.6
+release=1
+summary="Terminal handling library (wide character build)"
+homepage=https://invisible-island.net/ncurses/
+license=(MIT-open-group)
+category=core
+depends=(glibc)
+source=(gnu://ncurses/ncurses-$version.tar.gz)
+sha256=(355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11)
+configure_args=(
+	--with-shared --without-debug --without-normal --without-ada --enable-widec
+	--with-cxx-binding --with-cxx-shared --enable-pc-files --with-pkg-config-libdir=/usr/lib/pkgconfig
+	--with-manpage-format=normal --disable-stripping --without-tests AWK=awk
+)
+
+do_build() {
+	if ((CROSS)); then
+		# a host tic compiles the terminfo database during install
+		mkdir -p "$WORK/host-tic"
+		(
+			cd "$WORK/host-tic"
+			env -u CFLAGS -u CXXFLAGS -u LDFLAGS CC=gcc CXX=g++ AR=ar RANLIB=ranlib "$SRC/configure" AWK=awk
+			make -C include
+			make -C progs tic
+		)
+	fi
+	bt_build
+}
+
+do_install() {
+	local -a tic=() l
+	if ((CROSS)); then tic=(TIC_PATH="$WORK/host-tic/progs/tic"); fi
+	make DESTDIR="$DESTDIR" "${tic[@]}" install
+	# programs asking for the narrow libraries get the wide ones
+	for l in ncurses form panel menu; do
+		printf 'INPUT(-l%sw)\n' "$l" >"$DESTDIR/usr/lib/lib$l.so"
+		ln -sf "${l}w.pc" "$DESTDIR/usr/lib/pkgconfig/$l.pc"
+	done
+	printf 'INPUT(-lncursesw)\n' >"$DESTDIR/usr/lib/libcursesw.so"
+	ln -sf libncurses.so "$DESTDIR/usr/lib/libcurses.so"
+}

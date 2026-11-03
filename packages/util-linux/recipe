@@ -1,0 +1,22 @@
+name=util-linux
+version=2.42.4
+release=1
+summary="Core Linux system utilities: mount, fdisk, lsblk, agetty, kill, ..."
+homepage=https://github.com/util-linux/util-linux
+license=(GPL-2.0-or-later LGPL-2.1-or-later BSD-3-Clause)
+category=core
+depends=(glibc ncurses readline zlib-ng)
+features=(+nls)
+source=(kernel://utils/util-linux/v${version%.*}/util-linux-$version.tar.xz)
+sha256=(fbd62a100ab7bb8746ba0661255c3c48185b1e9021507c624da01fbc696330ec)
+# login/su/runuser need PAM (not packaged yet); no udev/systemd on CleanLinux
+configure_args=(
+	--disable-static --enable-fs-paths-default=/usr/bin:/usr/local/bin
+	--disable-login --disable-su --disable-runuser --disable-chfn-chsh --disable-setpriv
+	--disable-wall --disable-write --disable-liblastlog2 --disable-pylibmount
+	--disable-makeinstall-chown --disable-makeinstall-setuid --disable-asciidoc
+	--without-python --without-systemd --without-udev --without-selinux --without-audit
+	--without-cap-ng --without-libmagic --without-econf --without-cryptsetup --without-btrfs
+	--with-ncursesw --with-readline ADJTIME_PATH=/var/lib/hwclock/adjtime
+)
+configure_extra() { use_enable nls; }

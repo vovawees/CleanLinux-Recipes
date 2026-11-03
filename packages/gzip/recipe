@@ -1,0 +1,10 @@
+name=gzip
+version=1.15
+release=1
+summary="GNU gzip compression utility"
+homepage=https://www.gnu.org/software/gzip/
+license=(GPL-3.0-or-later)
+category=core
+depends=(glibc bash)
+source=(gnu://gzip/gzip-$version.tar.xz)
+sha256=(9aa0cc780dec156b8282844833b342ab7cb08c25d2cd9a1869cdd0df31deff48)

@@ -1,0 +1,18 @@
+name=tar
+version=1.35
+release=1
+summary="GNU tar archiver"
+homepage=https://www.gnu.org/software/tar/
+license=(GPL-3.0-or-later)
+category=core
+depends=(glibc)
+features=(+nls)
+source=(gnu://tar/tar-$version.tar.xz)
+sha256=(4d62ff37342ec7aed748535323930c7cf94acf71c3591882b26a7ea50f3edc16)
+configure_args=(--disable-acl --without-selinux --without-xattrs --with-zstd=zstd)
+configure_extra() { use_enable nls; }
+
+do_configure() {
+	export FORCE_UNSAFE_CONFIGURE=1
+	bt_configure
+}

@@ -1,0 +1,12 @@
+name=m4
+version=1.4.21
+release=1
+summary="GNU m4 macro processor"
+homepage=https://www.gnu.org/software/m4/
+license=(GPL-3.0-or-later)
+category=devel
+depends=(glibc)
+features=(+nls)
+source=(gnu://m4/m4-$version.tar.xz)
+sha256=(f25c6ab51548a73a75558742fb031e0625d6485fe5f9155949d6486a2408ab66)
+configure_extra() { use_enable nls; }

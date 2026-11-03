@@ -1,0 +1,15 @@
+name=diffutils
+version=3.12
+release=1
+summary="GNU diff, cmp, diff3 and sdiff"
+homepage=https://www.gnu.org/software/diffutils/
+license=(GPL-3.0-or-later)
+category=core
+depends=(glibc)
+features=(+nls)
+source=(gnu://diffutils/diffutils-$version.tar.xz)
+sha256=(7c8b7f9fc8609141fdea9cece85249d308624391ff61dedaf528fcb337727dfd)
+configure_extra() {
+	use_enable nls
+	if ((CROSS)); then echo gl_cv_func_strcasecmp_works=y; fi
+}

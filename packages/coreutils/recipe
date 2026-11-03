@@ -1,0 +1,20 @@
+name=coreutils
+version=9.12
+release=1
+summary="GNU core utilities: ls, cp, mv, cat, ..."
+homepage=https://www.gnu.org/software/coreutils/
+license=(GPL-3.0-or-later)
+category=core
+depends=(glibc)
+features=(+nls)
+source=(gnu://coreutils/coreutils-$version.tar.xz)
+sha256=(a480198559733e9b3da999e90543ac6f888a2caa544d8d664c5a1f17e528e210)
+# kill comes from util-linux, uptime from procps
+configure_args=(--enable-no-install-program=kill,uptime --without-openssl --without-libgmp
+	--disable-acl --disable-xattr --without-selinux)
+configure_extra() { use_enable nls; }
+
+do_configure() {
+	export FORCE_UNSAFE_CONFIGURE=1
+	bt_configure
+}
