@@ -1,0 +1,14 @@
+name=libxcrypt
+version=4.5.2
+release=1
+summary="Modern crypt(3): yescrypt, bcrypt and SHA-crypt password hashing (libcrypt)"
+homepage=https://github.com/besser82/libxcrypt
+license=(LGPL-2.1-or-later)
+category=core
+depends=(glibc)
+source=(https://github.com/besser82/libxcrypt/releases/download/v$version/libxcrypt-$version.tar.xz)
+sha256=(71513a31c01a428bccd5367a32fd95f115d6dac50fb5b60c779d5c7942aec071)
+# glibc no longer ships libcrypt; PAM and shadow hash passwords through this one. Only strong
+# hashes and the glibc ones (for old /etc/shadow entries), no obsolete API for old binaries.
+configure_args=(--disable-static --enable-hashes=strong,glibc --enable-obsolete-api=no
+	--disable-failure-tokens --disable-werror)
