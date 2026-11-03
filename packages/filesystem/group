@@ -19,6 +19,8 @@ input:x:24:
 mail:x:34:
 kvm:x:61:
 render:x:62:
+clock:x:63:
+sgx:x:64:
 wheel:x:97:
 users:x:999:
 nogroup:x:65534:
