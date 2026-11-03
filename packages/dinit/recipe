@@ -11,8 +11,10 @@ source=(https://github.com/davmac314/dinit/releases/download/v$version/dinit-$ve
 sha256=(959b35c171452ecfbc09379b516517dadd675350eebc57ca54aebedda05d9adf)
 
 do_configure() {
+	# Passing CXXFLAGS turns off dinit's own flag detection, including -std=c++11. GCC 16
+	# defaults to C++20, where std::allocator<T>::construct (used by dinit-util.h) is gone.
 	local -a args=(--prefix=/usr --sbindir=/usr/bin --mandir=/usr/share/man --disable-strip
-		--disable-capabilities "CXX=$CXX" "CXXFLAGS=$CXXFLAGS" "LDFLAGS=$LDFLAGS")
+		--disable-capabilities "CXX=$CXX" "CXXFLAGS=-std=c++11 $CXXFLAGS" "LDFLAGS=$LDFLAGS")
 	if ((CROSS)); then args+=(--platform=Linux CXX_FOR_BUILD=g++ CXXFLAGS_FOR_BUILD=-O2 LDFLAGS_FOR_BUILD=); fi
 	./configure "${args[@]}"
 }
