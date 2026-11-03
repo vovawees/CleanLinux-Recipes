@@ -9,6 +9,8 @@ GNU_MIRROR=${GNU_MIRROR:-https://ftpmirror.gnu.org/gnu}
 KERNEL_MIRROR=${KERNEL_MIRROR:-https://cdn.kernel.org/pub/linux}
 BUILD_TYPES=(autotools meson cmake make cargo python custom meta)
 OPTIONS=('!lto' '!strip' '!hardening' '!prune' '!linker' staticlibs emptydirs o3)
+# layers of the base (see README): spin and user overlays use 'extra', not this repository
+CATEGORIES=(core devel meta kernel firmware drivers platform)
 FETCH=0
 if [[ ${1:-} == --fetch ]]; then FETCH=1 && shift; fi
 pkgs=("$@")
@@ -42,7 +44,7 @@ check_one() (
 		echo "$1: syntax error"
 		exit 0
 	}
-	name='' version='' release=1 summary='' homepage='' build_type=autotools
+	name='' version='' release=1 summary='' homepage='' category='' build_type=autotools
 	license=() source=() sha256=() depends=() makedepends=() features=() patches=() options=()
 	CARCH=x86_64 CHOST=x86_64-cleanlinux-linux-gnu
 	# shellcheck source=/dev/null
@@ -53,6 +55,11 @@ check_one() (
 	[[ -n $summary ]] || echo "$1: summary is empty"
 	((${#license[@]})) || echo "$1: license is empty"
 	[[ $homepage == http*://* ]] || echo "$1: homepage must be a URL"
+	if [[ $category == extra ]]; then
+		echo "$1: category 'extra' is for spin and user overlays, not for the base repository"
+	elif ! in_list "$category" "${CATEGORIES[@]}"; then
+		echo "$1: category must be one of: ${CATEGORIES[*]} (got '$category')"
+	fi
 	in_list "$build_type" "${BUILD_TYPES[@]}" || echo "$1: unknown build_type '$build_type'"
 	if [[ $build_type != meta ]] && ((${#source[@]} == 0)); then echo "$1: no sources"; fi
 	((${#source[@]} == ${#sha256[@]})) || echo "$1: ${#source[@]} sources but ${#sha256[@]} sha256 sums"

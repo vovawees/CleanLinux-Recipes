@@ -50,7 +50,8 @@ meson_extra() { meson_feature zlib; meson_feature lzma; meson_feature lz4; }
 | Переменная | Смысл |
 |---|---|
 | `name`, `version`, `release` | имя (= имя каталога), версия upstream, номер сборки рецепта |
-| `summary`, `homepage`, `license`, `category` | описание |
+| `summary`, `homepage`, `license` | описание |
+| `category` | слой базы: `core` `devel` `meta` `kernel` `firmware` `drivers` `platform` (см. «Категории») |
 | `depends`, `makedepends` | зависимости времени работы / только сборки; `pkg:feat`, `pkg:!feat` — условные |
 | `features` | переключатели: `+feat` включена, `-feat` выключена по умолчанию |
 | `build_type` | `autotools` `meson` `cmake` `make` `cargo` `python` `custom` `meta` |
@@ -62,6 +63,23 @@ meson_extra() { meson_feature zlib; meson_feature lzma; meson_feature lz4; }
 | `backup` | конфиги, которые нельзя перезаписывать (новая версия ляжет как `.burnnew`) |
 
 Функции (все необязательны, выполняются в каталоге исходников): `do_prepare`, `do_configure`, `do_build`, `do_check`, `do_install`, `post_install`, а также `configure_extra`/`meson_extra`/`cmake_extra` (печатают по аргументу в строке). Внутри доступны `$SRC $BUILD $DESTDIR $FILES $CC $CFLAGS $LDFLAGS $CHOST $CARCH $KARCH $CROSS $JOBS $VIDEO_CARDS`, помощники `use`, `use_enable`, `use_with`, `meson_feature`, `meson_use`, `cmake_use` и стандартные шаги `bt_configure`, `bt_build`, `bt_install`.
+
+## Категории
+
+Категория — это слой базы, к которому относится пакет ([SCOPE.md](https://github.com/vovawees/CleanLinux/blob/main/docs/SCOPE.md)):
+
+| Категория | Слой | Что там |
+|---|---|---|
+| `core` | core | рантайм базовой системы: libc, init, утилиты и библиотеки, которые им нужны |
+| `devel` | core | тулчейн и инструменты сборки (`base-devel`): CleanLinux собирает всё из исходников |
+| `meta` | core | мета-пакеты (`base`, `base-devel`) |
+| `kernel` | hardware | ядро и то, что собирается вместе с ним |
+| `firmware` | hardware | firmware из upstream; на устройство ставится только нужное его профилю |
+| `drivers` | hardware | драйверы и поддержка железа в userspace: Mesa, ALSA UCM, правила и quirks устройств |
+| `platform` | platform | нейтральный фундамент для сборок: Wayland, libinput, seatd, D-Bus, PipeWire, … — в `base` не входит |
+
+DE, WM, приложений и игр здесь нет: их рецепты живут в репозиториях сборок и личных оверлеях, с категорией `extra`.
+`tools/lint.sh` не пропускает в этот репозиторий рецепты без категории слоя.
 
 ## Каналы (rolling release+++)
 
@@ -93,38 +111,38 @@ Upstream определяется по ссылкам самого рецепт�
 
 ## Пакеты
 
-| Пакет | Версия | Сборка | Описание |
-|---|---|---|---|
-| `base-devel` | 2026.1 | meta | Toolchain for building recipes natively (meta package) |
-| `base` | 2026.1 | meta | Minimal CleanLinux userland (meta package) |
-| `bash` | 5.3.20 | autotools | GNU Bourne Again shell (with all upstream patches) |
-| `binutils` | 2.47 | autotools | GNU assembler, linker and binary utilities |
-| `bison` | 3.8.2 | autotools | GNU parser generator (yacc replacement) |
-| `coreutils` | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
-| `diffutils` | 3.12 | autotools | GNU diff, cmp, diff3 and sdiff |
-| `dinit` | 0.22.1 | custom | dinit: fast, small service manager and init with dependency handling |
-| `filesystem` | 2026.1 | custom | CleanLinux base layout: merged /usr, default /etc files, os-release |
-| `findutils` | 4.11.0 | autotools | GNU find, xargs and locate |
-| `gawk` | 5.4.1 | autotools | GNU awk |
-| `gcc` | 16.2.0 | autotools | GNU Compiler Collection: C and C++ compilers and their runtime libraries |
-| `glibc` | 2.44 | autotools | GNU C library: libc, the dynamic loader and friends |
-| `grep` | 3.12 | autotools | GNU grep: search text with regular expressions |
-| `gzip` | 1.15 | autotools | GNU gzip compression utility |
-| `linux-headers` | 7.3.1 | custom | Linux kernel userspace API headers |
-| `linux` | 7.3.1 | custom | The Linux kernel and modules (CleanLinux defaults + profile GPU drivers) |
-| `lz4` | 1.10.0 | make | Extremely fast compression (library and lz4 tool) |
-| `m4` | 1.4.21 | autotools | GNU m4 macro processor |
-| `make` | 4.4.1 | autotools | GNU make |
-| `ncurses` | 6.6 | autotools | Terminal handling library (wide character build) |
-| `patch` | 2.8.1 | autotools | GNU patch: apply diff files |
-| `pkgconf` | 3.0.10 | meson | pkg-config implementation (also installed as pkg-config) |
-| `readline` | 8.3.6 | autotools | GNU readline: line editing and history for interactive programs |
-| `sed` | 4.10 | autotools | GNU stream editor |
-| `tar` | 1.35 | autotools | GNU tar archiver |
-| `util-linux` | 2.42.4 | autotools | Core Linux system utilities: mount, fdisk, lsblk, agetty, kill, ... |
-| `xz` | 5.8.4 | autotools | XZ Utils: LZMA/xz compression library and tools |
-| `zlib-ng` | 2.3.3 | cmake | zlib replacement with SIMD optimisations (zlib-compatible API and ABI) |
-| `zstd` | 1.5.7 | meson | Zstandard: fast real-time compression (library and zstd tool) |
+| Пакет | Категория | Версия | Сборка | Описание |
+|---|---|---|---|---|
+| `base-devel` | meta | 2026.1 | meta | Toolchain for building recipes natively (meta package) |
+| `base` | meta | 2026.1 | meta | Minimal CleanLinux userland (meta package) |
+| `bash` | core | 5.3.20 | autotools | GNU Bourne Again shell (with all upstream patches) |
+| `binutils` | devel | 2.47 | autotools | GNU assembler, linker and binary utilities |
+| `bison` | devel | 3.8.2 | autotools | GNU parser generator (yacc replacement) |
+| `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
+| `diffutils` | core | 3.12 | autotools | GNU diff, cmp, diff3 and sdiff |
+| `dinit` | core | 0.22.1 | custom | dinit: fast, small service manager and init with dependency handling |
+| `filesystem` | core | 2026.1 | custom | CleanLinux base layout: merged /usr, default /etc files, os-release |
+| `findutils` | core | 4.11.0 | autotools | GNU find, xargs and locate |
+| `gawk` | core | 5.4.1 | autotools | GNU awk |
+| `gcc` | devel | 16.2.0 | autotools | GNU Compiler Collection: C and C++ compilers and their runtime libraries |
+| `glibc` | core | 2.44 | autotools | GNU C library: libc, the dynamic loader and friends |
+| `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |
+| `gzip` | core | 1.15 | autotools | GNU gzip compression utility |
+| `linux-headers` | core | 7.3.1 | custom | Linux kernel userspace API headers |
+| `linux` | kernel | 7.3.1 | custom | The Linux kernel and modules (CleanLinux defaults + profile GPU drivers) |
+| `lz4` | core | 1.10.0 | make | Extremely fast compression (library and lz4 tool) |
+| `m4` | devel | 1.4.21 | autotools | GNU m4 macro processor |
+| `make` | devel | 4.4.1 | autotools | GNU make |
+| `ncurses` | core | 6.6 | autotools | Terminal handling library (wide character build) |
+| `patch` | devel | 2.8.1 | autotools | GNU patch: apply diff files |
+| `pkgconf` | devel | 3.0.10 | meson | pkg-config implementation (also installed as pkg-config) |
+| `readline` | core | 8.3.6 | autotools | GNU readline: line editing and history for interactive programs |
+| `sed` | core | 4.10 | autotools | GNU stream editor |
+| `tar` | core | 1.35 | autotools | GNU tar archiver |
+| `util-linux` | core | 2.42.4 | autotools | Core Linux system utilities: mount, fdisk, lsblk, agetty, kill, ... |
+| `xz` | core | 5.8.4 | autotools | XZ Utils: LZMA/xz compression library and tools |
+| `zlib-ng` | core | 2.3.3 | cmake | zlib replacement with SIMD optimisations (zlib-compatible API and ABI) |
+| `zstd` | core | 1.5.7 | meson | Zstandard: fast real-time compression (library and zstd tool) |
 
 ## English
 

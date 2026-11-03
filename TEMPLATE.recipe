@@ -7,7 +7,7 @@ release=1
 summary="One line: what it is"
 homepage=https://example.org/
 license=(MIT)
-category=extra
+category=core                       # core devel meta kernel firmware drivers platform (README)
 depends=(glibc zlib-ng:zlib)        # "pkg:feature" = only when the feature is on
 makedepends=(pkgconf)               # build-time only (skipped with --host-deps / cross builds)
 features=(+zlib -doc)               # +on by default, -off by default
