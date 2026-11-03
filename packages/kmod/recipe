@@ -1,0 +1,17 @@
+name=kmod
+version=34.3
+release=1
+summary="Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo"
+homepage=https://github.com/kmod-project/kmod
+license=(LGPL-2.1-or-later GPL-2.0-or-later)
+category=core
+depends=(glibc zstd:zstd xz:xz zlib-ng:zlib)
+features=(+zstd +xz +zlib)
+build_type=meson
+source=(kernel://utils/kernel/kmod/kmod-$version.tar.xz)
+sha256=(985554de49c21a58abd68c6cda2251384e1e5bb08b3b14c7f02b51f4c90c2958)
+# merged /usr: modules in /usr/lib/modules, configuration in /usr/lib/{modprobe,depmod}.d and /etc;
+# module signatures are not checked by kmod itself (no openssl), no man pages or completions
+meson_args=(-Dmoduledir=/usr/lib/modules -Dopenssl=disabled -Dmanpages=false -Ddocs=false
+	-Dbuild-tests=false -Dbashcompletiondir=no -Dfishcompletiondir=no -Dzshcompletiondir=no)
+meson_extra() { meson_feature zstd; meson_feature xz; meson_feature zlib; }

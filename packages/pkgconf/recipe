@@ -1,6 +1,6 @@
 name=pkgconf
 version=3.0.10
-release=1
+release=2
 summary="pkg-config implementation (also installed as pkg-config)"
 homepage=https://github.com/pkgconf/pkgconf
 license=(ISC)
@@ -9,7 +9,6 @@ depends=(glibc)
 build_type=meson
 source=(https://github.com/pkgconf/pkgconf/releases/download/pkgconf-$version/pkgconf-$version.tar.xz)
 sha256=(9371b2f6372da574d4c6dc96fe9b1463037bcf6afcb6671c1555afde7b17e2de)
-meson_args=(-Dtests=disabled)
 
 do_install() {
 	bt_install

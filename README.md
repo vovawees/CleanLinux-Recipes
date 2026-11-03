@@ -128,6 +128,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `glibc` | core | 2.44 | autotools | GNU C library: libc, the dynamic loader and friends |
 | `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |
 | `gzip` | core | 1.15 | autotools | GNU gzip compression utility |
+| `kmod` | core | 34.3 | meson | Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo |
 | `linux-headers` | core | 7.3.1 | custom | Linux kernel userspace API headers |
 | `linux` | kernel | 7.3.1 | custom | The Linux kernel and modules (CleanLinux defaults + profile GPU drivers) |
 | `lz4` | core | 1.10.0 | make | Extremely fast compression (library and lz4 tool) |
