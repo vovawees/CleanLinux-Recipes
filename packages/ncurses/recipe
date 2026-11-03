@@ -14,6 +14,15 @@ configure_args=(
 	--with-manpage-format=normal --disable-stripping --without-tests AWK=awk
 )
 
+# shellcheck disable=SC2016 # literal ${cf_includedir} from configure
+do_prepare() {
+	# configure's "does $CXX work" test adds -I$includedir, i.e. the *host* /usr/include, so the
+	# check fails when cross-compiling and the C++ binding is built with an empty $CXX.
+	# -I= resolves the path inside the compiler's sysroot (unchanged for native builds).
+	sed -i 's|CPPFLAGS="$CPPFLAGS -I${cf_includedir}"|CPPFLAGS="$CPPFLAGS -I=${cf_includedir}"|' configure
+	grep -qF -- '-I=${cf_includedir}' configure
+}
+
 do_build() {
 	if ((CROSS)); then
 		# a host tic compiles the terminfo database during install
