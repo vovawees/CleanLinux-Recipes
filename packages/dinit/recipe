@@ -1,0 +1,21 @@
+name=dinit
+version=0.22.1
+release=1
+summary="dinit: fast, small service manager and init with dependency handling"
+homepage=https://davmac.org/projects/dinit/
+license=(Apache-2.0)
+category=core
+depends=(glibc)
+build_type=custom
+source=(https://github.com/davmac314/dinit/releases/download/v$version/dinit-$version.tar.xz)
+sha256=(959b35c171452ecfbc09379b516517dadd675350eebc57ca54aebedda05d9adf)
+
+do_configure() {
+	local -a args=(--prefix=/usr --sbindir=/usr/bin --mandir=/usr/share/man --disable-strip
+		--disable-capabilities "CXX=$CXX" "CXXFLAGS=$CXXFLAGS" "LDFLAGS=$LDFLAGS")
+	if ((CROSS)); then args+=(--platform=Linux CXX_FOR_BUILD=g++ CXXFLAGS_FOR_BUILD=-O2 LDFLAGS_FOR_BUILD=); fi
+	./configure "${args[@]}"
+}
+do_build() { make; }
+do_check() { make check; }
+do_install() { make DESTDIR="$DESTDIR" install; }
