@@ -52,8 +52,10 @@ jobs:
           else
             changed=$(git diff --name-only "$base" HEAD -- packages | cut -d/ -f2 | sort -u)
           fi
-          pkgs=""
-          for p in $changed; do [ -f "packages/$p/recipe" ] && pkgs="$pkgs $p"; done
-          if [ -z "$pkgs" ]; then echo "no recipe changed"; exit 0; fi
-          echo "verifying:$pkgs"
-          tools/lint.sh --fetch $pkgs
+          pkgs=()
+          for p in $changed; do
+            if [ -f "packages/$p/recipe" ]; then pkgs+=("$p"); fi
+          done
+          if [ ${#pkgs[@]} -eq 0 ]; then echo "no recipe changed"; exit 0; fi
+          echo "verifying: ${pkgs[*]}"
+          tools/lint.sh --fetch "${pkgs[@]}"
