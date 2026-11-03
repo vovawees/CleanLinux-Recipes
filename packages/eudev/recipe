@@ -1,0 +1,20 @@
+name=eudev
+version=3.3.0
+release=1
+summary="udev without systemd: device manager (udevd, udevadm), rules, hwdb and libudev"
+homepage=https://github.com/eudev-project/eudev
+license=(GPL-2.0-or-later LGPL-2.1-or-later)
+category=core
+depends=(glibc kmod util-linux)
+makedepends=(gperf)
+source=(https://github.com/eudev-project/eudev/releases/download/v$version/eudev-$version.tar.gz)
+sha256=(8fba6e4f49ea4b1938828a3c2e7cc48874816c68621386e527076b6477f5d6ef)
+# merged /usr: rules, helpers and hwdb.d in /usr/lib/udev, udevd and udevadm in /usr/bin.
+# libinput, Mesa and every desktop need libudev; modules load through libkmod, blkid probes
+# filesystems for /dev/disk/by-*. dinit starts it: services in cleanlinux-boot.
+configure_args=(
+	--with-rootprefix=/usr --with-rootlibdir=/usr/lib --with-rootlibexecdir=/usr/lib/udev
+	--with-rootrundir=/run --enable-kmod --enable-blkid --enable-hwdb --disable-rule-generator
+	--disable-selinux --disable-manpages --disable-static
+)
+backup=(etc/udev/udev.conf)
