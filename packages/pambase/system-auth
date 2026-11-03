@@ -1,0 +1,16 @@
+#%PAM-1.0
+# CleanLinux: the shared authentication stack, included by the other services.
+# Change it by copying this file to /etc/pam.d/system-auth (it takes precedence).
+auth       required   pam_env.so
+auth       required   pam_unix.so     try_first_pass nullok
+auth       optional   pam_permit.so
+
+account    required   pam_unix.so
+account    optional   pam_permit.so
+
+password   required   pam_unix.so     try_first_pass nullok shadow yescrypt
+password   optional   pam_permit.so
+
+session    required   pam_limits.so
+session    required   pam_unix.so
+session    optional   pam_permit.so

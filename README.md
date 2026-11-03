@@ -139,6 +139,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `m4` | devel | 1.4.21 | autotools | GNU m4 macro processor |
 | `make` | devel | 4.4.1 | autotools | GNU make |
 | `ncurses` | core | 6.6 | autotools | Terminal handling library (wide character build) |
+| `pambase` | core | 2026.1 | custom | CleanLinux PAM stacks: system-auth, system-login, system-services, other |
 | `patch` | devel | 2.8.1 | autotools | GNU patch: apply diff files |
 | `pkgconf` | devel | 3.0.10 | meson | pkg-config implementation (also installed as pkg-config) |
 | `readline` | core | 8.3.6 | autotools | GNU readline: line editing and history for interactive programs |
