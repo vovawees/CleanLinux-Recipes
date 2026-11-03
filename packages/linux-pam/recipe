@@ -1,0 +1,28 @@
+name=linux-pam
+version=1.7.3
+release=1
+summary="Linux-PAM: pluggable authentication modules (pam_unix, pam_limits, pam_env, ...)"
+homepage=https://github.com/linux-pam/linux-pam
+license=(BSD-3-Clause GPL-2.0-or-later)
+category=core
+depends=(glibc libxcrypt)
+features=(+nls)
+build_type=meson
+source=(https://github.com/linux-pam/linux-pam/releases/download/v$version/Linux-PAM-$version.tar.xz)
+sha256=(2ce4765fd49df6693771ef2941f81e33d8ee14b94a81a5c7b369aa3b137b85a5)
+# no logind/elogind, audit, SELinux, NIS or libeconf in the base; the stacks of the system
+# (system-auth, system-login, ...) come with pambase, services find them in /usr/lib/pam.d
+meson_args=(-Dpam_unix=enabled -Dsecuredir=/usr/lib/security -Ddocs=disabled -Dexamples=false
+	-Dxtests=false)
+# the defaults of the modules live in /usr/share/pam/security (vendordir): a file of the same
+# name in /etc/security replaces one
+backup=(etc/environment)
+meson_extra() { meson_feature nls i18n; }
+
+post_install() {
+	# PAM reads /etc/environment through pam_env; an empty one is a valid start
+	[[ -e $DESTDIR/etc/environment ]] || install -Dm644 /dev/null "$DESTDIR/etc/environment"
+	# unix_chkpwd checks the password of the calling user (screen lockers) against /etc/shadow
+	chmod 4755 "$DESTDIR/usr/bin/unix_chkpwd"
+	rm -rf "$DESTDIR/usr/lib/systemd"
+}

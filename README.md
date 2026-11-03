@@ -133,6 +133,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `kmod` | core | 34.3 | meson | Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo |
 | `libxcrypt` | core | 4.5.2 | autotools | Modern crypt(3): yescrypt, bcrypt and SHA-crypt password hashing (libcrypt) |
 | `linux-headers` | core | 7.3.1 | custom | Linux kernel userspace API headers |
+| `linux-pam` | core | 1.7.3 | meson | Linux-PAM: pluggable authentication modules (pam_unix, pam_limits, pam_env, ...) |
 | `linux` | kernel | 7.3.1 | custom | The Linux kernel and modules (CleanLinux defaults + profile GPU drivers) |
 | `lz4` | core | 1.10.0 | make | Extremely fast compression (library and lz4 tool) |
 | `m4` | devel | 1.4.21 | autotools | GNU m4 macro processor |
