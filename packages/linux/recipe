@@ -1,6 +1,6 @@
 name=linux
 version=7.3.1
-release=3
+release=4
 summary="The Linux kernel and modules (CleanLinux defaults + profile GPU drivers)"
 homepage=https://www.kernel.org/
 license=(GPL-2.0-only)
@@ -12,7 +12,7 @@ features=(-sched_ext)
 source=(kernel://kernel/v${version%%.*}.x/linux-$version.tar.xz cleanlinux.config)
 sha256=(
 	fa595aad93734f829c963c2a90ef7c3673224fd7fdae7b49406e397cde2de231
-	59f47adbaca300ff13120e0b455edbec07cbb34344d00806d2f1c57d690a87e5
+	d1b6916a3808b2cbea485be4f49cb5890e2252ed77d4c11ac83d5f99c14b122a
 )
 options=(!lto !strip !hardening)
 
@@ -35,7 +35,7 @@ do_configure() {
 				# zstd kernel; AMD: amd-pstate with EPP (active mode), s2idle (PMC), sensors (SFH),
 				# the power framework (PMF, needs the PSP TEE); handheld controllers and platform
 				# drivers (ROG Ally, Legion Go, MSI Claw, AYANEO, OneXPlayer) as modules
-				printf '%s\n' CONFIG_KERNEL_ZSTD=y \
+				printf '%s\n' CONFIG_KERNEL_ZSTD=y CONFIG_SERIAL_8250=y CONFIG_SERIAL_8250_CONSOLE=y CONFIG_RTC_DRV_CMOS=y \
 					CONFIG_X86_AMD_PSTATE=y CONFIG_X86_AMD_PSTATE_DEFAULT_MODE=3 CONFIG_AMD_PMC=m \
 					CONFIG_AMD_SFH_HID=m CONFIG_CRYPTO_DEV_CCP=y CONFIG_CRYPTO_DEV_CCP_DD=m CONFIG_CRYPTO_DEV_SP_PSP=y \
 					CONFIG_TEE=m CONFIG_AMDTEE=m CONFIG_AMD_PMF=m \
