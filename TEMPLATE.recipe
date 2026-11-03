@@ -1,6 +1,6 @@
 # packages/<name>/recipe - copy, fill in, then:
-#   broom -R packages checksum --write <name>   (real sha256 from the downloaded files)
-#   broom -R packages lint <name> && broom -R packages build <name>
+#   burn -R packages checksum --write <name>   (real sha256 from the downloaded files)
+#   burn -R packages lint <name> && burn -R packages build <name>
 name=example
 version=1.2.3
 release=1
@@ -13,7 +13,7 @@ makedepends=(pkgconf)               # build-time only (skipped with --host-deps 
 features=(+zlib -doc)               # +on by default, -off by default
 build_type=meson                    # autotools meson cmake make cargo python custom meta
 source=(https://example.org/releases/example-$version.tar.xz)
-sha256=(SKIP)                       # replaced by: broom checksum --write
+sha256=(SKIP)                       # replaced by: burn checksum --write
 patches=()                          # files in patches/ (or downloaded sources)
 meson_args=(-Dtests=false)
 meson_extra() {                     # one argument per line, may use features

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Self-contained recipe checker (no broom needed), used by CI.
+# Self-contained recipe checker (no burn needed), used by CI.
 #   tools/lint.sh [--fetch] [pkg...]
 # --fetch also downloads the remote sources and verifies their sha256.
 set -euo pipefail

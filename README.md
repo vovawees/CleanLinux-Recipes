@@ -2,13 +2,13 @@
 
 Рецепты пакетов для **CleanLinux** — экспериментального Linux «с нуля» (не LFS) для портативных консолей и ПК на **x86_64 и arm64**.
 
-Это аналог AUR, но для всей системы: **здесь нет ни одного бинарника** — только ссылки на исходники upstream, их sha256 и инструкции сборки. Всё собирает пакетный менеджер `broom` прямо на машине пользователя под её процессор и видеокарту (профили `steam-deck`, `rog-ally`, `mangmi-air-x`, `raspberry-pi-5`, `native`, …).
+Это аналог AUR, но для всей системы: **здесь нет ни одного бинарника** — только ссылки на исходники upstream, их sha256 и инструкции сборки. Всё собирает пакетный менеджер `burn` прямо на машине пользователя под её процессор и видеокарту (профили `steam-deck`, `rog-ally`, `mangmi-air-x`, `raspberry-pi-5`, `native`, …).
 
 *English summary [below](#english).*
 
 ## Принципы
 
-- **Только ссылки + рецепты.** Исходники качаются по `https://` (или через зеркала `gnu://`, `kernel://`), у каждого есть sha256 — при несовпадении `broom` сборку не начнёт. CI отклоняет двоичные файлы и файлы больше 256 KiB.
+- **Только ссылки + рецепты.** Исходники качаются по `https://` (или через зеркала `gnu://`, `kernel://`), у каждого есть sha256 — при несовпадении `burn` сборку не начнёт. CI отклоняет двоичные файлы и файлы больше 256 KiB.
 - **Детерминированность.** Опциональные зависимости включаются только через *features* (аналог USE-флагов), а не «что случайно нашлось в системе». Для meson по умолчанию `--auto-features=disabled`.
 - **Минимализм.** Без документации и лишних локалей (настраивается `KEEP_DOCS`, `LOCALES`), без `.la` и статических библиотек, если есть `.so`, бинарники стрипаются.
 - **Совместимость.** glibc (не musl), merged `/usr` (`/bin`, `/lib`, `/lib64` → `/usr/...`), init — dinit, Wayland-first.
@@ -57,7 +57,7 @@ meson_extra() { meson_feature zlib; meson_feature lzma; meson_feature lz4; }
 | `configure_args`, `meson_args`, `cmake_args`, `make_args`, `make_install_args`, `cargo_args` | аргументы систем сборки |
 | `out_of_tree`, `meson_subdir`, `cmake_subdir`, `srcdir` | раскладка исходников |
 | `options` | `!lto` `!strip` `!hardening` `!prune` `staticlibs` `emptydirs` |
-| `backup` | конфиги, которые нельзя перезаписывать (новая версия ляжет как `.broomnew`) |
+| `backup` | конфиги, которые нельзя перезаписывать (новая версия ляжет как `.burnnew`) |
 
 Функции (все необязательны, выполняются в каталоге исходников): `do_prepare`, `do_configure`, `do_build`, `do_check`, `do_install`, `post_install`, а также `configure_extra`/`meson_extra`/`cmake_extra` (печатают по аргументу в строке). Внутри доступны `$SRC $BUILD $DESTDIR $FILES $CC $CFLAGS $LDFLAGS $CHOST $CARCH $KARCH $CROSS $JOBS $VIDEO_CARDS`, помощники `use`, `use_enable`, `use_with`, `meson_feature`, `meson_use`, `cmake_use` и стандартные шаги `bt_configure`, `bt_build`, `bt_install`.
 
@@ -67,15 +67,15 @@ meson_extra() { meson_feature zlib; meson_feature lzma; meson_feature lz4; }
 - `edge` *(план)* — свежие версии сразу после выхода upstream.
 - `security` *(план)* — только исправления безопасности поверх `main`.
 
-`broom update` не обновляет вслепую: показывает план (что, зачем, риск `major`/`core`, changelog из git-истории рецептов), сначала **собирает всё**, затем делает снимок (btrfs-хук), применяет, сам пересобирает пакеты, чьи библиотеки сменили soname, и проверяет систему (`broom doctor`). Любой пакет можно откатить (`broom rollback`) и заморозить (`broom hold`).
+`burn update` не обновляет вслепую: показывает план (что, зачем, риск `major`/`core`, changelog из git-истории рецептов), сначала **собирает всё**, затем делает снимок (btrfs-хук), применяет, сам пересобирает пакеты, чьи библиотеки сменили soname, и проверяет систему (`burn doctor`). Любой пакет можно откатить (`burn rollback`) и заморозить (`burn hold`).
 
 ## Как добавить пакет
 
 ```sh
 mkdir packages/foo && cp TEMPLATE.recipe packages/foo/recipe   # заполнить
-broom -R packages checksum --write foo    # настоящие sha256 из скачанных файлов
-broom -R packages lint foo
-broom -R packages build foo               # или: install
+burn -R packages checksum --write foo    # настоящие sha256 из скачанных файлов
+burn -R packages lint foo
+burn -R packages build foo               # или: install
 tools/lint.sh --fetch foo                 # то же, что проверяет CI
 ```
 
@@ -116,6 +116,6 @@ tools/lint.sh --fetch foo                 # то же, что проверяет
 
 ## English
 
-**CleanLinux-Recipes** is the package recipe repository of CleanLinux, an experimental from-scratch (not LFS) Linux for handheld consoles and PCs (x86_64 and arm64), built on glibc. Like the AUR, but for the whole system: it contains **no binaries**, only upstream source links, their sha256 and build instructions. The `broom` package manager builds everything locally, tuned by a hardware profile (CPU flags, GPU drivers, features). Rules: https-only sources with mandatory checksums, no binary or vendored files, deterministic builds through explicit features, minimal output (no docs/extra locales/static libs by default). `tools/lint.sh` is the self-contained checker used by CI; `--fetch` also downloads the sources and verifies their checksums.
+**CleanLinux-Recipes** is the package recipe repository of CleanLinux, an experimental from-scratch (not LFS) Linux for handheld consoles and PCs (x86_64 and arm64), built on glibc. Like the AUR, but for the whole system: it contains **no binaries**, only upstream source links, their sha256 and build instructions. The `burn` package manager builds everything locally, tuned by a hardware profile (CPU flags, GPU drivers, features). Rules: https-only sources with mandatory checksums, no binary or vendored files, deterministic builds through explicit features, minimal output (no docs/extra locales/static libs by default). `tools/lint.sh` is the self-contained checker used by CI; `--fetch` also downloads the sources and verifies their checksums.
 
 License of the recipes: MIT (see `LICENSE`). Each package keeps its own upstream license (`license=` in the recipe).
