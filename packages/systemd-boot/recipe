@@ -1,0 +1,44 @@
+name=systemd-boot
+version=261.4
+release=1
+summary="systemd-boot: the UEFI boot manager of systemd, built alone (no systemd)"
+homepage=https://systemd.io/BOOT/
+license=(LGPL-2.1-or-later)
+category=core
+# only the EFI binaries (systemd-boot, the UKI stub and the addon stub); cleanlinux-boot copies
+# the loader into the ESP and writes its entries. The build host needs python3 with jinja2 and
+# pyelftools (elf2efi), and gperf
+makedepends=(gperf)
+build_type=meson
+source=(systemd-$version.tar.gz::https://github.com/systemd/systemd/archive/refs/tags/v$version.tar.gz)
+sha256=(2f78c37c6592dd34b95cca86793f1b8c5b073db35681ef80ea16a73c0c297a9e)
+# PE binaries for the firmware: no strip, no LTO; the profile's CFLAGS (-march, hardening) are
+# for Linux programs, systemd sets the flags of its EFI code itself
+options=(!strip !lto !hardening)
+meson_args=(-Dmode=release -Dbootloader=enabled -Defi=true -Dtests=false -Dman=disabled -Dhtml=disabled
+	-Dsbat-distro=cleanlinux -Dsbat-distro-summary=CleanLinux -Dsbat-distro-pkgname=systemd-boot
+	-Dsbat-distro-version="$version" -Dsbat-distro-url=https://github.com/vovawees/CleanLinux
+	-Dc_args= -Dc_link_args=)
+
+_efi_arch() {
+	case $CARCH in
+		x86_64) echo x64 ;;
+		aarch64) echo aa64 ;;
+		riscv64) echo riscv64 ;;
+		*) return 1 ;;
+	esac
+}
+
+do_build() {
+	local a
+	a=$(_efi_arch)
+	ninja -C "$BUILD" -j "$JOBS" "src/boot/systemd-boot$a.efi" "src/boot/linux$a.efi.stub" "src/boot/addon$a.efi.stub"
+}
+
+do_install() {
+	local a f
+	a=$(_efi_arch)
+	for f in "systemd-boot$a.efi" "linux$a.efi.stub" "addon$a.efi.stub"; do
+		install -Dm644 "$BUILD/src/boot/$f" "$DESTDIR/usr/lib/systemd/boot/efi/$f"
+	done
+}
