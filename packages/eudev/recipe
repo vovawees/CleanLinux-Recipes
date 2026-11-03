@@ -1,6 +1,6 @@
 name=eudev
 version=3.3.0
-release=1
+release=2
 summary="udev without systemd: device manager (udevd, udevadm), rules, hwdb and libudev"
 homepage=https://github.com/eudev-project/eudev
 license=(GPL-2.0-or-later LGPL-2.1-or-later)
@@ -18,3 +18,12 @@ configure_args=(
 	--disable-selinux --disable-manpages --disable-static
 )
 backup=(etc/udev/udev.conf)
+
+post_install() {
+	# burn compiles the hardware database whenever a package adds or removes hwdb files
+	# (eudev itself, libinput, sane, ...): /etc/udev/hwdb.bin, the file udevd reads first
+	install -d "$DESTDIR/usr/share/burn/triggers"
+	printf '%s\n' '# hwdb sources changed: compile them for udevd' 'path=usr/lib/udev/hwdb.d/*.hwdb' \
+		'path=etc/udev/hwdb.d/*.hwdb' 'run=/usr/bin/udevadm hwdb --update --root $ROOT' \
+		>"$DESTDIR/usr/share/burn/triggers/eudev-hwdb.trigger"
+}
