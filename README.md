@@ -107,7 +107,7 @@ tools/updates.sh --write foo bar          # новые версии, release=1, 
 tools/lint.sh --fetch foo bar
 ```
 
-Upstream определяется по ссылкам самого рецепта, отдельные метаданные не нужны: листинги GNU и kernel.org (включая каталоги версий вроде `gcc-X/` и `util-linux/vX.Y/`), stable-ядро из `releases.json`, GitHub releases (теги как запасной вариант), любые https-каталоги, официальные патчи bash/readline (`_patchlevel`).
+Upstream определяется по ссылкам самого рецепта, отдельные метаданные не нужны: листинги GNU и kernel.org (включая каталоги версий вроде `gcc-X/` и `util-linux/vX.Y/`), stable-ядро из `releases.json`, GitHub releases (теги как запасной вариант), любые https-каталоги, официальные патчи bash/readline (`_patches=({001..NNN})`).
 
 ## Пакеты
 

@@ -1,19 +1,15 @@
 name=readline
 _basever=8.3
-_patchlevel=6
-version=$_basever.$_patchlevel
+_patches=({001..006}) # the official upstream patches: tools/updates.sh extends the range
+version=$_basever.${#_patches[@]}
 release=1
 summary="GNU readline: line editing and history for interactive programs"
 homepage=https://tiswww.case.edu/php/chet/readline/rltop.html
 license=(GPL-3.0-or-later)
 category=core
 depends=(glibc ncurses)
-source=(gnu://readline/readline-$_basever.tar.gz)
-for _p in $(seq -f '%03g' 1 "$_patchlevel"); do
-	source+=("gnu://readline/readline-$_basever-patches/readline${_basever/./}-$_p")
-	patches+=("readline${_basever/./}-$_p")
-done
-unset _p
+patches=("${_patches[@]/#/readline${_basever/./}-}")
+source=(gnu://readline/readline-$_basever.tar.gz "${patches[@]/#/gnu://readline/readline-$_basever-patches/}")
 patch_strip=0
 sha256=(
 	fe5383204467828cd495ee8d1d3c037a7eba1389c22bc6a041f627976f9061cc

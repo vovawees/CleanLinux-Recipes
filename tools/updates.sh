@@ -11,7 +11,7 @@
 #   kernel://<dir>/vX.Y/...         kernel.org directory listings (util-linux, ...)
 #   https://github.com/<owner>/<repo>/...   latest GitHub release (GITHUB_TOKEN raises API limits)
 #   any other https:// URL          the directory listing next to the file
-# Recipes with _basever + _patchlevel (bash, readline) also follow the official patch level.
+# Recipes with _basever + _patches=({001..NNN}) (bash, readline) also follow the official patch level.
 set -euo pipefail
 shopt -s nullglob inherit_errexit
 cd "$(dirname "$0")/.."
@@ -118,14 +118,16 @@ latest() {
 	esac
 }
 
-# patchlevel PKG BASEVER: newest official patch for _basever (bash, readline)
+# patchlevel PKG BASEVER: newest official patch for _basever (bash, readline), the GNU layout
+#   PKG/PKG-BASEVER-patches/PKG<BASEVER without dots>-NNN
 patchlevel() {
-	local raw u
-	raw=$(raw_urls "$1" | grep -F '$_p' | head -n1)
-	[[ -n $raw ]] || return 0
-	u=$(recipe_eval "$1" "_basever=$2" "_p=$MARK" -- "$raw")
-	u=$(url_expand "$u")
-	listing "${u%/*}/" "$(basename "${u%%"$MARK"*}")" "" | sed 's/^0*//; s/^$/0/' | newest
+	listing "$GNU_MIRROR/$1/$1-$2-patches/" "$1${2//./}-" "" | sed 's/^0*//; s/^$/0/' | newest
+}
+
+set_patches() { # PKG N: _patches=({001..N}), _patches=() for none
+	local f=packages/$1/recipe r='()'
+	if (($2 > 0)); then r=$(printf '({001..%03d})' "$2"); fi
+	sed -i -E "s/^_patches=\\([^)]*\\)/_patches=$r/" "$f"
 }
 
 set_var() { # PKG VAR NEW
@@ -168,7 +170,7 @@ for pkg in "${pkgs[@]}"; do
 	changes=()
 	declare -A seen=()
 	while IFS= read -r raw; do
-		[[ $raw == *'$_p'* ]] && continue
+		[[ $raw == *-patches/* ]] && continue # the official patches: see _patches below
 		# the variable that carries the version: first $var / ${var...} in the file name
 		var=$(sed -E 's/.*:://; s|.*/||' <<<"$raw" | grep -oE '\$\{?[A-Za-z_][A-Za-z0-9_]*' | head -n1 | tr -d '${')
 		[[ -n $var && -z ${seen[$var]:-} ]] || continue
@@ -187,10 +189,10 @@ for pkg in "${pkgs[@]}"; do
 		fi
 	done < <(raw_urls "$pkg")
 	unset seen
-	if [[ -n $(recipe_eval "$pkg" -- '${_patchlevel:-}') ]]; then
+	if grep -q '^_patches=' "packages/$pkg/recipe"; then
 		base=$(recipe_eval "$pkg" -- '${_basever}')
 		for c in "${changes[@]}"; do [[ $c == _basever\|* ]] && base=${c##*|}; done
-		cur=$(recipe_eval "$pkg" -- '${_patchlevel}')
+		cur=$(recipe_eval "$pkg" -- '${#_patches[@]}')
 		new=$(patchlevel "$pkg" "$base") || new=''
 		if [[ -z $new && $base != "$(recipe_eval "$pkg" -- '${_basever}')" ]]; then
 			new=0 # a new release without patches yet
@@ -199,9 +201,9 @@ for pkg in "${pkgs[@]}"; do
 			new=$cur
 		fi
 		if [[ $new != "$cur" ]]; then
-			changes+=("_patchlevel|$cur|$new")
+			changes+=("_patches|$cur|$new")
 		elif ((VERBOSE)); then
-			printf '%-14s _patchlevel=%s is the latest\n' "$pkg" "$cur"
+			printf '%-14s %s official patches, the latest\n' "$pkg" "$cur"
 		fi
 	fi
 	((${#changes[@]})) || continue
@@ -210,7 +212,7 @@ for pkg in "${pkgs[@]}"; do
 	if ((WRITE)); then
 		for c in "${changes[@]}"; do
 			IFS='|' read -r var _ new <<<"$c"
-			set_var "$pkg" "$var" "$new"
+			if [[ $var == _patches ]]; then set_patches "$pkg" "$new"; else set_var "$pkg" "$var" "$new"; fi
 		done
 		set_var "$pkg" release 1
 		rewrite_sha256 "$pkg" || { errors=1 && continue; }

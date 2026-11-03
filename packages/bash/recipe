@@ -1,7 +1,7 @@
 name=bash
 _basever=5.3
-_patchlevel=20
-version=$_basever.$_patchlevel
+_patches=({001..020}) # the official upstream patches: tools/updates.sh extends the range
+version=$_basever.${#_patches[@]}
 release=1
 summary="GNU Bourne Again shell (with all upstream patches)"
 homepage=https://www.gnu.org/software/bash/
@@ -9,12 +9,8 @@ license=(GPL-3.0-or-later)
 category=core
 depends=(glibc readline ncurses)
 features=(+nls)
-source=(gnu://bash/bash-$_basever.tar.gz)
-for _p in $(seq -f '%03g' 1 "$_patchlevel"); do
-	source+=("gnu://bash/bash-$_basever-patches/bash${_basever/./}-$_p")
-	patches+=("bash${_basever/./}-$_p")
-done
-unset _p
+patches=("${_patches[@]/#/bash${_basever/./}-}")
+source=(gnu://bash/bash-$_basever.tar.gz "${patches[@]/#/gnu://bash/bash-$_basever-patches/}")
 patch_strip=0
 sha256=(
 	0d5cd86965f869a26cf64f4b71be7b96f90a3ba8b3d74e27e8e9d9d5550f31ba
