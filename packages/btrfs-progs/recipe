@@ -1,0 +1,15 @@
+name=btrfs-progs
+version=7.3
+release=1
+summary="btrfs filesystem tools: mkfs.btrfs, btrfs (subvolumes, snapshots, scrub, send), btrfsck"
+homepage=https://btrfs.readthedocs.io/
+license=(GPL-2.0-only LGPL-2.1-or-later)
+category=core
+depends=(glibc util-linux zlib-ng zstd:zstd eudev:udev)
+features=(+zstd +udev)
+source=(kernel://kernel/people/kdave/btrfs-progs/btrfs-progs-v$version.tar.xz)
+sha256=(d37b63403d25fe025704c758e6a3da0979ae50c30c5f02aa78e4410e7b346e3a)
+# btrfs is the recommended root (snapshots before updates are made by burn itself); no lzo
+# (no recipe), btrfs-convert (needs the e2fsprogs and reiserfs libraries), Python bindings or docs
+configure_args=(--disable-documentation --disable-python --disable-convert --disable-lzo --disable-static)
+configure_extra() { use_enable zstd; use_enable udev libudev; }
