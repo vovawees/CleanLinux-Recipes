@@ -21,10 +21,11 @@ configure_extra() {
 	if ((CROSS)); then printf '%s\n' "--with-headers=$SYSROOT/usr/include"; fi
 }
 
-do_prepare() {
+do_configure() {
 	# merged /usr layout; the ABI loader paths (/lib64/ld-linux-x86-64.so.2,
 	# /lib/ld-linux-aarch64.so.1) resolve through the symlinks of the filesystem package
 	printf '%s\n' slibdir=/usr/lib rtlddir=/usr/lib sbindir=/usr/bin rootsbindir=/usr/bin >"$BUILD/configparms"
+	bt_configure
 }
 
 do_install() {
