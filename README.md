@@ -1,6 +1,6 @@
 # CleanLinux-Recipes
 
-Рецепты пакетов для **CleanLinux** — экспериментального Linux «с нуля» (не LFS) для портативных консолей и ПК на **x86_64 и arm64**.
+Рецепты пакетов для **CleanLinux** — базы для Linux-сборок, как Arch: система «с нуля» (не LFS), драйверы и оптимизация под железо для ПК, ноутбуков, портативных консолей и плат на **x86_64 и arm64**.
 
 Это аналог AUR, но для всей системы: **здесь нет ни одного бинарника** — только ссылки на исходники upstream, их sha256 и инструкции сборки. Всё собирает пакетный менеджер `burn` прямо на машине пользователя под её процессор и видеокарту (профили `steam-deck`, `rog-ally`, `mangmi-air-x`, `raspberry-pi-5`, `native`, …).
 
@@ -8,10 +8,11 @@
 
 ## Принципы
 
+- **Только база.** Здесь рецепты слоёв core, hardware и platform ([SCOPE.md](https://github.com/vovawees/CleanLinux/blob/main/docs/SCOPE.md)). DE, WM, приложения, Steam и всё «по вкусу» живут в репозиториях сборок — это оверлеи рецептов поверх этого репозитория.
 - **Только ссылки + рецепты.** Исходники качаются по `https://` (или через зеркала `gnu://`, `kernel://`), у каждого есть sha256 — при несовпадении `burn` сборку не начнёт. CI отклоняет двоичные файлы и файлы больше 256 KiB.
 - **Детерминированность.** Опциональные зависимости включаются только через *features* (аналог USE-флагов), а не «что случайно нашлось в системе». Для meson по умолчанию `--auto-features=disabled`.
 - **Минимализм.** Без документации и лишних локалей (настраивается `KEEP_DOCS`, `LOCALES`), без `.la` и статических библиотек, если есть `.so`, бинарники стрипаются.
-- **Совместимость.** glibc (не musl), merged `/usr` (`/bin`, `/lib`, `/lib64` → `/usr/...`), init — dinit, Wayland-first.
+- **Совместимость.** glibc (не musl), merged `/usr` (`/bin`, `/lib`, `/lib64` → `/usr/...`), init — dinit. Программный стек (Wayland или X11, PipeWire, …) выбирает сборка через features.
 - **Оптимизация под железо.** Флаги CPU (`-march`/`-mcpu`), LTO и hardening приходят из профиля устройства, рецепты их не трогают.
 
 ## Структура
@@ -127,6 +128,6 @@ Upstream определяется по ссылкам самого рецепт�
 
 ## English
 
-**CleanLinux-Recipes** is the package recipe repository of CleanLinux, an experimental from-scratch (not LFS) Linux for handheld consoles and PCs (x86_64 and arm64), built on glibc. Like the AUR, but for the whole system: it contains **no binaries**, only upstream source links, their sha256 and build instructions. The `burn` package manager builds everything locally, tuned by a hardware profile (CPU flags, GPU drivers, features). Rules: https-only sources with mandatory checksums, no binary or vendored files, deterministic builds through explicit features, minimal output (no docs/extra locales/static libs by default). `tools/lint.sh` is the self-contained checker used by CI; `--fetch` also downloads the sources and verifies their checksums. `tools/updates.sh` watches upstream releases (inferred from the recipe sources: GNU/kernel.org listings, GitHub releases, bash/readline patch levels); the daily `updates` workflow bumps and verifies recipes, publishes them to the `edge` channel and proposes them to `main`.
+**CleanLinux-Recipes** is the package recipe repository of CleanLinux, a base for Linux spins like Arch: a from-scratch (not LFS) system, drivers and hardware tuning for PCs, laptops, handhelds and boards (x86_64 and arm64), built on glibc. It holds the base layers only (core, hardware, platform); desktops, applications and games belong to spin repositories, which are recipe overlays on top of this one. Like the AUR, but for the whole system: it contains **no binaries**, only upstream source links, their sha256 and build instructions. The `burn` package manager builds everything locally, tuned by a hardware profile (CPU flags, GPU drivers, features). Rules: https-only sources with mandatory checksums, no binary or vendored files, deterministic builds through explicit features, minimal output (no docs/extra locales/static libs by default). `tools/lint.sh` is the self-contained checker used by CI; `--fetch` also downloads the sources and verifies their checksums. `tools/updates.sh` watches upstream releases (inferred from the recipe sources: GNU/kernel.org listings, GitHub releases, bash/readline patch levels); the daily `updates` workflow bumps and verifies recipes, publishes them to the `edge` channel and proposes them to `main`.
 
 License of the recipes: MIT (see `LICENSE`). Each package keeps its own upstream license (`license=` in the recipe).
