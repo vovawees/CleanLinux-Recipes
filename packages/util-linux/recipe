@@ -1,22 +1,40 @@
 name=util-linux
 version=2.42.4
-release=1
+release=2
 summary="Core Linux system utilities: mount, fdisk, lsblk, agetty, kill, ..."
 homepage=https://github.com/util-linux/util-linux
 license=(GPL-2.0-or-later LGPL-2.1-or-later BSD-3-Clause)
 category=core
-depends=(glibc ncurses readline zlib-ng)
+depends=(glibc ncurses readline zlib-ng linux-pam pambase)
 features=(+nls)
-source=(kernel://utils/util-linux/v${version%.*}/util-linux-$version.tar.xz)
-sha256=(fbd62a100ab7bb8746ba0661255c3c48185b1e9021507c624da01fbc696330ec)
-# login/su/runuser need PAM (not packaged yet); no udev/systemd on CleanLinux
+source=(kernel://utils/util-linux/v${version%.*}/util-linux-$version.tar.xz login.pam su.pam runuser.pam chfn.pam)
+sha256=(
+	fbd62a100ab7bb8746ba0661255c3c48185b1e9021507c624da01fbc696330ec
+	959675fba1a7a6d028e2da86ab7738b8a6a7f2704ecad6221cb5f84d2b9c994b 2140af6ffd124f8346b2399476b137481ae6fa32e67e6e8dd1677247c6efe818
+	404bd93a309e9febf2bcb7cd6885aa6753d8fa807ea4e1cc27adda000c53ad42 111f4af97eed644d6a04a2c749be8db21061bd758f0011a8a4589cb41cd54b38
+)
+# login, su, runuser, chfn and chsh authenticate through PAM (their services: /usr/lib/pam.d);
+# setpriv needs libcap-ng, wall and write a setgid tty group: not in the base yet; no systemd
 configure_args=(
 	--disable-static --enable-fs-paths-default=/usr/bin:/usr/local/bin
-	--disable-login --disable-su --disable-runuser --disable-chfn-chsh --disable-setpriv
+	--disable-setpriv
 	--disable-wall --disable-write --disable-liblastlog2 --disable-pylibmount
-	--disable-makeinstall-chown --disable-makeinstall-setuid --disable-asciidoc
+	--disable-makeinstall-chown --disable-asciidoc
 	--without-python --without-systemd --without-udev --without-selinux --without-audit
 	--without-cap-ng --without-libmagic --without-econf --without-cryptsetup --without-btrfs
 	--with-ncursesw --with-readline ADJTIME_PATH=/var/lib/hwclock/adjtime
 )
 configure_extra() { use_enable nls; }
+
+post_install() {
+	local d=$DESTDIR/usr/lib/pam.d
+	install -Dm644 "$FILES/login.pam" "$d/login"
+	install -Dm644 "$FILES/su.pam" "$d/su"
+	install -Dm644 "$FILES/su.pam" "$d/su-l"
+	install -Dm644 "$FILES/runuser.pam" "$d/runuser"
+	install -Dm644 "$FILES/runuser.pam" "$d/runuser-l"
+	install -Dm644 "$FILES/chfn.pam" "$d/chfn"
+	install -Dm644 "$FILES/chfn.pam" "$d/chsh"
+	# users change their own finger information and shell (PAM asks for the password)
+	chmod 4755 "$DESTDIR/usr/bin/chfn" "$DESTDIR/usr/bin/chsh"
+}

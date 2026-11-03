@@ -1,0 +1,10 @@
+#%PAM-1.0
+auth       sufficient pam_rootok.so
+# trust the members of "wheel":
+#auth      sufficient pam_wheel.so trust use_uid
+# only the members of "wheel" may use su:
+#auth      required   pam_wheel.so use_uid
+auth       required   pam_unix.so
+account    required   pam_unix.so
+session    required   pam_unix.so
+password   include    system-auth
