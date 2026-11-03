@@ -8,7 +8,7 @@ cd "$(dirname "$0")/.."
 GNU_MIRROR=${GNU_MIRROR:-https://ftpmirror.gnu.org/gnu}
 KERNEL_MIRROR=${KERNEL_MIRROR:-https://cdn.kernel.org/pub/linux}
 BUILD_TYPES=(autotools meson cmake make cargo python custom meta)
-OPTIONS=('!lto' '!strip' '!hardening' '!prune' staticlibs emptydirs)
+OPTIONS=('!lto' '!strip' '!hardening' '!prune' '!linker' staticlibs emptydirs o3)
 FETCH=0
 if [[ ${1:-} == --fetch ]]; then FETCH=1 && shift; fi
 pkgs=("$@")

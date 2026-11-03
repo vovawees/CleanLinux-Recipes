@@ -1,6 +1,6 @@
 name=zstd
 version=1.5.7
-release=1
+release=2
 summary="Zstandard: fast real-time compression (library and zstd tool)"
 homepage=https://facebook.github.io/zstd/
 license=(BSD-3-Clause GPL-2.0-only)
@@ -8,6 +8,8 @@ category=core
 depends=(glibc zlib-ng:zlib xz:lzma lz4:lz4)
 features=(+zlib +lzma +lz4)
 build_type=meson
+# upstream builds these hot loops with -O3
+options=(o3)
 meson_subdir=build/meson
 source=(https://github.com/facebook/zstd/releases/download/v$version/zstd-$version.tar.gz)
 sha256=(eb33e51f49a15e023950cd7825ca74a4a2b43db8354825ac24fc1b7ee09e6fa3)

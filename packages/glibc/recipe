@@ -10,7 +10,8 @@ source=(gnu://glibc/glibc-$version.tar.xz)
 sha256=(37f600f2bef3c5e8300147059568b2a2e40a7ad6ccc65ce942556d49429cc667)
 out_of_tree=1
 # glibc cannot be built with LTO and brings its own hardening (fortify, stack protector, bind-now)
-options=(!lto !hardening)
+# glibc is linked by GNU ld only
+options=(!lto !hardening !linker)
 configure_args=(
 	--enable-kernel=5.15 --enable-stack-protector=strong --enable-bind-now --enable-fortify-source
 	--disable-nscd --disable-profile --disable-werror

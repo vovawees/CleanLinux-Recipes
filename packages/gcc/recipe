@@ -22,7 +22,7 @@ sha256=(
 )
 out_of_tree=1
 # GCC builds itself with its own flags; the profile flags still reach the target libraries
-options=(!lto)
+options=(!lto !linker)
 configure_args=(
 	--enable-shared --enable-threads=posix --enable-__cxa_atexit --enable-clocale=gnu
 	--enable-gnu-unique-object --enable-gnu-indirect-function --enable-linker-build-id

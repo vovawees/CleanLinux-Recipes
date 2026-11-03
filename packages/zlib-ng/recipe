@@ -1,12 +1,14 @@
 name=zlib-ng
 version=2.3.3
-release=1
+release=2
 summary="zlib replacement with SIMD optimisations (zlib-compatible API and ABI)"
 homepage=https://github.com/zlib-ng/zlib-ng
 license=(Zlib)
 category=core
 depends=(glibc)
 build_type=cmake
+# upstream builds these hot loops with -O3
+options=(o3)
 source=(zlib-ng-$version.tar.gz::https://github.com/zlib-ng/zlib-ng/archive/refs/tags/$version.tar.gz)
 sha256=(f9c65aa9c852eb8255b636fd9f07ce1c406f061ec19a2e7d508b318ca0c907d1)
 # ZLIB_COMPAT: provides libz.so.1 and zlib.h, so it is the system zlib
