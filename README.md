@@ -122,6 +122,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
 | `diffutils` | core | 3.12 | autotools | GNU diff, cmp, diff3 and sdiff |
 | `dinit` | core | 0.22.1 | custom | dinit: fast, small service manager and init with dependency handling |
+| `e2fsprogs` | core | 1.47.4 | autotools | ext2/3/4 filesystem tools: mke2fs, e2fsck, tune2fs, resize2fs, debugfs |
 | `eudev` | core | 3.3.0 | autotools | udev without systemd: device manager (udevd, udevadm), rules, hwdb and libudev |
 | `filesystem` | core | 2026.1 | custom | CleanLinux base layout: merged /usr, default /etc files, os-release |
 | `findutils` | core | 4.11.0 | autotools | GNU find, xargs and locate |

@@ -1,0 +1,21 @@
+name=e2fsprogs
+version=1.47.4
+release=1
+summary="ext2/3/4 filesystem tools: mke2fs, e2fsck, tune2fs, resize2fs, debugfs"
+homepage=https://e2fsprogs.sourceforge.net/
+license=(GPL-2.0-only LGPL-2.0-only MIT)
+category=core
+depends=(glibc util-linux)
+features=(+nls)
+source=(kernel://kernel/people/tytso/e2fsprogs/v$version/e2fsprogs-$version.tar.xz)
+sha256=(fd5bf388cbdbe006a3d3b318d983b2948382440acc85a87f1e7d108653e8db0b)
+# libblkid, libuuid and the fsck wrapper come from util-linux; no uuidd, fuse2fs, libarchive
+# (mke2fs -d takes a directory), e2scrub cron jobs, systemd units or udev rules
+configure_args=(
+	--enable-elf-shlibs --enable-symlink-install --disable-libblkid --disable-libuuid
+	--disable-uuidd --disable-fsck --disable-e2initrd-helper --disable-fuse2fs
+	--without-libarchive --with-crond-dir=no --with-systemd-unit-dir=no --with-udev-rules-dir=no
+)
+backup=(etc/mke2fs.conf etc/e2scrub.conf)
+configure_extra() { use_enable nls; }
+do_install() { make DESTDIR="$DESTDIR" install install-libs; }
