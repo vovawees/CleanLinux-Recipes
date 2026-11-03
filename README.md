@@ -21,6 +21,7 @@ packages/<имя>/recipe      рецепт (bash)
 packages/<имя>/patches/    патчи (необязательно)
 packages/<имя>/<файл>      мелкие локальные файлы: конфиги, фрагменты
 tools/lint.sh              автономная проверка рецептов (её запускает CI)
+tools/updates.sh           слежение за upstream: какие рецепты отстали (--write поднимает версии и sha256)
 TEMPLATE.recipe            шаблон нового рецепта
 ```
 
@@ -78,6 +79,16 @@ burn -R packages lint foo
 burn -R packages build foo               # или: install
 tools/lint.sh --fetch foo                 # то же, что проверяет CI
 ```
+
+## Как обновить пакеты
+
+```sh
+tools/updates.sh -v                       # что отстало от upstream (GITHUB_TOKEN поднимает лимиты API)
+tools/updates.sh --write foo bar          # новые версии, release=1, скачать исходники, новые sha256
+tools/lint.sh --fetch foo bar
+```
+
+Upstream определяется по ссылкам самого рецепта, отдельные метаданные не нужны: листинги GNU и kernel.org (включая каталоги версий вроде `gcc-X/` и `util-linux/vX.Y/`), stable-ядро из `releases.json`, GitHub releases (теги как запасной вариант), любые https-каталоги, официальные патчи bash/readline (`_patchlevel`).
 
 ## Пакеты
 
