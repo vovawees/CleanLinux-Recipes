@@ -1,6 +1,6 @@
 name=linux
 version=7.3.1
-release=1
+release=2
 summary="The Linux kernel and modules (CleanLinux defaults + profile GPU drivers)"
 homepage=https://www.kernel.org/
 license=(GPL-2.0-only)
@@ -8,14 +8,20 @@ category=kernel
 build_type=custom
 # host tools needed to build: bc perl flex bison openssl libelf (recipes: see ROADMAP)
 makedepends=(bison)
+features=(-sched_ext)
 source=(kernel://kernel/v${version%%.*}.x/linux-$version.tar.xz cleanlinux.config)
-sha256=(fa595aad93734f829c963c2a90ef7c3673224fd7fdae7b49406e397cde2de231 6040dac47dc471c0d254e3e62c1adc0b6757b69deb3d5848b6f9bdcddd6d7231)
+sha256=(
+	fa595aad93734f829c963c2a90ef7c3673224fd7fdae7b49406e397cde2de231
+	9d08c4497a0a6506e01188b984efaa086147c83f4188b1ed039d7cab9ce28b12
+)
 options=(!lto !strip !hardening)
 
 _kmake() {
-	local -a cross=()
+	local -a cross=() repro=(KBUILD_BUILD_USER=burn KBUILD_BUILD_HOST=cleanlinux)
 	if ((CROSS)); then cross=(CROSS_COMPILE="$CHOST-"); fi
-	env -u CFLAGS -u CXXFLAGS -u LDFLAGS make ARCH="$KARCH" HOSTCC=gcc "${cross[@]}" "$@"
+	# reproducible: the build timestamp comes from the recipe (burn sets SOURCE_DATE_EPOCH)
+	if [[ -n ${SOURCE_DATE_EPOCH:-} ]]; then repro+=(KBUILD_BUILD_TIMESTAMP="$(LC_ALL=C date -u -d "@$SOURCE_DATE_EPOCH")"); fi
+	env -u CFLAGS -u CXXFLAGS -u LDFLAGS "${repro[@]}" make ARCH="$KARCH" HOSTCC=gcc "${cross[@]}" "$@"
 }
 
 do_configure() {
@@ -23,19 +29,40 @@ do_configure() {
 	# start from the profile's config (KERNEL_CONFIG=/path/to/config) or the arch defconfig
 	if [[ -n $KERNEL_CONFIG ]]; then cp "$KERNEL_CONFIG" .config; else _kmake defconfig; fi
 	cp "$FILES/cleanlinux.config" "$WORK/fragment.config"
-	for v in $VIDEO_CARDS; do
-		case $v in
-			amd) printf '%s\n' CONFIG_DRM_AMDGPU=m CONFIG_DRM_AMDGPU_CIK=y CONFIG_DRM_AMDGPU_SI=y CONFIG_DRM_AMD_DC=y ;;
-			intel) printf '%s\n' CONFIG_DRM_I915=m CONFIG_DRM_XE=m ;;
-			nouveau) printf '%s\n' CONFIG_DRM_NOUVEAU=m ;;
-			freedreno) printf '%s\n' CONFIG_DRM_MSM=m ;;
-			panfrost) printf '%s\n' CONFIG_DRM_PANFROST=m CONFIG_DRM_PANTHOR=m ;;
-			v3d) printf '%s\n' CONFIG_DRM_V3D=m CONFIG_DRM_VC4=m ;;
-			lima) printf '%s\n' CONFIG_DRM_LIMA=m ;;
-			etnaviv) printf '%s\n' CONFIG_DRM_ETNAVIV=m ;;
-			virgl) printf '%s\n' CONFIG_DRM_VIRTIO_GPU=m ;;
+	{
+		case $KARCH in
+			x86)
+				# zstd kernel; AMD: amd-pstate with EPP (active mode), s2idle (PMC), sensors (SFH),
+				# the power framework (PMF, needs the PSP TEE); handheld controllers and platform
+				# drivers (ROG Ally, Legion Go, MSI Claw, AYANEO, OneXPlayer) as modules
+				printf '%s\n' CONFIG_KERNEL_ZSTD=y \
+					CONFIG_X86_AMD_PSTATE=y CONFIG_X86_AMD_PSTATE_DEFAULT_MODE=3 CONFIG_AMD_PMC=m \
+					CONFIG_AMD_SFH_HID=m CONFIG_CRYPTO_DEV_CCP=y CONFIG_CRYPTO_DEV_CCP_DD=m CONFIG_CRYPTO_DEV_SP_PSP=y \
+					CONFIG_TEE=m CONFIG_AMDTEE=m CONFIG_AMD_PMF=m \
+					CONFIG_ASUS_WMI=m CONFIG_ASUS_ARMOURY=m CONFIG_HID_ASUS=m CONFIG_LENOVO_WMI_GAMEZONE=m \
+					CONFIG_HID_LENOVO_GO=m CONFIG_HID_LENOVO_GO_S=m CONFIG_HID_MSI=m CONFIG_MSI_WMI_PLATFORM=m \
+					CONFIG_AYANEO_EC=m CONFIG_OXP_EC=m
+				;;
 		esac
-	done >>"$WORK/fragment.config"
+		# sched_ext: BPF CPU schedulers (scx_lavd, scx_bpfland...); needs pahole on the build host
+		if use sched_ext; then
+			printf '%s\n' CONFIG_BPF=y CONFIG_BPF_SYSCALL=y CONFIG_BPF_JIT=y CONFIG_DEBUG_INFO=y \
+				CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y CONFIG_DEBUG_INFO_BTF=y CONFIG_SCHED_CLASS_EXT=y
+		fi
+		for v in $VIDEO_CARDS; do
+			case $v in
+				amd) printf '%s\n' CONFIG_DRM_AMDGPU=m CONFIG_DRM_AMDGPU_CIK=y CONFIG_DRM_AMDGPU_SI=y CONFIG_DRM_AMD_DC=y ;;
+				intel) printf '%s\n' CONFIG_DRM_I915=m CONFIG_DRM_XE=m ;;
+				nouveau) printf '%s\n' CONFIG_DRM_NOUVEAU=m ;;
+				freedreno) printf '%s\n' CONFIG_DRM_MSM=m ;;
+				panfrost) printf '%s\n' CONFIG_DRM_PANFROST=m CONFIG_DRM_PANTHOR=m ;;
+				v3d) printf '%s\n' CONFIG_DRM_V3D=m CONFIG_DRM_VC4=m ;;
+				lima) printf '%s\n' CONFIG_DRM_LIMA=m ;;
+				etnaviv) printf '%s\n' CONFIG_DRM_ETNAVIV=m ;;
+				virgl) printf '%s\n' CONFIG_DRM_VIRTIO_GPU=m ;;
+			esac
+		done
+	} >>"$WORK/fragment.config"
 	scripts/kconfig/merge_config.sh -m .config "$WORK/fragment.config"
 	_kmake olddefconfig
 }
