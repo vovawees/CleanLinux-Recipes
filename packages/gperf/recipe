@@ -1,0 +1,10 @@
+name=gperf
+version=3.3
+release=1
+summary="GNU perfect hash function generator (builds the keyword tables of eudev)"
+homepage=https://www.gnu.org/software/gperf/
+license=(GPL-3.0-or-later)
+category=devel
+depends=(glibc)
+source=(gnu://gperf/gperf-$version.tar.gz)
+sha256=(fd87e0aba7e43ae054837afd6cd4db03a3f2693deb3619085e6ed9d8d9604ad8)

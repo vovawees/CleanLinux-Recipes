@@ -127,6 +127,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `gawk` | core | 5.4.1 | autotools | GNU awk |
 | `gcc` | devel | 16.2.0 | autotools | GNU Compiler Collection: C and C++ compilers and their runtime libraries |
 | `glibc` | core | 2.44 | autotools | GNU C library: libc, the dynamic loader and friends |
+| `gperf` | devel | 3.3 | autotools | GNU perfect hash function generator (builds the keyword tables of eudev) |
 | `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |
 | `gzip` | core | 1.15 | autotools | GNU gzip compression utility |
 | `kmod` | core | 34.3 | meson | Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo |
