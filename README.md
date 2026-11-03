@@ -65,7 +65,7 @@ meson_extra() { meson_feature zlib; meson_feature lzma; meson_feature lz4; }
 ## Каналы (rolling release+++)
 
 - `main` — основной канал: только рецепты, прошедшие CI (lint + проверка ссылок и sha256).
-- `edge` *(план)* — свежие версии сразу после выхода upstream.
+- `edge` — свежие версии сразу после выхода upstream: workflow `updates` каждый день запускает `tools/updates.sh --write`, проверяет новые ссылки и sha256 (`tools/lint.sh --fetch`), публикует результат в ветку `edge` и предлагает его в `main` через PR. Подписаться: `CHANNEL=edge` в `/etc/burn/burn.conf`.
 - `security` *(план)* — только исправления безопасности поверх `main`.
 
 `burn update` не обновляет вслепую: показывает план (что, зачем, риск `major`/`core`, changelog из git-истории рецептов), сначала **собирает всё**, затем делает снимок (btrfs-хук), применяет, сам пересобирает пакеты, чьи библиотеки сменили soname, и проверяет систему (`burn doctor`). Любой пакет можно откатить (`burn rollback`) и заморозить (`burn hold`).
@@ -127,6 +127,6 @@ Upstream определяется по ссылкам самого рецепт�
 
 ## English
 
-**CleanLinux-Recipes** is the package recipe repository of CleanLinux, an experimental from-scratch (not LFS) Linux for handheld consoles and PCs (x86_64 and arm64), built on glibc. Like the AUR, but for the whole system: it contains **no binaries**, only upstream source links, their sha256 and build instructions. The `burn` package manager builds everything locally, tuned by a hardware profile (CPU flags, GPU drivers, features). Rules: https-only sources with mandatory checksums, no binary or vendored files, deterministic builds through explicit features, minimal output (no docs/extra locales/static libs by default). `tools/lint.sh` is the self-contained checker used by CI; `--fetch` also downloads the sources and verifies their checksums.
+**CleanLinux-Recipes** is the package recipe repository of CleanLinux, an experimental from-scratch (not LFS) Linux for handheld consoles and PCs (x86_64 and arm64), built on glibc. Like the AUR, but for the whole system: it contains **no binaries**, only upstream source links, their sha256 and build instructions. The `burn` package manager builds everything locally, tuned by a hardware profile (CPU flags, GPU drivers, features). Rules: https-only sources with mandatory checksums, no binary or vendored files, deterministic builds through explicit features, minimal output (no docs/extra locales/static libs by default). `tools/lint.sh` is the self-contained checker used by CI; `--fetch` also downloads the sources and verifies their checksums. `tools/updates.sh` watches upstream releases (inferred from the recipe sources: GNU/kernel.org listings, GitHub releases, bash/readline patch levels); the daily `updates` workflow bumps and verifies recipes, publishes them to the `edge` channel and proposes them to `main`.
 
 License of the recipes: MIT (see `LICENSE`). Each package keeps its own upstream license (`license=` in the recipe).

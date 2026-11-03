@@ -1,0 +1,68 @@
+name: updates
+
+# rolling release+++: follow upstream releases every day.
+# tools/updates.sh --write bumps the recipes, tools/lint.sh --fetch verifies the new links and
+# sha256, the result goes to the edge channel (CHANNEL=edge in burn.conf) and is proposed to main.
+on:
+  schedule:
+    - cron: "23 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: updates
+
+jobs:
+  updates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: edge = main + pending updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin edge >/dev/null; then
+            git fetch -q origin edge
+            git switch -q -c edge origin/edge
+            git merge -q --no-edit origin/main
+          else
+            git switch -q -c edge
+          fi
+
+      - name: check upstream releases
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          status=0
+          tools/updates.sh --write | tee "$RUNNER_TEMP/updates.txt" || status=$?
+          if [ "$status" -ne 0 ]; then echo "::warning::some upstream versions could not be checked"; fi
+
+      - name: verify the bumped recipes
+        run: |
+          mapfile -t pkgs < <(git diff --name-only -- packages | cut -d/ -f2 | sort -u)
+          if [ ${#pkgs[@]} -eq 0 ]; then echo "everything is up to date"; exit 0; fi
+          tools/lint.sh "${pkgs[@]}"
+          tools/lint.sh --fetch "${pkgs[@]}"
+
+      - name: publish to edge
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! git diff --quiet; then
+            git commit -qam "Upstream updates $(date -u +%F)" -m "$(cat "$RUNNER_TEMP/updates.txt")"
+          fi
+          git push -q origin edge
+          ahead=$(git rev-list --count origin/main..edge)
+          open=$(gh pr list --head edge --base main --state open --json number --jq 'length')
+          if [ "$ahead" -gt 0 ] && [ "$open" -eq 0 ]; then
+            gh pr create --base main --head edge --title "Upstream updates" \
+              --body "Bumped by tools/updates.sh, links and sha256 verified by tools/lint.sh --fetch. Use CHANNEL=edge in burn.conf to follow them right away." ||
+              echo "::notice::allow GitHub Actions to create pull requests (Settings > Actions > General) to get a PR"
+          fi
