@@ -118,6 +118,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `bash` | core | 5.3.20 | autotools | GNU Bourne Again shell (with all upstream patches) |
 | `binutils` | devel | 2.47 | autotools | GNU assembler, linker and binary utilities |
 | `bison` | devel | 3.8.2 | autotools | GNU parser generator (yacc replacement) |
+| `burn` | core | 0.4.1 | make | The CleanLinux package manager: source based, rolling+++ |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
 | `diffutils` | core | 3.12 | autotools | GNU diff, cmp, diff3 and sdiff |
 | `dinit` | core | 0.22.1 | custom | dinit: fast, small service manager and init with dependency handling |
