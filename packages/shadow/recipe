@@ -1,0 +1,44 @@
+name=shadow
+version=4.20.3
+release=1
+summary="Password and account tools: passwd, useradd, usermod, groupadd, chage, newuidmap, ..."
+homepage=https://github.com/shadow-maint/shadow
+license=(BSD-3-Clause)
+category=core
+depends=(glibc libxcrypt linux-pam pambase)
+features=(+nls)
+source=(https://github.com/shadow-maint/shadow/releases/download/$version/shadow-$version.tar.xz)
+sha256=(623be9429f64fa2165bfc5957c6a642ec309c5cf23c0d53855c99f7591922297)
+# login, su, nologin, chfn and chsh come from util-linux; no logind (elogind is for spins),
+# audit, SELinux, ACL/xattr copies, tcb, nscd or sssd in the base
+configure_args=(
+	--with-libpam --without-libbsd --without-su --disable-logind --enable-subordinate-ids
+	--with-yescrypt --with-bcrypt --with-btrfs --with-group-name-max-length=32
+	--without-audit --without-selinux --without-acl --without-tcb --without-nscd --without-sssd
+	--without-skey --disable-static
+)
+backup=(etc/login.defs etc/default/useradd)
+configure_extra() { use_enable nls; }
+
+do_prepare() {
+	# merged /usr: one PATH; yescrypt for the tools that hash without PAM
+	sed -i -e 's|^ENV_SUPATH.*|ENV_SUPATH\tPATH=/usr/local/bin:/usr/bin|' \
+		-e 's|^ENV_PATH.*|ENV_PATH\tPATH=/usr/local/bin:/usr/bin|' \
+		-e 's|^#ENCRYPT_METHOD .*|ENCRYPT_METHOD YESCRYPT|' etc/login.defs
+	grep -q '^ENCRYPT_METHOD YESCRYPT' etc/login.defs
+}
+
+post_install() {
+	local f
+	cd "$DESTDIR"
+	# util-linux has these (with PAM)
+	rm -f usr/bin/{login,chfn,chsh,nologin} etc/pam.d/{login,chfn,chsh}
+	# the PAM services of shadow go next to the other distribution files
+	mkdir -p usr/lib/pam.d
+	for f in etc/pam.d/*; do mv "$f" usr/lib/pam.d/; done
+	rmdir etc/pam.d
+	install -Dm644 /dev/null etc/default/useradd
+	printf '%s\n' GROUP=users HOME=/home INACTIVE=-1 EXPIRE= SHELL=/bin/bash SKEL=/etc/skel \
+		CREATE_MAIL_SPOOL=no >etc/default/useradd
+	install -dm755 etc/skel
+}

@@ -144,6 +144,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `pkgconf` | devel | 3.0.10 | meson | pkg-config implementation (also installed as pkg-config) |
 | `readline` | core | 8.3.6 | autotools | GNU readline: line editing and history for interactive programs |
 | `sed` | core | 4.10 | autotools | GNU stream editor |
+| `shadow` | core | 4.20.3 | autotools | Password and account tools: passwd, useradd, usermod, groupadd, chage, newuidmap, ... |
 | `tar` | core | 1.35 | autotools | GNU tar archiver |
 | `util-linux` | core | 2.42.4 | autotools | Core Linux system utilities: mount, fdisk, lsblk, agetty, kill, ... |
 | `xz` | core | 5.8.4 | autotools | XZ Utils: LZMA/xz compression library and tools |
