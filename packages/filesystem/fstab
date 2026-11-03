@@ -1,0 +1,4 @@
+# <device>	<mount point>	<type>	<options>	<dump> <pass>
+# Recommended root: btrfs with zstd, e.g.
+# UUID=...	/	btrfs	rw,noatime,compress=zstd:1,space_cache=v2	0 0
+tmpfs		/tmp		tmpfs	nosuid,nodev	0 0

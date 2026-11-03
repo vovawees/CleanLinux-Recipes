@@ -1,0 +1,8 @@
+# /etc/profile: login shell environment
+export PATH=/usr/local/bin:/usr/bin
+export LANG=${LANG:-C.UTF-8}
+umask 022
+for f in /etc/profile.d/*.sh; do
+	[ -r "$f" ] && . "$f"
+done
+unset f

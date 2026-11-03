@@ -1,0 +1,10 @@
+name=base
+version=2026.1
+release=1
+summary="Minimal CleanLinux userland (meta package)"
+homepage=https://github.com/vovawees/CleanLinux-Recipes
+license=(MIT)
+category=meta
+build_type=meta
+depends=(filesystem glibc bash coreutils util-linux dinit sed grep gawk tar gzip xz zstd lz4 zlib-ng
+	findutils diffutils ncurses readline)

@@ -1,0 +1,44 @@
+name=filesystem
+version=2026.1
+release=1
+summary="CleanLinux base layout: merged /usr, default /etc files, os-release"
+homepage=https://github.com/vovawees/CleanLinux-Recipes
+license=(MIT)
+category=core
+build_type=custom
+source=(passwd group hosts fstab os-release profile shells nsswitch.conf ld.so.conf issue)
+sha256=(
+	227707642221d83de555aff61e0ad993a43551094110437a231832d97032662d 72cf2b00fcd3567ea95404c123924e3efd72c8c921e16d450a355fd92e6a1b31 c0fca42f35a4c2034fb2105cdd428f65ecd5d5454fc8e58f5620adbfc0ec9509 442b6df3246fcfea08310bb5ab370143949ac1cd824ef624e14c44a5e932bbac e7b43fbcf94d02ad983d0ca8c24f20238c04fb5ba1f093f493f700979860291c
+	00b0abbd3adee679d2fa4017346dbe4a2779dd4d985c7153f2af09a6f173612e 4ec4e8c524a4f10ca5898ccfaa6d29e7e08aff3a681f6bafbb62e7bec91aa154 d54fb53b04476247ca5b2a4cbefe6b598467eb039c83b9011767f69c7a62e482 27d7ebd402e1b9a20fd3a0663ccc10e1b1feff2d9dfb1ad7dd12bb76cfe0880a e7ad123f8e86703e1f1dc85cc7249aec2eaeafae02e8b5216f2bbdb435257469
+)
+options=(emptydirs)
+backup=(etc/passwd etc/group etc/shadow etc/hosts etc/fstab etc/profile etc/shells etc/nsswitch.conf etc/ld.so.conf etc/issue)
+
+do_install() {
+	local d f
+	cd "$DESTDIR"
+	for d in boot dev etc/ld.so.conf.d etc/profile.d home mnt opt proc root run srv sys tmp \
+		usr/bin usr/include usr/lib usr/share/man usr/local/bin usr/local/lib usr/local/share \
+		var/cache var/lib var/log var/spool var/tmp; do
+		mkdir -p "$d"
+	done
+	# merged /usr: one bin and one lib directory, old paths are symlinks
+	ln -s usr/bin bin
+	ln -s usr/bin sbin
+	ln -s usr/lib lib
+	ln -s usr/lib lib64
+	ln -s bin usr/sbin
+	ln -s lib usr/lib64
+	ln -s ../run var/run
+	ln -s ../run/lock var/lock
+	chmod 0750 root
+	chmod 1777 tmp var/tmp
+	for f in passwd group hosts fstab profile shells nsswitch.conf ld.so.conf issue; do
+		install -m644 "$FILES/$f" "etc/$f"
+	done
+	install -m644 "$FILES/os-release" usr/lib/os-release
+	ln -s ../usr/lib/os-release etc/os-release
+	# every account starts locked; set passwords after the first boot
+	sed 's/^\([^:]*\):.*/\1:!*:20000::::::/' "$FILES/passwd" >etc/shadow
+	chmod 0600 etc/shadow
+}

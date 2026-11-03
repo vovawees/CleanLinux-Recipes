@@ -1,0 +1,9 @@
+name=base-devel
+version=2026.1
+release=1
+summary="Toolchain for building recipes natively (meta package)"
+homepage=https://github.com/vovawees/CleanLinux-Recipes
+license=(MIT)
+category=meta
+build_type=meta
+depends=(base binutils gcc linux-headers make patch m4 bison pkgconf)
