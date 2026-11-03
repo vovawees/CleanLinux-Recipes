@@ -1,0 +1,51 @@
+name: lint
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      fetch_all:
+        description: "Download and verify the sources of every recipe"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: shellcheck
+        run: shellcheck -x tools/*.sh && shellcheck -s bash packages/*/recipe
+
+      - name: lint all recipes
+        run: tools/lint.sh
+
+      - name: verify links and sha256 of changed recipes
+        env:
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          FETCH_ALL: ${{ inputs.fetch_all }}
+        run: |
+          case $EVENT in
+            pull_request) base=$PR_BASE ;;
+            push) base=$BEFORE ;;
+            *) base='' ;;
+          esac
+          if [ "$FETCH_ALL" = true ] || [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+            changed=$(ls packages)
+          else
+            changed=$(git diff --name-only "$base" HEAD -- packages | cut -d/ -f2 | sort -u)
+          fi
+          pkgs=""
+          for p in $changed; do [ -f "packages/$p/recipe" ] && pkgs="$pkgs $p"; done
+          if [ -z "$pkgs" ]; then echo "no recipe changed"; exit 0; fi
+          echo "verifying:$pkgs"
+          tools/lint.sh --fetch $pkgs
