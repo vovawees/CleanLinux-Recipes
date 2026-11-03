@@ -8,3 +8,12 @@ category=core
 depends=(glibc bash)
 source=(gnu://gzip/gzip-$version.tar.xz)
 sha256=(9aa0cc780dec156b8282844833b342ab7cb08c25d2cd9a1869cdd0df31deff48)
+
+do_prepare() {
+	# gzip.h defines a "head" macro; gzip.c includes <signal.h> after it, and on aarch64
+	# <signal.h> pulls in <asm/sigcontext.h>, whose structs have members named "head".
+	# Include <signal.h> first (it is include-guarded, the later #include is a no-op).
+	if grep -q '^#include <signal.h>' gzip.c; then
+		sed -i 's|^#include "gzip.h"|#include <signal.h>\n#include "gzip.h"|' gzip.c
+	fi
+}
