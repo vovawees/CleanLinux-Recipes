@@ -1,0 +1,25 @@
+name=iio-sensor-proxy
+version=3.9
+release=1
+summary="iio-sensor-proxy: the accelerometer, light, compass and proximity sensors over D-Bus (screen rotation of desktops)"
+homepage=https://gitlab.freedesktop.org/hadess/iio-sensor-proxy
+license=(GPL-3.0-or-later)
+category=platform
+# polkit guards the compass (geoclue); no Qualcomm SSC (libssc), no GTK test programs
+depends=(glibc glib libgudev polkit dbus)
+build_type=meson
+source=(https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/-/archive/$version/iio-sensor-proxy-$version.tar.gz
+	iio-sensor-proxy.dinit 81-iio-sensor-proxy-dinit.rules)
+sha256=(
+	af5edd307dcfa52dc3a242d13b7cc756e90a71640caf332efbad960e21649ae4
+	3c6db72ca4a0df17cc0d7ce6eb8046d989bd85f6cedfad22984384d4780d885f
+	a0f09ca6ce6c2efa65b9f3f6efd603e3effdbccab4569a6ecd13e894157523de
+)
+meson_args=(-Dudevrulesdir=/usr/lib/udev/rules.d -Dsystemdsystemunitdir=/usr/lib/systemd/system
+	-Dssc-support=disabled -Dgtk-tests=false -Dtests=false -Dgtk_doc=false)
+
+post_install() {
+	rm -rf "$DESTDIR/usr/lib/systemd"
+	install -Dm644 "$FILES/iio-sensor-proxy.dinit" "$DESTDIR/usr/lib/dinit.d/iio-sensor-proxy"
+	install -Dm644 "$FILES/81-iio-sensor-proxy-dinit.rules" "$DESTDIR/usr/lib/udev/rules.d/81-iio-sensor-proxy-dinit.rules"
+}

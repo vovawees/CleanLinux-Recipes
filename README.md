@@ -182,6 +182,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `hardware` | drivers | 1 | custom | The hardware profile of the device: its quirks (udev rules, hwdb, modprobe.d, sysctl.d), boot modules, kernel command line and boot loader |
 | `harfbuzz` | platform | 15.0.0 | meson | HarfBuzz: the text shaping engine (OpenType layout of every script) |
 | `hwdata` | platform | 0.413 | autotools | hwdata: PCI, USB and PNP id databases (lspci, lsusb, libdisplay-info) |
+| `iio-sensor-proxy` | platform | 3.9 | meson | iio-sensor-proxy: the accelerometer, light, compass and proximity sensors over D-Bus (screen rotation of desktops) |
 | `iproute2` | core | 7.3.0 | custom | IP routing utilities: ip, ss, bridge, tc |
 | `iwd` | core | 3.12 | autotools | iwd: the wireless daemon (WPA2/WPA3, enterprise) and iwctl |
 | `json-c` | core | 0.19 | cmake | JSON-C: JSON objects in C (the LUKS2 metadata of cryptsetup) |
@@ -197,6 +198,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `libffi` | devel | 3.8.0 | autotools | Foreign function interface library: calls with argument lists built at run time (Python ctypes, GLib) |
 | `libfontenc` | platform | 1.1.9 | autotools | libfontenc: font encodings of the X11 font library |
 | `libglvnd` | drivers | 1.7.0 | meson | libglvnd: vendor-neutral dispatch of OpenGL, OpenGL ES, EGL and GLX, so Mesa and the NVIDIA driver live side by side |
+| `libgudev` | platform | 238 | meson | libgudev: GObject bindings of libudev (device enumeration and uevents for GLib programs) |
 | `libinput` | platform | 1.32.0 | meson | libinput: input devices for Wayland compositors and X11 (touchpads, touchscreens, tablets, quirks) |
 | `libpipeline` | core | 1.5.8 | autotools | Library for running pipelines of subprocesses (man-db) |
 | `libpng` | platform | 1.6.59 | autotools | libpng: the PNG reference library (freetype's color glyphs, image loaders) |

@@ -1,0 +1,9 @@
+# the IIO sensors (accelerometer: screen rotation; light, compass, proximity) over D-Bus
+# (net.hadess.SensorProxy) for desktops and spins. 81-iio-sensor-proxy-dinit.rules starts it when
+# udev finds such a sensor; without sensors it exits by itself and stays stopped
+type = process
+command = /usr/lib/iio-sensor-proxy
+restart = on-failure
+smooth-recovery = true
+log-type = buffer
+depends-on: dbus

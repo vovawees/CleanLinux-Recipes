@@ -1,0 +1,3 @@
+# Without systemd: 80-iio-sensor-proxy.rules gives a sensor its IIO_SENSOR_PROXY_TYPE (and a
+# SYSTEMD_WANTS nobody reads); dinit starts the service instead, once, without waiting for it
+ACTION=="add", ENV{IIO_SENSOR_PROXY_TYPE}=="?*", RUN+="/usr/bin/dinitctl --quiet start --no-wait iio-sensor-proxy"
