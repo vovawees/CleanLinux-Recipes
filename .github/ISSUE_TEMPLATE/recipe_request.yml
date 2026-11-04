@@ -1,0 +1,28 @@
+name: Новый рецепт · Recipe request
+description: Пакет, которого не хватает базе · a package the base is missing
+labels: [recipe]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Пакет · Package
+    validations:
+      required: true
+  - type: input
+    id: upstream
+    attributes:
+      label: Upstream (сайт, релизы) · homepage and releases
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Категория · Category
+      options: [core, devel, kernel, firmware, drivers, platform, meta, nonfree]
+  - type: textarea
+    id: why
+    attributes:
+      label: Зачем он базе · Why the base needs it (https://github.com/vovawees/CleanLinux/blob/main/docs/SCOPE.md)
+      description: Без него система не загрузится, не обновится или не использует железо? Иначе — место в сборке.
+    validations:
+      required: true

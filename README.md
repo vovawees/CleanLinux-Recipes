@@ -21,7 +21,9 @@
 packages/<имя>/recipe      рецепт (bash)
 packages/<имя>/patches/    патчи (необязательно)
 packages/<имя>/<файл>      мелкие локальные файлы: конфиги, фрагменты
-tools/lint.sh              автономная проверка рецептов (её запускает CI)
+tools/lint.sh              автономная проверка рецептов (её запускает tools/check.sh)
+tools/check.sh             все проверки перед push: shellcheck, lint, sha256 изменённых рецептов
+tools/edge.sh              канал edge: обновления upstream каждый день (cron)
 tools/updates.sh           слежение за upstream: какие рецепты отстали (--write поднимает версии и sha256)
 TEMPLATE.recipe            шаблон нового рецепта
 ```
@@ -85,8 +87,8 @@ DE, WM, приложений и игр здесь нет: их рецепты ж
 
 ## Каналы (rolling release+++)
 
-- `main` — основной канал: только рецепты, прошедшие CI (lint + проверка ссылок и sha256).
-- `edge` — свежие версии сразу после выхода upstream: workflow `updates` каждый день запускает `tools/updates.sh --write`, проверяет новые ссылки и sha256 (`tools/lint.sh --fetch`), публикует результат в ветку `edge` и предлагает его в `main` через PR. Подписаться: `CHANNEL=edge` в `/etc/burn/burn.conf`.
+- `main` — основной канал: только рецепты, прошедшие проверки `tools/check.sh` (lint + ссылки и sha256).
+- `edge` — свежие версии сразу после выхода upstream: `tools/edge.sh` каждый день (cron у сопровождающего) запускает `tools/updates.sh --write`, проверяет новые ссылки и sha256 (`tools/lint.sh --fetch`), публикует результат в ветку `edge` и предлагает его в `main` через PR. Подписаться: `CHANNEL=edge` в `/etc/burn/burn.conf`.
 - `security` *(план)* — только исправления безопасности поверх `main`.
 
 `burn update` не обновляет вслепую: показывает план (что, зачем, риск `major`/`core`, changelog из git-истории рецептов), сначала **собирает всё**, затем делает снимок btrfs (сам burn, без btrfs-progs), применяет, сам пересобирает пакеты, чьи библиотеки сменили soname, и проверяет систему (`burn doctor`). Любой пакет можно откатить (`burn rollback`) и заморозить (`burn hold`).
@@ -98,7 +100,7 @@ mkdir packages/foo && cp TEMPLATE.recipe packages/foo/recipe   # заполни�
 burn -R packages checksum --write foo    # настоящие sha256 из скачанных файлов
 burn -R packages lint foo
 burn -R packages build foo               # или: install
-tools/lint.sh --fetch foo                 # то же, что проверяет CI
+tools/lint.sh --fetch foo                 # то же, что проверяет tools/check.sh
 ```
 
 ## Как обновить пакеты

@@ -1,0 +1,26 @@
+name: Обновление или поломка рецепта · Recipe update or breakage
+description: Новая версия upstream, уязвимость или рецепт не собирается · new version, vulnerability or a build failure
+labels: [recipe]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Пакет · Package
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Что случилось · What
+      options: [новая версия · new version, уязвимость · vulnerability, не собирается · build failure, другое · other]
+    validations:
+      required: true
+  - type: input
+    id: advisories
+    attributes:
+      label: CVE / GHSA (для security=)
+  - type: textarea
+    id: details
+    attributes:
+      label: Подробности и лог · Details and log
+      render: text
