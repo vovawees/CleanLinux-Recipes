@@ -1,6 +1,6 @@
 name=linux
 version=7.3.1
-release=5
+release=6
 summary="The Linux kernel and modules (CleanLinux defaults + profile GPU drivers)"
 homepage=https://www.kernel.org/
 license=(GPL-2.0-only)
@@ -9,10 +9,11 @@ build_type=custom
 # host tools needed to build: bc perl flex bison openssl libelf (recipes: see ROADMAP)
 makedepends=(bison)
 features=(-sched_ext)
-source=(kernel://kernel/v${version%%.*}.x/linux-$version.tar.xz cleanlinux.config)
+source=(kernel://kernel/v${version%%.*}.x/linux-$version.tar.xz cleanlinux.config x86.config)
 sha256=(
 	fa595aad93734f829c963c2a90ef7c3673224fd7fdae7b49406e397cde2de231
 	0aff1632c6f4c9dfaf381f4ed169eda3dd46c3648a1a90965bfcc75e800a65d2
+	848304723897fe231c5879ae0b63c189f37547872c024c8978af413809ffe8ca
 )
 options=(!lto !strip !hardening)
 
@@ -26,33 +27,14 @@ _kmake() {
 
 do_configure() {
 	local v
-	# start from the profile's config (KERNEL_CONFIG=/path/to/config) or the arch defconfig
+	# start from the profile's config (KERNEL_CONFIG=/path/to/config) or the arch defconfig, then
+	# merge the CleanLinux defaults, the hardware of the arch, the GPU drivers of VIDEO_CARDS and
+	# the profile's KERNEL_FRAGMENT
 	if [[ -n $KERNEL_CONFIG ]]; then cp "$KERNEL_CONFIG" .config; else _kmake defconfig; fi
 	cp "$FILES/cleanlinux.config" "$WORK/fragment.config"
 	{
-		case $KARCH in
-			x86)
-				# zstd kernel; AMD: amd-pstate with EPP (active mode), s2idle (PMC), sensors (SFH),
-				# the power framework (PMF, needs the PSP TEE); handheld controllers and platform
-				# drivers (ROG Ally, Legion Go, MSI Claw, AYANEO, OneXPlayer) as modules; laptop
-				# touchpads and touchscreens: I2C HID behind the Intel LPSS / AMD I2C controllers,
-				# whose interrupts come from the GPIO (pinctrl) drivers
-				printf '%s\n' CONFIG_KERNEL_ZSTD=y CONFIG_SERIAL_8250=y CONFIG_SERIAL_8250_CONSOLE=y CONFIG_RTC_DRV_CMOS=y \
-					CONFIG_X86_AMD_PSTATE=y CONFIG_X86_AMD_PSTATE_DEFAULT_MODE=3 CONFIG_AMD_PMC=m \
-					CONFIG_AMD_SFH_HID=m CONFIG_CRYPTO_DEV_CCP=y CONFIG_CRYPTO_DEV_CCP_DD=m CONFIG_CRYPTO_DEV_SP_PSP=y \
-					CONFIG_TEE=m CONFIG_AMDTEE=m CONFIG_AMD_PMF=m \
-					CONFIG_ASUS_WMI=m CONFIG_ASUS_ARMOURY=m CONFIG_HID_ASUS=m CONFIG_LENOVO_WMI_GAMEZONE=m \
-					CONFIG_HID_LENOVO_GO=m CONFIG_HID_LENOVO_GO_S=m CONFIG_HID_MSI=m CONFIG_MSI_WMI_PLATFORM=m \
-					CONFIG_AYANEO_EC=m CONFIG_OXP_EC=m \
-					CONFIG_PINCTRL=y CONFIG_PINCTRL_AMD=y CONFIG_PINCTRL_INTEL_PLATFORM=y CONFIG_PINCTRL_SUNRISEPOINT=y \
-					CONFIG_PINCTRL_CANNONLAKE=y CONFIG_PINCTRL_ICELAKE=y CONFIG_PINCTRL_TIGERLAKE=y \
-					CONFIG_PINCTRL_ALDERLAKE=y CONFIG_PINCTRL_METEORLAKE=y CONFIG_PINCTRL_JASPERLAKE=y \
-					CONFIG_PINCTRL_GEMINILAKE=y CONFIG_PINCTRL_BROXTON=y CONFIG_MFD_INTEL_LPSS_PCI=m \
-					CONFIG_MFD_INTEL_LPSS_ACPI=m CONFIG_I2C_DESIGNWARE_CORE=y CONFIG_I2C_DESIGNWARE_PLATFORM=y \
-					CONFIG_COMMON_CLK=y CONFIG_I2C_AMD_MP2=m \
-					CONFIG_I2C_HID_ACPI=m
-				;;
-		esac
+		# x86-64 PCs, laptops and handhelds: power, platform drivers, input, sensors, sound
+		if [[ $KARCH == x86 ]]; then cat "$FILES/x86.config"; fi
 		# sched_ext: BPF CPU schedulers (scx_lavd, scx_bpfland...); needs pahole on the build host
 		if use sched_ext; then
 			printf '%s\n' CONFIG_BPF=y CONFIG_BPF_SYSCALL=y CONFIG_BPF_JIT=y CONFIG_DEBUG_INFO=y \
@@ -71,6 +53,11 @@ do_configure() {
 				virgl) printf '%s\n' CONFIG_DRM_VIRTIO_GPU=m ;;
 			esac
 		done
+		# the device's own options (KERNEL_FRAGMENT in its profile) come last and win
+		if [[ -n ${KERNEL_FRAGMENT:-} ]]; then
+			[[ -f $KERNEL_FRAGMENT ]] || die "KERNEL_FRAGMENT=$KERNEL_FRAGMENT: no such file"
+			cat "$KERNEL_FRAGMENT"
+		fi
 	} >>"$WORK/fragment.config"
 	scripts/kconfig/merge_config.sh -m .config "$WORK/fragment.config"
 	_kmake olddefconfig
