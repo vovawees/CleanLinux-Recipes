@@ -119,7 +119,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `binutils` | devel | 2.47 | autotools | GNU assembler, linker and binary utilities |
 | `bison` | devel | 3.8.2 | autotools | GNU parser generator (yacc replacement) |
 | `btrfs-progs` | core | 7.3 | autotools | btrfs filesystem tools: mkfs.btrfs, btrfs (subvolumes, snapshots, scrub, send), btrfsck |
-| `burn` | core | 0.5.0 | make | The CleanLinux package manager: source based, rolling+++ |
+| `burn` | core | 0.6.0 | make | The CleanLinux package manager: source based, rolling+++ |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
 | `dbus` | core | 1.16.2 | meson | D-Bus: the message bus daemon and libdbus |
 | `dhcpcd` | core | 10.5.2 | custom | DHCP and DHCPv6 client: IPv4LL, SLAAC, privilege separation |
