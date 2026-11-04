@@ -1,6 +1,6 @@
 name=util-linux
 version=2.42.4
-release=2
+release=3
 summary="Core Linux system utilities: mount, fdisk, lsblk, agetty, kill, ..."
 homepage=https://github.com/util-linux/util-linux
 license=(GPL-2.0-or-later LGPL-2.1-or-later BSD-3-Clause)
@@ -37,4 +37,8 @@ post_install() {
 	install -Dm644 "$FILES/chfn.pam" "$d/chsh"
 	# users change their own finger information and shell (PAM asks for the password)
 	chmod 4755 "$DESTDIR/usr/bin/chfn" "$DESTDIR/usr/bin/chsh"
+	# hwclock keeps the drift and UTC/LOCAL in /var/lib/hwclock/adjtime: without the
+	# directory every hwclock --systohc (the clock saved at shutdown) fails
+	install -d "$DESTDIR/usr/lib/tmpfiles.d"
+	printf 'd /var/lib/hwclock 0755 root root -\n' >"$DESTDIR/usr/lib/tmpfiles.d/hwclock.conf"
 }
