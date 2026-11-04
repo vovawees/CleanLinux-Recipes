@@ -120,7 +120,8 @@ Upstream определяется по ссылкам самого рецепт�
 | `binutils` | devel | 2.47 | autotools | GNU assembler, linker and binary utilities |
 | `bison` | devel | 3.8.2 | autotools | GNU parser generator (yacc replacement) |
 | `btrfs-progs` | core | 7.3 | autotools | btrfs filesystem tools: mkfs.btrfs, btrfs (subvolumes, snapshots, scrub, send), btrfsck |
-| `burn` | core | 0.6.0 | make | The CleanLinux package manager: source based, rolling+++ |
+| `burn` | core | 0.7.0 | make | The CleanLinux package manager: source based, rolling+++ |
+| `cleanlinux-boot` | core | 0.1.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, kernels in the ESP) |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
 | `dbus` | core | 1.16.2 | meson | D-Bus: the message bus daemon and libdbus |
 | `dhcpcd` | core | 10.5.2 | custom | DHCP and DHCPv6 client: IPv4LL, SLAAC, privilege separation |
@@ -134,7 +135,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `filesystem` | core | 2026.1 | custom | CleanLinux base layout: merged /usr, default /etc files, os-release |
 | `findutils` | core | 4.11.0 | autotools | GNU find, xargs and locate |
 | `gawk` | core | 5.4.1 | autotools | GNU awk |
-| `gcc` | devel | 16.2.0 | autotools | GNU Compiler Collection: C and C++ compilers and their runtime libraries |
+| `gcc` | devel | 16.2.0 | autotools | GNU Compiler Collection: C and C++ compilers |
 | `glibc` | core | 2.44 | autotools | GNU C library: libc, the dynamic loader and friends |
 | `gperf` | devel | 3.3 | autotools | GNU perfect hash function generator (builds the keyword tables of eudev) |
 | `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |

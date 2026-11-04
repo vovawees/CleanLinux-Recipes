@@ -1,11 +1,11 @@
 name=dinit
 version=0.22.1
-release=1
+release=2
 summary="dinit: fast, small service manager and init with dependency handling"
 homepage=https://davmac.org/projects/dinit/
 license=(Apache-2.0)
 category=core
-depends=(glibc)
+depends=(glibc gcc-libs)
 build_type=custom
 source=(https://github.com/davmac314/dinit/releases/download/v$version/dinit-$version.tar.xz)
 sha256=(959b35c171452ecfbc09379b516517dadd675350eebc57ca54aebedda05d9adf)

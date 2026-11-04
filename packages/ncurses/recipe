@@ -1,11 +1,11 @@
 name=ncurses
 version=6.6
-release=1
+release=2
 summary="Terminal handling library (wide character build)"
 homepage=https://invisible-island.net/ncurses/
 license=(MIT-open-group)
 category=core
-depends=(glibc)
+depends=(glibc gcc-libs)
 source=(gnu://ncurses/ncurses-$version.tar.gz)
 sha256=(355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11)
 configure_args=(

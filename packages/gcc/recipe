@@ -1,11 +1,11 @@
 name=gcc
 version=16.2.0
-release=1
-summary="GNU Compiler Collection: C and C++ compilers and their runtime libraries"
+release=2
+summary="GNU Compiler Collection: C and C++ compilers"
 homepage=https://gcc.gnu.org/
 license=(GPL-3.0-or-later GPL-3.0-with-GCC-exception)
 category=devel
-depends=(glibc binutils zlib-ng zstd)
+depends=(glibc binutils gcc-libs zlib-ng zstd)
 features=(-fortran +nls)
 _gmp=6.3.0 _mpfr=4.2.2 _mpc=1.4.1
 source=(
@@ -21,6 +21,16 @@ sha256=(
 	91204cd32f164bd3b7c992d4a6a8ce6519511aadab30f78b6982d0bf8d73e931
 )
 out_of_tree=1
+# the runtime every C++ program (dinit, ...) and pthread_cancel (libgcc_s) need, without the compiler;
+# the sanitizer libraries stay with the compiler, libquadmath only exists on x86_64
+split=(gcc-libs)
+summary_gcc_libs="GCC runtime libraries: libgcc_s, libstdc++, libatomic, libgomp, libitm, libquadmath"
+license_gcc_libs=(GPL-3.0-with-GCC-exception)
+depends_gcc_libs=(glibc)
+files_gcc_libs=(
+	usr/lib/libgcc_s.so.1 'usr/lib/libstdc++.so.6' 'usr/lib/libstdc++.so.6.*[0-9]'
+	'usr/lib/libatomic.so.1*' 'usr/lib/libgomp.so.1*' 'usr/lib/libitm.so.1*' 'usr/lib/libquadmath.so.0*'
+)
 # GCC builds itself with its own flags; the profile flags still reach the target libraries
 options=(!lto !linker)
 configure_args=(
