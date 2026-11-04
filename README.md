@@ -122,6 +122,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `btrfs-progs` | core | 7.3 | autotools | btrfs filesystem tools: mkfs.btrfs, btrfs (subvolumes, snapshots, scrub, send), btrfsck |
 | `burn` | core | 0.7.0 | make | The CleanLinux package manager: source based, rolling+++ |
 | `cleanlinux-boot` | core | 0.1.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, kernels in the ESP) |
+| `cleanlinux-install` | core | 0.1.0 | make | The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, systemd-boot, users |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
 | `dbus` | core | 1.16.2 | meson | D-Bus: the message bus daemon and libdbus |
 | `dhcpcd` | core | 10.5.2 | custom | DHCP and DHCPv6 client: IPv4LL, SLAAC, privilege separation |
