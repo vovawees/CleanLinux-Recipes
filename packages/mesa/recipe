@@ -1,6 +1,6 @@
 name=mesa
 version=26.2.6
-release=1
+release=2
 summary="Mesa: OpenGL, OpenGL ES, EGL, GBM and Vulkan drivers for the GPUs of the profile (VIDEO_CARDS)"
 homepage=https://mesa3d.org/
 license=(MIT)
@@ -16,10 +16,13 @@ category=drivers
 #   v3d        v3d, vc4 and v3dv (Raspberry Pi)
 #   lima etnaviv virgl   lima; etnaviv; virgl and venus (virtio-gpu of virtual machines)
 # The software fallback is softpipe; llvmpipe and lavapipe (feature llvmpipe) need libLLVM at run time.
-# Features: the window systems (wayland, x11: GLX and the X11 WSI of Vulkan).
+# Features: the window systems (wayland, x11: GLX and the X11 WSI of Vulkan; libglvnd needs x11 too,
+# so turn it on for both: FEATURES="x11").
+# OpenGL, OpenGL ES and EGL go through libglvnd: Mesa is the vendor library libEGL_mesa (libGLX_mesa),
+# next to the NVIDIA driver's when it is installed.
 features=(+wayland -x11 -llvmpipe -nvk video_cards_amd video_cards_intel video_cards_nouveau video_cards_freedreno
 	video_cards_panfrost video_cards_v3d video_cards_lima video_cards_etnaviv video_cards_virgl)
-depends=(glibc gcc-libs expat zlib-ng zstd libdrm eudev libdisplay-info elfutils:video_cards_amd wayland:wayland
+depends=(glibc gcc-libs expat zlib-ng zstd libdrm libglvnd eudev libdisplay-info elfutils:video_cards_amd wayland:wayland
 	libx11:x11 libxcb:x11 libxext:x11 libxfixes:x11 libxshmfence:x11 libxxf86vm:x11 libxrandr:x11
 	llvm-libs:llvmpipe)
 makedepends=(python python-mako python-pyyaml python-packaging wayland-protocols:wayland xorgproto:x11
@@ -31,7 +34,7 @@ build_type=meson
 source=(https://archive.mesa3d.org/mesa-$version.tar.xz)
 sha256=(b9436b3e1a8be76fbd4823dc884f90596ab7c6ac5e1867a305e66ffccfb31a92)
 # every codec of the hardware video engines (Vulkan video): the device builds its own packages
-meson_args=(-Db_ndebug=true -Dgles1=disabled -Dgles2=enabled -Degl=enabled -Dgbm=enabled -Dglvnd=disabled
+meson_args=(-Db_ndebug=true -Dgles1=disabled -Dgles2=enabled -Degl=enabled -Dgbm=enabled -Dglvnd=enabled
 	-Dshader-cache=enabled -Dzstd=enabled -Dexpat=enabled -Dxmlconfig=enabled -Ddisplay-info=enabled
 	-Dallow-kcmp=enabled -Dvalgrind=disabled -Dlibunwind=disabled -Dlmsensors=disabled -Dgallium-va=disabled
 	-Dandroid-libbacktrace=disabled -Dmicrosoft-clc=disabled -Dgallium-rusticl=false -Dbuild-tests=false

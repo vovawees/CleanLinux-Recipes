@@ -1,0 +1,24 @@
+name=libglvnd
+version=1.7.0
+release=1
+summary="libglvnd: vendor-neutral dispatch of OpenGL, OpenGL ES, EGL and GLX, so Mesa and the NVIDIA driver live side by side"
+homepage=https://gitlab.freedesktop.org/glvnd/libglvnd
+license=(LicenseRef-libglvnd MIT)
+category=drivers
+# libEGL, libGLESv2, libOpenGL and the headers of the APIs; the drivers are vendor libraries
+# (libEGL_mesa, libEGL_nvidia) found through /usr/share/glvnd/egl_vendor.d. GLX (libGL, libGLX)
+# with the feature x11. OpenGL ES 1 is off, as in Mesa.
+features=(-x11)
+depends=(glibc libx11:x11 libxext:x11)
+makedepends=(python xorgproto:x11)
+build_type=meson
+source=(https://gitlab.freedesktop.org/glvnd/libglvnd/-/archive/v$version/libglvnd-v$version.tar.gz)
+sha256=(2b6e15b06aafb4c0b6e2348124808cbd9b291c647299eaaba2e3202f51ff2f3d)
+meson_args=(-Dasm=enabled -Degl=true -Dgles1=false -Dgles2=true -Dheaders=true -Dhgl=false -Dtls=true
+	-Dentrypoint-patching=enabled)
+
+meson_extra() {
+	local x=disabled
+	if use x11; then x=enabled; fi
+	printf '%s\n' "-Dx11=$x" "-Dglx=$x"
+}
