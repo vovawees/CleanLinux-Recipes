@@ -1,0 +1,18 @@
+name=gdk-pixbuf
+version=2.44.8
+release=1
+summary="GdkPixbuf: image loading for GTK and the icon checks of xdg-desktop-portal (PNG, GIF, ...)"
+homepage=https://gitlab.gnome.org/GNOME/gdk-pixbuf
+license=(LGPL-2.1-or-later)
+category=platform
+features=(+nls)
+depends=(glibc glib libpng)
+build_type=meson
+source=(https://download.gnome.org/sources/gdk-pixbuf/${version%.*}/gdk-pixbuf-$version.tar.xz)
+sha256=(919f529512961a12e81cd4b4b466a48c3933469e7f9a310c6513cd4fb252ba3c)
+# the loaders are built into the library: no loaders.cache to keep up to date. JPEG and TIFF need
+# libraries the platform does not package yet, SVG needs librsvg (Rust); glycin is for GNOME spins
+meson_args=(-Dpng=enabled -Djpeg=disabled -Dtiff=disabled -Dgif=enabled -Dglycin=disabled -Dandroid=disabled
+	-Dothers=disabled -Dbuiltin_loaders=all -Dgtk_doc=false -Ddocumentation=false -Dintrospection=disabled
+	-Dman=false -Dtests=false -Dinstalled_tests=false -Dthumbnailer=disabled -Drelocatable=false)
+meson_extra() { meson_feature nls; }

@@ -127,6 +127,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `bison` | devel | 3.8.2 | autotools | GNU parser generator (yacc replacement) |
 | `bluez` | drivers | 5.87 | autotools | BlueZ: the Bluetooth daemon (bluetoothd), bluetoothctl and libbluetooth |
 | `btrfs-progs` | core | 7.3 | autotools | btrfs filesystem tools: mkfs.btrfs, btrfs (subvolumes, snapshots, scrub, send), btrfsck |
+| `bubblewrap` | platform | 0.13.1 | meson | bubblewrap (bwrap): unprivileged sandboxes in user namespaces (xdg-desktop-portal, Flatpak, Steam) |
 | `burn` | core | 0.7.0 | make | The CleanLinux package manager: source based, rolling+++ |
 | `bzip2` | core | 1.0.8 | custom | Block-sorting file compressor and libbz2 |
 | `ca-certificates` | core | 2026.10.20 | custom | Mozilla's trusted root certificates for TLS (the NSS bundle as extracted by curl.se) |
@@ -155,9 +156,11 @@ Upstream определяется по ссылкам самого рецепт�
 | `fontconfig` | platform | 2.18.3 | meson | Fontconfig: font discovery and configuration (fc-list, fc-match, fc-cache) |
 | `freetype` | platform | 2.15.0 | meson | FreeType: the font rasterizer (TrueType, OpenType, CFF, WOFF, bitmap fonts) |
 | `fribidi` | platform | 1.0.18 | meson | GNU FriBidi: the Unicode bidirectional algorithm (Arabic, Hebrew) for Pango and others |
+| `fuse3` | platform | 3.18.3 | meson | FUSE 3: filesystems in user space (libfuse3, fusermount3): the document portal, sshfs, AppImage |
 | `gawk` | core | 5.4.1 | autotools | GNU awk |
 | `gcc` | devel | 16.2.0 | autotools | GNU Compiler Collection: C and C++ compilers |
 | `gdbm` | core | 1.26 | autotools | GNU dbm: key/value database library (man-db's index) |
+| `gdk-pixbuf` | platform | 2.44.8 | meson | GdkPixbuf: image loading for GTK and the icon checks of xdg-desktop-portal (PNG, GIF, ...) |
 | `gettext` | devel | 1.0 | autotools | GNU gettext tools: msgfmt, xgettext, autopoint (glibc has libintl itself) |
 | `git` | core | 2.56.0 | custom | Distributed version control system |
 | `glib` | platform | 2.90.1 | meson | GLib: the core library of GNOME and many others (GObject, GIO, D-Bus bindings) |
@@ -166,12 +169,15 @@ Upstream определяется по ссылкам самого рецепт�
 | `gperf` | devel | 3.3 | autotools | GNU perfect hash function generator (builds the keyword tables of eudev) |
 | `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |
 | `groff` | core | 1.24.2 | autotools | GNU troff: formats manual pages for the terminal |
+| `gst-plugins-base` | platform | 1.28.8 | meson | GStreamer base plugins and libraries (pbutils, audio, video, app): playback, conversion, ALSA |
+| `gstreamer` | platform | 1.28.8 | meson | GStreamer: the multimedia framework core (pipelines, plugin registry, gst-launch-1.0, gst-inspect-1.0) |
 | `gzip` | core | 1.15 | autotools | GNU gzip compression utility |
 | `hardware` | drivers | 1 | custom | The hardware profile of the device: its quirks (udev rules, hwdb, modprobe.d, sysctl.d) and boot modules |
 | `harfbuzz` | platform | 15.0.0 | meson | HarfBuzz: the text shaping engine (OpenType layout of every script) |
 | `hwdata` | platform | 0.413 | autotools | hwdata: PCI, USB and PNP id databases (lspci, lsusb, libdisplay-info) |
 | `iproute2` | core | 7.3.0 | custom | IP routing utilities: ip, ss, bridge, tc |
 | `iwd` | core | 3.12 | autotools | iwd: the wireless daemon (WPA2/WPA3, enterprise) and iwctl |
+| `json-glib` | platform | 1.10.8 | meson | JSON-GLib: JSON parsing and generation for GLib and GObject (xdg-desktop-portal) |
 | `kbd` | core | 2.10.0 | autotools | Console keyboard maps and fonts: loadkeys, setfont, showkey, kbd_mode |
 | `kmod` | core | 34.3 | meson | Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo |
 | `less` | core | 710 | autotools | Terminal pager (man, git and burn show long output with it) |
@@ -267,6 +273,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `wireless-regdb` | firmware | 2026.09.03 | custom | Wireless regulatory database: the allowed Wi-Fi channels and power of each country (signed) |
 | `wireplumber` | platform | 0.5.19 | meson | WirePlumber: the session and policy manager of PipeWire (devices, routing, Bluetooth profiles) |
 | `xcb-proto` | platform | 1.17.0 | autotools | XCB protocol descriptions: the XML of the X11 protocol and the xcbgen generator of libxcb |
+| `xdg-desktop-portal` | platform | 1.22.1 | meson | xdg-desktop-portal: the portal D-Bus service (files, screenshots, screen casting, ...) for sandboxed and regular apps |
 | `xkbcomp` | platform | 1.5.0 | autotools | xkbcomp: the XKB keymap compiler of the X servers (Xwayland runs it for every keymap) |
 | `xkeyboard-config` | platform | 2.48 | meson | XKB data: keyboard models, layouts and options for libxkbcommon and X11 |
 | `xorgproto` | platform | 2026.1 | meson | X11 protocol headers: xproto, the extensions (randr, render, xinput, dri3, present, ...) and GL/GLX |

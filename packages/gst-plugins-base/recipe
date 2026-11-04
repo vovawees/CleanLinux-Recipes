@@ -1,0 +1,30 @@
+name=gst-plugins-base
+version=1.28.8
+release=1
+summary="GStreamer base plugins and libraries (pbutils, audio, video, app): playback, conversion, ALSA"
+homepage=https://gstreamer.freedesktop.org/
+license=(LGPL-2.1-or-later)
+category=platform
+# the codecs of the Ogg family and OpenGL need libraries the platform does not package yet: media spins
+# add them with their recipes; X11 sinks by feature x11
+features=(+nls +alsa -x11)
+depends=(glibc glib gstreamer zlib-ng alsa-lib:alsa libx11:x11 libxext:x11 libxi:x11)
+build_type=meson
+source=(https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-$version.tar.xz)
+sha256=(ade70e3381fcbb024f1f20aa9ede9b5654aeed39d5bd70b1a98f53015e501117)
+meson_args=(-Dadder=enabled -Dapp=enabled -Daudioconvert=enabled -Daudiomixer=enabled -Daudiorate=enabled
+	-Daudioresample=enabled -Daudiotestsrc=enabled -Dcompositor=enabled -Ddebugutils=enabled -Ddsd=enabled
+	-Dencoding=enabled -Dgio=enabled -Dgio-typefinder=enabled -Doverlaycomposition=enabled -Dpbtypes=enabled
+	-Dplayback=enabled -Drawparse=enabled -Dsubparse=enabled -Dtcp=enabled -Dtypefind=enabled
+	-Dvideoconvertscale=enabled -Dvideorate=enabled -Dvideotestsrc=enabled -Dvolume=enabled -Ddrm=enabled
+	-Dgl=disabled -Dogg=disabled -Dopus=disabled -Dtheora=disabled -Dvorbis=disabled -Dtremor=disabled
+	-Dpango=disabled -Dcdparanoia=disabled -Dlibvisual=disabled -Dxvideo=disabled -Dorc=disabled
+	-Diso-codes=disabled -Dexamples=disabled -Dtests=disabled -Dtools=enabled -Dintrospection=disabled
+	-Ddoc=disabled -Dqt5=disabled -Dpackage-name=CleanLinux -Dpackage-origin=https://github.com/vovawees/CleanLinux)
+meson_extra() {
+	meson_feature nls
+	meson_feature alsa
+	meson_feature x11
+	meson_feature x11 xshm
+	meson_feature x11 xi
+}

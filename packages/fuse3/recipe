@@ -1,0 +1,17 @@
+name=fuse3
+version=3.18.3
+release=1
+summary="FUSE 3: filesystems in user space (libfuse3, fusermount3): the document portal, sshfs, AppImage"
+homepage=https://github.com/libfuse/libfuse
+license=(GPL-2.0-only LGPL-2.1-only)
+category=platform
+depends=(glibc)
+build_type=meson
+source=(https://github.com/libfuse/libfuse/releases/download/fuse-$version/fuse-$version.tar.gz)
+sha256=(bcd19582c5e30f7fe45dd86a5540e998590aa01903afc7ebcbeea6c8ac5421ee)
+backup=(etc/fuse.conf)
+# no init script; fusermount3 is setuid root (mounts for unprivileged users), set here and not by meson
+meson_args=(-Dutils=true -Dexamples=false -Dtests=false -Duseroot=false -Dinitscriptdir= -Denable-io-uring=false
+	-Dudevrulesdir=/usr/lib/udev/rules.d)
+
+post_install() { chmod 4755 "$DESTDIR/usr/bin/fusermount3"; }

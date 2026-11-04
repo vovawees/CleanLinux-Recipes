@@ -1,0 +1,16 @@
+name=xdg-desktop-portal
+version=1.22.1
+release=1
+summary="xdg-desktop-portal: the portal D-Bus service (files, screenshots, screen casting, ...) for sandboxed and regular apps"
+homepage=https://flatpak.github.io/xdg-desktop-portal/
+license=(LGPL-2.1-or-later)
+category=platform
+# the session bus starts it on demand; the backends (wlr, KDE, GTK, GNOME) come with the spins.
+# Images and sounds from apps are checked inside bubblewrap; the document portal mounts with FUSE
+depends=(glibc glib json-glib fuse3 gdk-pixbuf gstreamer gst-plugins-base pipewire bubblewrap dbus)
+build_type=meson
+source=(https://github.com/flatpak/xdg-desktop-portal/releases/download/$version/xdg-desktop-portal-$version.tar.xz)
+sha256=(d4879ddb3d65ff1a8f19187497e6f13dc5d267bcac404a5d501218be355753d3)
+meson_args=(-Dflatpak-interfaces=disabled -Dgeoclue=disabled -Dgudev=disabled -Dsystemd=disabled
+	-Ddocumentation=disabled -Dman-pages=disabled -Dtests=disabled -Dinstalled-tests=false
+	-Dsandboxed-image-validation=enabled -Dsandboxed-sound-validation=enabled)
