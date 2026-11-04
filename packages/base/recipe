@@ -1,6 +1,6 @@
 name=base
 version=2026.1
-release=6
+release=7
 summary="Minimal CleanLinux userland (meta package)"
 homepage=https://github.com/vovawees/CleanLinux-Recipes
 license=(MIT)
@@ -9,7 +9,9 @@ build_type=meta
 # what boots and lets you in: init and devices, users and login (PAM, shadow), the tools of the
 # root filesystems (btrfs, ext4, the vfat ESP), wired networking (DHCP); no kernel and no boot
 # loader (profile, installer), no Wi-Fi daemon (iwd: the installer adds it where there is Wi-Fi);
-# gcc-libs: libstdc++ for dinit, libgcc_s for pthread_cancel in glibc
+# gcc-libs: libstdc++ for dinit, libgcc_s for pthread_cancel in glibc; the console minimum of an
+# administrator: processes (ps, top, pkill, killall, fuser), a pager, keymaps and console fonts;
+# burn brings curl, git and the CA certificates; no editor and no other shell
 depends=(filesystem glibc gcc-libs bash coreutils util-linux kmod dinit eudev sed grep gawk tar gzip xz zstd lz4 zlib-ng
 	findutils diffutils ncurses readline libxcrypt linux-pam pambase shadow e2fsprogs btrfs-progs dosfstools
-	iproute2 dhcpcd openresolv cleanlinux-boot burn)
+	iproute2 dhcpcd openresolv procps-ng psmisc less kbd cleanlinux-boot burn)

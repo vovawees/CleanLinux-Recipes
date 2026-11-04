@@ -1,0 +1,12 @@
+name=less
+version=710
+release=1
+summary="Terminal pager (man, git and burn show long output with it)"
+homepage=https://www.greenwoodsoftware.com/less/
+license=(GPL-3.0-or-later)
+category=core
+depends=(glibc ncurses)
+build_type=autotools
+source=(https://ftp.gnu.org/gnu/less/less-$version.tar.gz)
+sha256=(d1008fb78dcae1323ddab664bcb352a61f022b1b131bd8018548e021d975ec7a)
+configure_args=(--with-regex=posix)

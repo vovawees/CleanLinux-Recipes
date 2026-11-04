@@ -146,7 +146,9 @@ Upstream определяется по ссылкам самого рецепт�
 | `gzip` | core | 1.15 | autotools | GNU gzip compression utility |
 | `iproute2` | core | 7.3.0 | custom | IP routing utilities: ip, ss, bridge, tc |
 | `iwd` | core | 3.12 | autotools | iwd: the wireless daemon (WPA2/WPA3, enterprise) and iwctl |
+| `kbd` | core | 2.10.0 | autotools | Console keyboard maps and fonts: loadkeys, setfont, showkey, kbd_mode |
 | `kmod` | core | 34.3 | meson | Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo |
+| `less` | core | 710 | autotools | Terminal pager (man, git and burn show long output with it) |
 | `libxcrypt` | core | 4.5.2 | autotools | Modern crypt(3): yescrypt, bcrypt and SHA-crypt password hashing (libcrypt) |
 | `linux-headers` | core | 7.3.1 | custom | Linux kernel userspace API headers |
 | `linux-pam` | core | 1.7.3 | meson | Linux-PAM: pluggable authentication modules (pam_unix, pam_limits, pam_env, ...) |
@@ -160,6 +162,8 @@ Upstream определяется по ссылкам самого рецепт�
 | `pambase` | core | 2026.1 | custom | CleanLinux PAM stacks: system-auth, system-login, system-services, other |
 | `patch` | devel | 2.8.1 | autotools | GNU patch: apply diff files |
 | `pkgconf` | devel | 3.0.10 | meson | pkg-config implementation (also installed as pkg-config) |
+| `procps-ng` | core | 4.0.7 | autotools | Process and memory tools: ps, top, free, vmstat, pgrep/pkill, watch, sysctl, uptime, w |
+| `psmisc` | core | 23.7 | autotools | Process tools that use /proc: fuser, killall, pstree, prtstat, peekfd |
 | `readline` | core | 8.3.6 | autotools | GNU readline: line editing and history for interactive programs |
 | `sed` | core | 4.10 | autotools | GNU stream editor |
 | `shadow` | core | 4.20.3 | autotools | Password and account tools: passwd, useradd, usermod, groupadd, chage, newuidmap, ... |

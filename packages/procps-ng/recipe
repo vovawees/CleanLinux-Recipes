@@ -1,0 +1,13 @@
+name=procps-ng
+version=4.0.7
+release=1
+summary="Process and memory tools: ps, top, free, vmstat, pgrep/pkill, watch, sysctl, uptime, w"
+homepage=https://gitlab.com/procps-ng/procps
+license=(GPL-2.0-or-later LGPL-2.1-or-later)
+category=core
+depends=(glibc ncurses)
+build_type=autotools
+source=(https://downloads.sourceforge.net/project/procps-ng/Production/procps-ng-$version.tar.xz)
+sha256=(9d2021f47a4501c667862c9942a92d1953694b21d11bcd1702e83eb594e3d67d)
+# kill comes from util-linux
+configure_args=(--disable-kill --without-systemd --without-elogind --with-ncurses --enable-watch8bit --disable-static)

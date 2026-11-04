@@ -1,0 +1,11 @@
+name=psmisc
+version=23.7
+release=1
+summary="Process tools that use /proc: fuser, killall, pstree, prtstat, peekfd"
+homepage=https://gitlab.com/psmisc/psmisc
+license=(GPL-2.0-or-later)
+category=core
+depends=(glibc ncurses)
+build_type=autotools
+source=(https://downloads.sourceforge.net/project/psmisc/psmisc/psmisc-$version.tar.xz)
+sha256=(58c55d9c1402474065adae669511c191de374b0871eec781239ab400b907c327)
