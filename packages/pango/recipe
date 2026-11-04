@@ -1,0 +1,15 @@
+name=pango
+version=1.58.2
+release=1
+summary="Pango: text layout and rendering (HarfBuzz shaping, FriBidi, Fontconfig fonts, cairo drawing)"
+homepage=https://www.gtk.org/docs/architecture/pango
+license=(LGPL-2.0-or-later)
+category=platform
+# no Xft (cairo draws on X11 as well), no libthai, no introspection
+depends=(glibc glib harfbuzz fribidi fontconfig freetype cairo)
+build_type=meson
+source=(https://download.gnome.org/sources/pango/${version%.*}/pango-$version.tar.xz)
+sha256=(342385b6ca3b7c73455d7c80a13b7dbe4489e00bc3bd4c5bd6ed4dce421e374a)
+meson_args=(-Dcairo=enabled -Dfreetype=enabled -Dfontconfig=enabled -Dxft=disabled -Dlibthai=disabled
+	-Dsysprof=disabled -Dintrospection=disabled -Ddocumentation=false -Dman-pages=false
+	-Dbuild-testsuite=false -Dbuild-examples=false)

@@ -131,6 +131,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `burn` | core | 0.8.0 | make | The CleanLinux package manager: source based, rolling+++ |
 | `bzip2` | core | 1.0.8 | custom | Block-sorting file compressor and libbz2 |
 | `ca-certificates` | core | 2026.10.20 | custom | Mozilla's trusted root certificates for TLS (the NSS bundle as extracted by curl.se) |
+| `cairo` | platform | 1.18.6 | meson | cairo: 2D vector graphics (image, PNG, PDF, PS, SVG, X11 and XCB surfaces), drawn by pixman |
 | `ccache` | devel | 4.14.2 | cmake | Compiler cache: rebuilds of the same sources come from the cache (burn CCACHE=1) |
 | `cleanlinux-boot` | core | 0.2.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, zram, power, kernels in the ESP) |
 | `cleanlinux-install` | core | 0.2.0 | make | The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, systemd-boot, users |
@@ -234,6 +235,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `openresolv` | core | 3.17.4 | custom | resolvconf: /etc/resolv.conf from DHCP clients, VPNs and local resolvers |
 | `openssl` | core | 3.5.9 | custom | TLS and cryptography library and the openssl tool (3.5 LTS) |
 | `pambase` | core | 2026.1 | custom | CleanLinux PAM stacks: system-auth, system-login, system-services, other |
+| `pango` | platform | 1.58.2 | meson | Pango: text layout and rendering (HarfBuzz shaping, FriBidi, Fontconfig fonts, cairo drawing) |
 | `patch` | devel | 2.8.1 | autotools | GNU patch: apply diff files |
 | `pcre2` | platform | 10.49 | autotools | PCRE2: Perl-compatible regular expressions (8, 16 and 32 bit, JIT) for GLib, Qt, grep |
 | `perl` | devel | 5.44.0 | custom | The Perl 5 language: autoconf, automake, OpenSSL and kernel builds need it |
