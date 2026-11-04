@@ -1,13 +1,16 @@
 name=llvm
 version=23.1.5
-release=1
+release=2
 summary="LLVM and clang: the compiler of llvmpipe and lavapipe and of the OpenCL C kernels of Mesa (Intel, Mali)"
 homepage=https://llvm.org/
 license=('Apache-2.0 WITH LLVM-exception')
 category=devel
 # Only Mesa needs it, and only where the GPU does (see the mesa recipe); the base compiler stays GCC.
 # One shared libLLVM (llvm-libs, what llvmpipe links at run time) and libclang-cpp; the native target only:
-# clang reaches SPIR-V through its SPIR target and SPIRV-LLVM-Translator, which need no backend
+# clang reaches SPIR-V through its SPIR target and SPIRV-LLVM-Translator, which need no backend.
+# Feature toolchain: clang as a compiler of the system (COMPILER=clang of burn) - lld (the linker of
+# ThinLTO) and, in a native build, the profile runtime of compiler-rt (PGO=1 with clang)
+features=(-toolchain)
 depends=(glibc gcc-libs zlib-ng zstd libffi ncurses)
 makedepends=(cmake ninja python)
 build_type=cmake
@@ -19,7 +22,7 @@ summary_llvm_libs="The LLVM runtime library (libLLVM): llvmpipe and lavapipe of 
 license_llvm_libs=('Apache-2.0 WITH LLVM-exception')
 depends_llvm_libs=(glibc gcc-libs zlib-ng zstd libffi)
 files_llvm_libs=('usr/lib/libLLVM.so.*' 'usr/lib/libLLVM-*.so')
-cmake_args=(-DLLVM_ENABLE_PROJECTS=clang -DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCLANG_LINK_CLANG_DYLIB=ON
+cmake_args=(-DLLVM_BUILD_LLVM_DYLIB=ON -DLLVM_LINK_LLVM_DYLIB=ON -DCLANG_LINK_CLANG_DYLIB=ON
 	-DLLVM_ENABLE_RTTI=ON -DLLVM_ENABLE_FFI=ON -DLLVM_ENABLE_ZLIB=FORCE_ON -DLLVM_ENABLE_ZSTD=FORCE_ON
 	-DLLVM_ENABLE_LIBXML2=OFF -DLLVM_ENABLE_ASSERTIONS=OFF -DLLVM_INSTALL_UTILS=ON -DLLVM_INCLUDE_TESTS=OFF
 	-DLLVM_INCLUDE_BENCHMARKS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_INCLUDE_DOCS=OFF -DLLVM_ENABLE_BINDINGS=OFF
@@ -32,4 +35,14 @@ cmake_extra() {
 		*) die "llvm: no LLVM target for $CARCH" ;;
 	esac
 	printf '%s\n' "-DLLVM_TARGETS_TO_BUILD=$target" "-DLLVM_HOST_TRIPLE=$CHOST" "-DLLVM_DEFAULT_TARGET_TRIPLE=$CHOST"
+	if ! use toolchain; then
+		echo "-DLLVM_ENABLE_PROJECTS=clang"
+		return
+	fi
+	echo "-DLLVM_ENABLE_PROJECTS=clang;lld"
+	# the runtimes are built by the new clang: it has to run here
+	if ((CROSS)); then return; fi
+	printf '%s\n' -DLLVM_ENABLE_RUNTIMES=compiler-rt -DCOMPILER_RT_BUILD_PROFILE=ON -DCOMPILER_RT_BUILD_BUILTINS=OFF \
+		-DCOMPILER_RT_BUILD_SANITIZERS=OFF -DCOMPILER_RT_BUILD_XRAY=OFF -DCOMPILER_RT_BUILD_LIBFUZZER=OFF \
+		-DCOMPILER_RT_BUILD_MEMPROF=OFF -DCOMPILER_RT_BUILD_ORC=OFF -DCOMPILER_RT_BUILD_CTX_PROFILE=OFF
 }
