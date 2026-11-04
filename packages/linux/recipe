@@ -1,6 +1,6 @@
 name=linux
 version=7.3.1
-release=4
+release=5
 summary="The Linux kernel and modules (CleanLinux defaults + profile GPU drivers)"
 homepage=https://www.kernel.org/
 license=(GPL-2.0-only)
@@ -12,7 +12,7 @@ features=(-sched_ext)
 source=(kernel://kernel/v${version%%.*}.x/linux-$version.tar.xz cleanlinux.config)
 sha256=(
 	fa595aad93734f829c963c2a90ef7c3673224fd7fdae7b49406e397cde2de231
-	d1b6916a3808b2cbea485be4f49cb5890e2252ed77d4c11ac83d5f99c14b122a
+	0aff1632c6f4c9dfaf381f4ed169eda3dd46c3648a1a90965bfcc75e800a65d2
 )
 options=(!lto !strip !hardening)
 
@@ -34,14 +34,23 @@ do_configure() {
 			x86)
 				# zstd kernel; AMD: amd-pstate with EPP (active mode), s2idle (PMC), sensors (SFH),
 				# the power framework (PMF, needs the PSP TEE); handheld controllers and platform
-				# drivers (ROG Ally, Legion Go, MSI Claw, AYANEO, OneXPlayer) as modules
+				# drivers (ROG Ally, Legion Go, MSI Claw, AYANEO, OneXPlayer) as modules; laptop
+				# touchpads and touchscreens: I2C HID behind the Intel LPSS / AMD I2C controllers,
+				# whose interrupts come from the GPIO (pinctrl) drivers
 				printf '%s\n' CONFIG_KERNEL_ZSTD=y CONFIG_SERIAL_8250=y CONFIG_SERIAL_8250_CONSOLE=y CONFIG_RTC_DRV_CMOS=y \
 					CONFIG_X86_AMD_PSTATE=y CONFIG_X86_AMD_PSTATE_DEFAULT_MODE=3 CONFIG_AMD_PMC=m \
 					CONFIG_AMD_SFH_HID=m CONFIG_CRYPTO_DEV_CCP=y CONFIG_CRYPTO_DEV_CCP_DD=m CONFIG_CRYPTO_DEV_SP_PSP=y \
 					CONFIG_TEE=m CONFIG_AMDTEE=m CONFIG_AMD_PMF=m \
 					CONFIG_ASUS_WMI=m CONFIG_ASUS_ARMOURY=m CONFIG_HID_ASUS=m CONFIG_LENOVO_WMI_GAMEZONE=m \
 					CONFIG_HID_LENOVO_GO=m CONFIG_HID_LENOVO_GO_S=m CONFIG_HID_MSI=m CONFIG_MSI_WMI_PLATFORM=m \
-					CONFIG_AYANEO_EC=m CONFIG_OXP_EC=m
+					CONFIG_AYANEO_EC=m CONFIG_OXP_EC=m \
+					CONFIG_PINCTRL=y CONFIG_PINCTRL_AMD=y CONFIG_PINCTRL_INTEL_PLATFORM=y CONFIG_PINCTRL_SUNRISEPOINT=y \
+					CONFIG_PINCTRL_CANNONLAKE=y CONFIG_PINCTRL_ICELAKE=y CONFIG_PINCTRL_TIGERLAKE=y \
+					CONFIG_PINCTRL_ALDERLAKE=y CONFIG_PINCTRL_METEORLAKE=y CONFIG_PINCTRL_JASPERLAKE=y \
+					CONFIG_PINCTRL_GEMINILAKE=y CONFIG_PINCTRL_BROXTON=y CONFIG_MFD_INTEL_LPSS_PCI=m \
+					CONFIG_MFD_INTEL_LPSS_ACPI=m CONFIG_I2C_DESIGNWARE_CORE=y CONFIG_I2C_DESIGNWARE_PLATFORM=y \
+					CONFIG_COMMON_CLK=y CONFIG_I2C_AMD_MP2=m \
+					CONFIG_I2C_HID_ACPI=m
 				;;
 		esac
 		# sched_ext: BPF CPU schedulers (scx_lavd, scx_bpfland...); needs pahole on the build host
