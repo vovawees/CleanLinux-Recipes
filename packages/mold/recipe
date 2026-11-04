@@ -1,0 +1,13 @@
+name=mold
+version=3.0.0
+release=1
+summary="Fast linker for ELF (burn LINKER=mold)"
+homepage=https://github.com/rui314/mold
+license=(MIT)
+category=devel
+depends=(glibc gcc-libs zlib-ng zstd)
+build_type=cmake
+source=(mold-$version.tar.gz::https://github.com/rui314/mold/archive/refs/tags/v$version.tar.gz)
+sha256=(1dee837e227b0c3f2661def602ef8ddc0b889ae5b1d28c1ddec5f29e08e5ceb5)
+# the bundled mimalloc and oneTBB, the system zlib and zstd
+cmake_args=(-DMOLD_USE_SYSTEM_MIMALLOC=OFF -DMOLD_USE_SYSTEM_TBB=OFF -DMOLD_LTO=OFF -DBUILD_TESTING=OFF)

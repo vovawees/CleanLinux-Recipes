@@ -1,0 +1,13 @@
+name=dwarves
+version=1.32
+release=1
+summary="pahole and the DWARF tools: BTF for the kernel (sched_ext, BPF), struct layouts"
+homepage=https://git.kernel.org/pub/scm/devel/pahole/pahole.git
+license=(GPL-2.0-only)
+category=devel
+depends=(glibc elfutils zlib-ng)
+build_type=cmake
+source=(https://fedorapeople.org/~acme/dwarves/dwarves-$version.tar.xz)
+sha256=(319cbf319e9fc92065a5407ce47eb868d73566f3d4840a56832734e4579df947)
+# the libbpf of the tarball
+cmake_args=(-D__LIB=lib -DLIBBPF_EMBEDDED=ON)

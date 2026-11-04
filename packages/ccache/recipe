@@ -1,0 +1,14 @@
+name=ccache
+version=4.14.2
+release=1
+summary="Compiler cache: rebuilds of the same sources come from the cache (burn CCACHE=1)"
+homepage=https://ccache.dev
+license=(GPL-3.0-or-later)
+category=devel
+depends=(glibc gcc-libs zstd)
+build_type=cmake
+source=(https://github.com/ccache/ccache/releases/download/v$version/ccache-$version.tar.xz)
+sha256=(0feb2707d9cb48885abb950e5d629e85f57fa79a2439cbbdfa681d6c3dc5f0dc)
+# nothing downloaded: the bundled third party code and the system zstd; no remote storage
+cmake_args=(-DDEPS=LOCAL -DENABLE_TESTING=OFF -DREDIS_STORAGE_BACKEND=OFF -DHTTP_STORAGE_BACKEND=OFF
+	-DENABLE_DOCUMENTATION=OFF)
