@@ -59,7 +59,7 @@ meson_extra() { meson_feature zlib; meson_feature lzma; meson_feature lz4; }
 | `patches`, `patch_strip` | патчи и уровень `-p` (по умолчанию 1) |
 | `configure_args`, `meson_args`, `cmake_args`, `make_args`, `make_install_args`, `cargo_args` | аргументы систем сборки |
 | `out_of_tree`, `meson_subdir`, `cmake_subdir`, `srcdir` | раскладка исходников |
-| `options` | `!lto` `!strip` `!hardening` `!prune` `!linker` (только GNU ld) `staticlibs` `emptydirs` `o3` (горячий код: -O3) `late` (`burn update` собирает пакет после применения обновления, против новой системы: внешние модули ядра) |
+| `options` | `!lto` `!strip` `!hardening` `!prune` `!linker` (только GNU ld) `staticlibs` `emptydirs` `o3` (горячий код: -O3) `late` (`burn update` собирает пакет после применения обновления, против новой системы: внешние модули ядра) `pgo` (при `PGO=1`: сборка с профилем, тренировка — `do_pgo` или `check`) `!clang` (всегда GCC, даже при `COMPILER=clang`: glibc, ядро, GCC) |
 | `backup` | конфиги, которые нельзя перезаписывать (новая версия ляжет как `.burnnew`) |
 | `split` | дополнительные пакеты из той же сборки (`split=(gcc-libs)`); для каждого: `files_KEY` (пути и glob-шаблоны внутри `$DESTDIR`, обязательно), `summary_KEY`, `depends_KEY`, `backup_KEY`, `license_KEY`, где `KEY` — имя с `_` вместо `-` и `.` |
 
