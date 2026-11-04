@@ -1,0 +1,20 @@
+name=cleanlinux-profiles
+version=2026.11.4
+release=1
+summary="The hardware profiles of CleanLinux for burn: generic, native and the devices"
+homepage=https://github.com/vovawees/CleanLinux/tree/main/profiles
+license=(MIT)
+category=core
+build_type=custom
+# profiles/ of the CleanLinux repository (tools/profiles-tarball.sh, release profiles-VERSION);
+# burn reads them from /usr/share/burn/profiles, /etc/burn/profiles comes first
+source=(https://github.com/vovawees/CleanLinux/releases/download/profiles-$version/cleanlinux-profiles-$version.tar.gz)
+sha256=(4172b1a83cd7560766fae584465884241dfb9699f3b475ff243e428f79f34bc9)
+
+do_build() { :; }
+do_install() {
+	install -d "$DESTDIR/usr/share/burn"
+	cp -r profiles "$DESTDIR/usr/share/burn/"
+	find "$DESTDIR/usr/share/burn/profiles" -type d -exec chmod 755 {} + -o -type f -exec chmod 644 {} +
+	install -Dm644 LICENSE "$DESTDIR/usr/share/licenses/$name/LICENSE"
+}
