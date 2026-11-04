@@ -1,0 +1,12 @@
+name=xkbcomp
+version=1.5.0
+release=1
+summary="xkbcomp: the XKB keymap compiler of the X servers (Xwayland runs it for every keymap)"
+homepage=https://gitlab.freedesktop.org/xorg/app/xkbcomp
+license=(MIT)
+category=platform
+depends=(glibc libxkbfile libx11 xkeyboard-config)
+makedepends=(xorgproto)
+source=(https://www.x.org/archive/individual/app/xkbcomp-$version.tar.xz)
+sha256=(2ac31f26600776db6d9cd79b3fcd272263faebac7eb85fb2f33c7141b8486060)
+configure_args=(--with-xkb-config-root=/usr/share/X11/xkb)

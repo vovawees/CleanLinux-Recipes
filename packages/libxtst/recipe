@@ -1,0 +1,12 @@
+name=libxtst
+version=1.2.6
+release=1
+summary="libXtst: client library of the XTEST and RECORD extensions (input emulation)"
+homepage=https://gitlab.freedesktop.org/xorg/lib/libxtst
+license=(MIT)
+category=platform
+depends=(glibc libxi libxext)
+makedepends=(xorgproto)
+source=(https://www.x.org/archive/individual/lib/libXtst-$version.tar.xz)
+sha256=(f94f0b37c07d80d877f3eda2c2405cc7e62aa9842f6310354aa349e3d66a4fe5)
+configure_args=(--disable-static --disable-specs --without-xmlto --without-fop --without-xsltproc)

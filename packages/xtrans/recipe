@@ -1,0 +1,10 @@
+name=xtrans
+version=1.6.0
+release=1
+summary="xtrans: the transport layer of the X11 libraries and servers (headers only)"
+homepage=https://gitlab.freedesktop.org/xorg/lib/libxtrans
+license=(MIT)
+category=platform
+source=(https://www.x.org/archive/individual/lib/xtrans-$version.tar.xz)
+sha256=(faafea166bf2451a173d9d593352940ec6404145c5d1da5c213423ce4d359e92)
+configure_args=(--disable-docs --without-xmlto --without-fop --without-xsltproc)

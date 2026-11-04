@@ -1,0 +1,12 @@
+name=libxfont2
+version=2.0.9
+release=1
+summary="libXfont2: the font library of the X servers (the built-in fonts, PCF and FreeType fonts)"
+homepage=https://gitlab.freedesktop.org/xorg/lib/libxfont
+license=(MIT)
+category=platform
+depends=(glibc freetype libfontenc zlib-ng)
+makedepends=(xorgproto xtrans)
+source=(https://www.x.org/archive/individual/lib/libXfont2-$version.tar.xz)
+sha256=(f042a370666815e7b941e9b7019024755bd1c6c2954afbfa515af378251799e2)
+configure_args=(--disable-static --disable-devel-docs --without-xmlto --without-fop --without-xsltproc)

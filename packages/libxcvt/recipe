@@ -1,0 +1,11 @@
+name=libxcvt
+version=0.1.3
+release=1
+summary="libxcvt: VESA CVT display timings (the modes that Xwayland offers to X11 clients)"
+homepage=https://gitlab.freedesktop.org/xorg/lib/libxcvt
+license=(MIT)
+category=platform
+depends=(glibc)
+build_type=meson
+source=(https://www.x.org/archive/individual/lib/libxcvt-$version.tar.xz)
+sha256=(a929998a8767de7dfa36d6da4751cdbeef34ed630714f2f4a767b351f2442e01)

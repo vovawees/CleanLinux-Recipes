@@ -1,0 +1,12 @@
+name=xorgproto
+version=2026.1
+release=1
+summary="X11 protocol headers: xproto, the extensions (randr, render, xinput, dri3, present, ...) and GL/GLX"
+homepage=https://gitlab.freedesktop.org/xorg/proto/xorgproto
+license=(MIT)
+category=platform
+build_type=meson
+source=(https://www.x.org/archive/individual/proto/xorgproto-$version.tar.xz)
+sha256=(f9bfe4a9ed8c8ab9d2a3b0d49797f046052dadd06b7a8b45dbffaffb137e8290)
+# headers and pkg-config files only; the legacy headers of the old servers are left out
+meson_args=(-Dlegacy=false)

@@ -1,0 +1,12 @@
+name=libxrandr
+version=1.5.5
+release=1
+summary="libXrandr: client library of the RandR extension (outputs, modes, rotation)"
+homepage=https://gitlab.freedesktop.org/xorg/lib/libxrandr
+license=(MIT)
+category=platform
+depends=(glibc libxext libxrender)
+makedepends=(xorgproto)
+source=(https://www.x.org/archive/individual/lib/libXrandr-$version.tar.xz)
+sha256=(72b922c2e765434e9e9f0960148070bd4504b288263e2868a4ccce1b7cf2767a)
+configure_args=(--disable-static)

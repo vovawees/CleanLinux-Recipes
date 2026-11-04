@@ -1,15 +1,18 @@
 name=libxkbcommon
 version=1.13.2
-release=1
+release=2
 summary="libxkbcommon: keymaps and keyboard state for Wayland compositors and clients, xkbregistry, xkbcli"
 homepage=https://xkbcommon.org/
 license=(MIT)
 category=platform
-# xkbregistry (the list of layouts for settings panels) reads the XML of xkeyboard-config
-depends=(glibc xkeyboard-config libxml2)
+# xkbregistry (the list of layouts for settings panels) reads the XML of xkeyboard-config;
+# libxkbcommon-x11 (keymaps of X11 clients, feature x11) needs libxcb
+features=(-x11)
+depends=(glibc xkeyboard-config libxml2 libxcb:x11)
 build_type=meson
 source=(https://github.com/xkbcommon/libxkbcommon/archive/refs/tags/xkbcommon-$version.tar.gz)
 sha256=(acc4d5f7c3cbba5f9f8d08d8bdbeede84ecede46792f47929aa9321873385528)
-# libxkbcommon-x11 comes with the X11 libraries (feature x11), the Wayland test client is left out
-meson_args=(-Denable-x11=false -Denable-wayland=false -Denable-xkbregistry=true -Denable-tools=true
+# the Wayland test client is left out
+meson_args=(-Denable-wayland=false -Denable-xkbregistry=true -Denable-tools=true
 	-Denable-docs=false -Denable-bash-completion=false)
+meson_extra() { meson_use x11 enable-x11; }

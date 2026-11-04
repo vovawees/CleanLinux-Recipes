@@ -1,0 +1,12 @@
+name=libx11
+version=1.8.14
+release=1
+summary="libX11: Xlib, the core X11 client library, and the locale data of X input methods"
+homepage=https://gitlab.freedesktop.org/xorg/lib/libx11
+license=(MIT)
+category=platform
+depends=(glibc libxcb)
+makedepends=(xorgproto xtrans)
+source=(https://www.x.org/archive/individual/lib/libX11-$version.tar.xz)
+sha256=(bbc78c46217174655c2b32b138ad119f3ac15f50808b4d0b3a2677a4b1afc950)
+configure_args=(--disable-static --disable-specs --disable-xf86bigfont --without-xmlto --without-fop --without-xsltproc)

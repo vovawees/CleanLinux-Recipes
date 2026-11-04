@@ -1,0 +1,12 @@
+name=libxcb
+version=1.17.0
+release=1
+summary="libxcb: the X11 protocol C binding (XCB) and its extension libraries (randr, dri3, present, xkb, xinput, ...)"
+homepage=https://xcb.freedesktop.org/
+license=(MIT)
+category=platform
+depends=(glibc libxau libxdmcp)
+makedepends=(xcb-proto python)
+source=(https://www.x.org/archive/individual/lib/libxcb-$version.tar.xz)
+sha256=(599ebf9996710fea71622e6e184f3a8ad5b43d0e5fa8c4e407123c88a59a6d55)
+configure_args=(--disable-static --enable-xinput --enable-xkb --disable-devel-docs --without-doxygen)

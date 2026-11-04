@@ -179,13 +179,34 @@ Upstream определяется по ссылкам самого рецепт�
 | `libdrm` | drivers | 2.4.134 | meson | libdrm: userspace interface to the kernel DRM (KMS, GEM) and the GPU-specific helpers of Mesa |
 | `libevdev` | platform | 1.14.0 | meson | libevdev: the evdev input device interface for libinput (and its debugging tools) |
 | `libffi` | devel | 3.8.0 | autotools | Foreign function interface library: calls with argument lists built at run time (Python ctypes, GLib) |
+| `libfontenc` | platform | 1.1.9 | autotools | libfontenc: font encodings of the X11 font library |
 | `libinput` | platform | 1.32.0 | meson | libinput: input devices for Wayland compositors and X11 (touchpads, touchscreens, tablets, quirks) |
 | `libpipeline` | core | 1.5.8 | autotools | Library for running pipelines of subprocesses (man-db) |
 | `libpng` | platform | 1.6.59 | autotools | libpng: the PNG reference library (freetype's color glyphs, image loaders) |
 | `libtool` | devel | 2.6.2 | autotools | GNU libtool: portable shared libraries for autotools builds, and libltdl |
+| `libx11` | platform | 1.8.14 | autotools | libX11: Xlib, the core X11 client library, and the locale data of X input methods |
+| `libxau` | platform | 1.0.12 | autotools | libXau: X11 authorization protocol (.Xauthority) |
+| `libxcb` | platform | 1.17.0 | autotools | libxcb: the X11 protocol C binding (XCB) and its extension libraries (randr, dri3, present, xkb, xinput, ...) |
+| `libxcomposite` | platform | 0.4.7 | autotools | libXcomposite: client library of the Composite extension |
 | `libxcrypt` | core | 4.5.2 | autotools | Modern crypt(3): yescrypt, bcrypt and SHA-crypt password hashing (libcrypt) |
+| `libxcursor` | platform | 1.2.3 | autotools | libXcursor: X11 cursor themes and animated cursors |
+| `libxcvt` | platform | 0.1.3 | meson | libxcvt: VESA CVT display timings (the modes that Xwayland offers to X11 clients) |
+| `libxdamage` | platform | 1.1.7 | autotools | libXdamage: client library of the DAMAGE extension |
+| `libxdmcp` | platform | 1.1.5 | autotools | libXdmcp: X Display Manager Control Protocol library |
+| `libxext` | platform | 1.3.7 | autotools | libXext: client library of the common X11 extensions (SHAPE, MIT-SHM, SYNC, XC-MISC, ...) |
+| `libxfixes` | platform | 6.0.2 | autotools | libXfixes: client library of the XFIXES extension (cursors, regions, selections) |
+| `libxfont2` | platform | 2.0.9 | autotools | libXfont2: the font library of the X servers (the built-in fonts, PCF and FreeType fonts) |
+| `libxi` | platform | 1.8.4 | autotools | libXi: client library of the X Input extension (XI2: touch, raw and multiple devices) |
+| `libxinerama` | platform | 1.1.6 | autotools | libXinerama: client library of the Xinerama extension (screens of a multi-monitor desktop) |
 | `libxkbcommon` | platform | 1.13.2 | meson | libxkbcommon: keymaps and keyboard state for Wayland compositors and clients, xkbregistry, xkbcli |
+| `libxkbfile` | platform | 1.2.0 | meson | libxkbfile: the XKB file library of xkbcomp and the X servers |
 | `libxml2` | platform | 2.15.4 | meson | libxml2: the XML parser and toolkit of GNOME (xmllint) |
+| `libxpresent` | platform | 1.0.2 | autotools | libXpresent: client library of the Present extension |
+| `libxrandr` | platform | 1.5.5 | autotools | libXrandr: client library of the RandR extension (outputs, modes, rotation) |
+| `libxrender` | platform | 0.9.13 | autotools | libXrender: client library of the RENDER extension |
+| `libxshmfence` | platform | 1.3.3 | autotools | libxshmfence: shared memory fences of DRI3 (Mesa and Xwayland) |
+| `libxtst` | platform | 1.2.6 | autotools | libXtst: client library of the XTEST and RECORD extensions (input emulation) |
+| `libxxf86vm` | platform | 1.1.7 | autotools | libXxf86vm: client library of the XFree86-VidMode extension (gamma ramps of old games, Mesa GLX) |
 | `linux-firmware` | firmware | 20261019 | custom | Firmware of GPUs, Wi-Fi, Bluetooth, audio DSPs and other devices (what the profile needs: FIRMWARE) |
 | `linux-headers` | core | 7.3.1 | custom | Linux kernel userspace API headers |
 | `linux-pam` | core | 1.7.3 | meson | Linux-PAM: pluggable authentication modules (pam_unix, pam_limits, pam_env, ...) |
@@ -226,7 +247,11 @@ Upstream определяется по ссылкам самого рецепт�
 | `wayland` | platform | 1.26.0 | meson | Wayland: the display protocol library (libwayland-client, -server, -cursor, -egl) and wayland-scanner |
 | `wireless-regdb` | firmware | 2026.09.03 | custom | Wireless regulatory database: the allowed Wi-Fi channels and power of each country (signed) |
 | `wireplumber` | platform | 0.5.19 | meson | WirePlumber: the session and policy manager of PipeWire (devices, routing, Bluetooth profiles) |
+| `xcb-proto` | platform | 1.17.0 | autotools | XCB protocol descriptions: the XML of the X11 protocol and the xcbgen generator of libxcb |
+| `xkbcomp` | platform | 1.5.0 | autotools | xkbcomp: the XKB keymap compiler of the X servers (Xwayland runs it for every keymap) |
 | `xkeyboard-config` | platform | 2.48 | meson | XKB data: keyboard models, layouts and options for libxkbcommon and X11 |
+| `xorgproto` | platform | 2026.1 | meson | X11 protocol headers: xproto, the extensions (randr, render, xinput, dri3, present, ...) and GL/GLX |
+| `xtrans` | platform | 1.6.0 | autotools | xtrans: the transport layer of the X11 libraries and servers (headers only) |
 | `xz` | core | 5.8.4 | autotools | XZ Utils: LZMA/xz compression library and tools |
 | `zlib-ng` | core | 2.3.3 | cmake | zlib replacement with SIMD optimisations (zlib-compatible API and ABI) |
 | `zstd` | core | 1.5.7 | meson | Zstandard: fast real-time compression (library and zstd tool) |
