@@ -4,4 +4,8 @@ ID=cleanlinux
 BUILD_ID=rolling
 ANSI_COLOR="1;36"
 HOME_URL="https://github.com/vovawees/CleanLinux"
+DOCUMENTATION_URL="https://github.com/vovawees/CleanLinux/tree/main/docs"
 BUG_REPORT_URL="https://github.com/vovawees/CleanLinux/issues"
+# the level of the contract between the base and its spins (docs/SPINS.md of CleanLinux): spins
+# ask for it with SPIN_BASE
+CLEANLINUX_BASE=1
