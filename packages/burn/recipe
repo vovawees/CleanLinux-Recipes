@@ -1,17 +1,19 @@
 name=burn
-version=0.8.0
+version=0.9.1
 release=1
 summary="The CleanLinux package manager: source based, rolling+++"
 homepage=https://github.com/vovawees/burn
 license=(MIT)
 category=core
-# bash runs the functions of recipes, curl downloads the sources, git syncs the recipe
-# repositories and the spins
-depends=(glibc zstd bash curl git)
+# bash runs the functions of recipes; libcurl downloads the sources inside burn (make CURL=1: HTTP/2,
+# one connection per server); git syncs the recipe repositories and the spins; openssl makes and
+# checks the signatures of packages (burn key, sign, verify, the binary cache)
+depends=(glibc zstd bash curl git openssl)
 build_type=make
+make_args=(CURL=1)
 source=(https://github.com/vovawees/burn/releases/download/v$version/burn-$version.tar.gz burn.sysusers)
 sha256=(
-	527d67f84dd91ae9f29833714fa0e6bd112ca970764ef21975b763599aab0de2
+	3724cf0f69338fdcfe29d34599bdd041392eb7409e3644a6c5fde04040bc4178
 	17f344844d9f6418d11c3c8ef3cfb03b673f42270b4918c32629e94b43844a3a
 )
 
