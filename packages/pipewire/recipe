@@ -1,0 +1,65 @@
+name=pipewire
+version=1.6.11
+release=1
+summary="PipeWire: the audio and video server (ALSA, PulseAudio and JACK clients, cameras, screen capture)"
+homepage=https://pipewire.org/
+license=(MIT)
+category=platform
+# features choose the compatibility: ALSA clients (alsa), the PulseAudio server pipewire-pulse
+# (pulseaudio), libjack (jack), Bluetooth audio (bluetooth); seat tracking through elogind (elogind).
+# The session manager (WirePlumber) is a recipe of its own
+features=(+alsa +pulseaudio -jack -bluetooth -elogind)
+depends=(glibc dbus eudev alsa-lib readline bluez:bluetooth sbc:bluetooth elogind:elogind)
+build_type=meson
+source=(https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$version/pipewire-$version.tar.bz2
+	pipewire.sysusers pipewire.user.dinit pipewire-pulse.user.dinit)
+sha256=(
+	0b32fbbece4591376b45dde5a818bfa5b3517e70913a2f7414e33c47c20b07ee
+	d19d38580b00d46884ff6a4b1826d5ff4fc5fd2b57ee1cfabf7f15422cbefbd3
+	c521e3bd51b82a81993a6cf004a30c1e2109591b5c803c3e4780bd50fd1070a0
+	457a4a388aa528c39fd5bd9bc2bd0a2954b2c6db272303e8eb82fecb14453ded
+)
+meson_args=(-Ddocs=disabled -Dman=disabled -Dexamples=disabled -Dtests=disabled -Dinstalled_tests=disabled
+	-Dgstreamer=disabled -Dgstreamer-device-provider=disabled -Dlibsystemd=disabled
+	-Dsystemd-system-service=disabled -Dsystemd-user-service=disabled -Dselinux=disabled
+	'-Dsession-managers=[]' -Dspa-plugins=enabled -Dalsa=enabled -Daudiomixer=enabled -Daudioconvert=enabled
+	-Dcontrol=enabled -Daudiotestsrc=enabled -Dsupport=enabled -Dvideoconvert=enabled -Dvideotestsrc=enabled
+	-Dvolume=enabled -Dv4l2=enabled -Dudev=enabled -Dudevrulesdir=/usr/lib/udev/rules.d -Ddbus=enabled
+	-Dreadline=enabled -Dpipewire-v4l2=disabled -Dlibcamera=disabled -Dvulkan=disabled -Dffmpeg=disabled
+	-Dpw-cat=disabled -Dpw-cat-ffmpeg=disabled -Dsndfile=disabled -Dsdl2=disabled -Dlibmysofa=disabled
+	-Dlibpulse=disabled -Droc=disabled -Davahi=disabled -Decho-cancel-webrtc=disabled -Dlibusb=disabled
+	-Draop=disabled -Dlv2=disabled -Dx11=disabled -Dx11-xfixes=disabled -Dlibcanberra=disabled -Davb=disabled
+	-Dflatpak=disabled -Dgsettings=disabled -Dcompress-offload=disabled -Dopus=disabled -Dlibffado=disabled
+	-Dsnap=disabled -Debur128=disabled -Dfftw=disabled -Donnxruntime=disabled -Devl=disabled -Dtest=disabled
+	-Djack=disabled -Djack-devel=false -Drlimits-install=true -Dbluez5-codec-aptx=disabled
+	-Dbluez5-codec-ldac=disabled -Dbluez5-codec-aac=disabled -Dbluez5-codec-lc3plus=disabled
+	-Dbluez5-codec-opus=disabled -Dbluez5-codec-lc3=disabled -Dbluez5-codec-g722=disabled
+	-Dbluez5-backend-native-mm=disabled -Dbluez5-backend-ofono=disabled -Dbluez5-backend-hsphfpd=disabled
+	-Dbluez5-plc-spandsp=disabled)
+meson_extra() {
+	meson_feature alsa pipewire-alsa
+	meson_feature jack pipewire-jack
+	meson_feature bluetooth bluez5
+	meson_feature bluetooth bluez5-backend-hsp-native
+	meson_feature bluetooth bluez5-backend-hfp-native
+	meson_feature elogind logind
+	if use elogind; then echo -Dlogind-provider=libelogind; fi
+}
+
+post_install() {
+	# realtime priority for the members of "pipewire" (limits.d of PAM)
+	install -Dm644 "$FILES/pipewire.sysusers" "$DESTDIR/usr/lib/sysusers.d/pipewire.conf"
+	# user services: dinit --user starts them for each user session
+	install -Dm644 "$FILES/pipewire.user.dinit" "$DESTDIR/usr/lib/dinit.d/user/pipewire"
+	if use pulseaudio; then
+		install -Dm644 "$FILES/pipewire-pulse.user.dinit" "$DESTDIR/usr/lib/dinit.d/user/pipewire-pulse"
+	else
+		rm -f "$DESTDIR/usr/bin/pipewire-pulse"
+	fi
+	if use alsa; then
+		# ALSA clients go through PipeWire
+		install -d "$DESTDIR/etc/alsa/conf.d"
+		ln -s /usr/share/alsa/alsa.conf.d/50-pipewire.conf "$DESTDIR/etc/alsa/conf.d/50-pipewire.conf"
+		ln -s /usr/share/alsa/alsa.conf.d/99-pipewire-default.conf "$DESTDIR/etc/alsa/conf.d/99-pipewire-default.conf"
+	fi
+}

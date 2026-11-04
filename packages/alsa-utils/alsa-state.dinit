@@ -1,0 +1,6 @@
+# the mixer levels: restored at boot (and by udev when a card appears), stored at shutdown
+# (dinitctl enable alsa-state)
+type = scripted
+command = /usr/bin/alsactl -E HOME=/run/alsa restore
+stop-command = /usr/bin/alsactl -E HOME=/run/alsa store
+depends-on: system

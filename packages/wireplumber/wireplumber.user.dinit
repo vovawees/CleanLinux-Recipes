@@ -1,0 +1,6 @@
+# the session manager of PipeWire for the user session (dinit --user)
+type = process
+command = /usr/bin/wireplumber
+restart = true
+log-type = buffer
+depends-on: pipewire

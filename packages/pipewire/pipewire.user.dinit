@@ -1,0 +1,5 @@
+# the PipeWire server of the user session (dinit --user); WirePlumber manages it
+type = process
+command = /usr/bin/pipewire
+restart = true
+log-type = buffer

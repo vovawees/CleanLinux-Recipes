@@ -1,0 +1,2 @@
+# members get realtime priority for audio (/etc/security/limits.d/25-pw-rlimits.conf)
+g pipewire -

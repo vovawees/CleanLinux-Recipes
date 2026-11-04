@@ -114,6 +114,9 @@ Upstream определяется по ссылкам самого рецепт�
 
 | Пакет | Категория | Версия | Сборка | Описание |
 |---|---|---|---|---|
+| `alsa-lib` | drivers | 1.2.16.1 | autotools | ALSA library: the userspace sound API of Linux (PCM, mixer, UCM, plugins) |
+| `alsa-ucm-conf` | drivers | 1.2.16.1 | custom | ALSA Use Case Manager profiles: sound routing of laptops, handhelds and SoCs (SOF, Snapdragon, ...) |
+| `alsa-utils` | drivers | 1.2.16 | autotools | ALSA tools: alsamixer, amixer, aplay, arecord, alsactl (mixer state across reboots) |
 | `autoconf` | devel | 2.73 | autotools | GNU autoconf: configure scripts from configure.ac |
 | `automake` | devel | 1.19 | autotools | GNU automake: Makefile.in from Makefile.am |
 | `base-devel` | meta | 2026.1 | meta | Everything needed to build any recipe natively (meta package) |
@@ -122,6 +125,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `bc` | devel | 1.08.2 | autotools | GNU bc and dc: arbitrary precision calculators (the kernel build uses bc) |
 | `binutils` | devel | 2.47 | autotools | GNU assembler, linker and binary utilities |
 | `bison` | devel | 3.8.2 | autotools | GNU parser generator (yacc replacement) |
+| `bluez` | drivers | 5.87 | autotools | BlueZ: the Bluetooth daemon (bluetoothd), bluetoothctl and libbluetooth |
 | `btrfs-progs` | core | 7.3 | autotools | btrfs filesystem tools: mkfs.btrfs, btrfs (subvolumes, snapshots, scrub, send), btrfsck |
 | `burn` | core | 0.7.0 | make | The CleanLinux package manager: source based, rolling+++ |
 | `bzip2` | core | 1.0.8 | custom | Block-sorting file compressor and libbz2 |
@@ -179,6 +183,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `linux-headers` | core | 7.3.1 | custom | Linux kernel userspace API headers |
 | `linux-pam` | core | 1.7.3 | meson | Linux-PAM: pluggable authentication modules (pam_unix, pam_limits, pam_env, ...) |
 | `linux` | kernel | 7.3.1 | custom | The Linux kernel and modules (CleanLinux defaults + profile GPU drivers) |
+| `lua` | platform | 5.4.9 | custom | Lua 5.4: the embeddable scripting language (WirePlumber's scripts), shared liblua |
 | `lz4` | core | 1.10.0 | make | Extremely fast compression (library and lz4 tool) |
 | `m4` | devel | 1.4.21 | autotools | GNU m4 macro processor |
 | `make` | devel | 4.4.1 | autotools | GNU make |
@@ -194,6 +199,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `patch` | devel | 2.8.1 | autotools | GNU patch: apply diff files |
 | `pcre2` | platform | 10.49 | autotools | PCRE2: Perl-compatible regular expressions (8, 16 and 32 bit, JIT) for GLib, Qt, grep |
 | `perl` | devel | 5.44.0 | custom | The Perl 5 language: autoconf, automake, OpenSSL and kernel builds need it |
+| `pipewire` | platform | 1.6.11 | meson | PipeWire: the audio and video server (ALSA, PulseAudio and JACK clients, cameras, screen capture) |
 | `pixman` | platform | 0.46.4 | meson | pixman: low-level pixel manipulation (compositing, scaling) for cairo, wlroots and Xwayland |
 | `pkgconf` | devel | 3.0.10 | meson | pkg-config implementation (also installed as pkg-config) |
 | `polkit` | platform | 128 | meson | polkit: authorization for privileged actions of unprivileged programs (rules in JavaScript) |
@@ -201,6 +207,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `psmisc` | core | 23.7 | autotools | Process tools that use /proc: fuser, killall, pstree, prtstat, peekfd |
 | `python` | devel | 3.15.2 | autotools | The Python 3 language: meson, the kernel's and Mesa's build scripts need it |
 | `readline` | core | 8.3.6 | autotools | GNU readline: line editing and history for interactive programs |
+| `sbc` | drivers | 2.2 | autotools | SBC: the Bluetooth A2DP audio codec (PipeWire's Bluetooth audio) |
 | `seatd` | platform | 0.9.3 | meson | seatd and libseat: seat management (GPU and input devices) for Wayland compositors without logind |
 | `sed` | core | 4.10 | autotools | GNU stream editor |
 | `shadow` | core | 4.20.3 | autotools | Password and account tools: passwd, useradd, usermod, groupadd, chage, newuidmap, ... |
@@ -209,6 +216,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `util-linux` | core | 2.42.4 | autotools | Core Linux system utilities: mount, fdisk, lsblk, agetty, kill, ... |
 | `wayland-protocols` | platform | 1.50 | meson | Wayland protocol extensions (XML): xdg-shell, linux-dmabuf, presentation-time, ... |
 | `wayland` | platform | 1.26.0 | meson | Wayland: the display protocol library (libwayland-client, -server, -cursor, -egl) and wayland-scanner |
+| `wireplumber` | platform | 0.5.19 | meson | WirePlumber: the session and policy manager of PipeWire (devices, routing, Bluetooth profiles) |
 | `xkeyboard-config` | platform | 2.48 | meson | XKB data: keyboard models, layouts and options for libxkbcommon and X11 |
 | `xz` | core | 5.8.4 | autotools | XZ Utils: LZMA/xz compression library and tools |
 | `zlib-ng` | core | 2.3.3 | cmake | zlib replacement with SIMD optimisations (zlib-compatible API and ABI) |

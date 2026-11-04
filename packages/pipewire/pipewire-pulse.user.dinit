@@ -1,0 +1,6 @@
+# the PulseAudio server of PipeWire: clients of libpulse play through it
+type = process
+command = /usr/bin/pipewire-pulse
+restart = true
+log-type = buffer
+depends-on: pipewire

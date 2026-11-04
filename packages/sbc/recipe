@@ -1,0 +1,11 @@
+name=sbc
+version=2.2
+release=1
+summary="SBC: the Bluetooth A2DP audio codec (PipeWire's Bluetooth audio)"
+homepage=https://www.bluez.org/
+license=(LGPL-2.1-or-later GPL-2.0-or-later)
+category=drivers
+depends=(glibc)
+source=(kernel://bluetooth/sbc-$version.tar.xz)
+sha256=(a1ada76ef35e5af9c2fbd063754dc9e37a8d989417c6eb1ecebb089b1383ae9e)
+configure_args=(--disable-static --disable-tester)

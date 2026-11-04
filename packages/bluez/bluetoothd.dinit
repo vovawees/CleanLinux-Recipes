@@ -1,0 +1,7 @@
+# Bluetooth (dinitctl enable bluetoothd); bluetoothctl talks to it over the system bus
+type = process
+command = /usr/lib/bluetooth/bluetoothd -n
+restart = true
+smooth-recovery = true
+log-type = buffer
+depends-on: dbus

@@ -1,0 +1,23 @@
+name=bluez
+version=5.87
+release=1
+summary="BlueZ: the Bluetooth daemon (bluetoothd), bluetoothctl and libbluetooth"
+homepage=https://www.bluez.org/
+license=(GPL-2.0-or-later LGPL-2.1-or-later)
+category=drivers
+# no OBEX (file transfer: libical), mesh (json-c) or CUPS printing; the deprecated hci* tools stay out
+depends=(glibc glib dbus eudev readline)
+source=(kernel://bluetooth/bluez-$version.tar.xz bluetoothd.dinit)
+sha256=(
+	26bdcf2cebd7310c6f598850606b037ef0c515fe6608ebc54d22c50c4c32b35f
+	8e44bdeecc7831126a76932580026fda5fe44677e5b8a09c4c684fbc1274077f
+)
+configure_args=(--libexecdir=/usr/lib --localstatedir=/var --enable-library --disable-systemd
+	--disable-manpages --disable-cups --disable-mesh --disable-obex --disable-midi --disable-test
+	--disable-monitor --with-dbusconfdir=/usr/share --with-udevdir=/usr/lib/udev)
+backup=(etc/bluetooth/main.conf)
+
+post_install() {
+	install -Dm644 "$FILES/bluetoothd.dinit" "$DESTDIR/usr/lib/dinit.d/bluetoothd"
+	install -Dm644 src/main.conf "$DESTDIR/etc/bluetooth/main.conf"
+}

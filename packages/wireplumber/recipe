@@ -1,0 +1,24 @@
+name=wireplumber
+version=0.5.19
+release=1
+summary="WirePlumber: the session and policy manager of PipeWire (devices, routing, Bluetooth profiles)"
+homepage=https://pipewire.pages.freedesktop.org/wireplumber/
+license=(MIT)
+category=platform
+features=(-elogind)
+depends=(glibc pipewire glib lua elogind:elogind)
+build_type=meson
+source=(https://gitlab.freedesktop.org/pipewire/wireplumber/-/archive/$version/wireplumber-$version.tar.bz2
+	wireplumber.user.dinit)
+sha256=(
+	e743070200e3788b8a46b5cd35438170dea4458302cfa3bb04ab4a9495ad14a4
+	603e23ebfbbdc96518ddaa5b0f69305bc21291a0b2f7a4d8bfdacb258ec9f1ce
+)
+meson_args=(-Dsystem-lua=true -Dsystem-lua-version=5.4 -Dintrospection=disabled -Ddoc=disabled -Dtests=false
+	-Ddbus-tests=false -Dsystemd=disabled -Dsystemd-system-service=false -Dsystemd-user-service=false
+	-Dmodules=true -Ddaemon=true -Dtools=true)
+meson_extra() { meson_feature elogind; }
+
+post_install() {
+	install -Dm644 "$FILES/wireplumber.user.dinit" "$DESTDIR/usr/lib/dinit.d/user/wireplumber"
+}

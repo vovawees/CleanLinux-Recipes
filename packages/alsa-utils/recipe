@@ -1,0 +1,24 @@
+name=alsa-utils
+version=1.2.16
+release=1
+summary="ALSA tools: alsamixer, amixer, aplay, arecord, alsactl (mixer state across reboots)"
+homepage=https://www.alsa-project.org/
+license=(GPL-2.0-or-later)
+category=drivers
+features=(+nls)
+depends=(glibc alsa-lib ncurses)
+source=(https://www.alsa-project.org/files/pub/utils/alsa-utils-$version.tar.bz2 alsa-state.dinit)
+sha256=(
+	092399d5e8749a1d5e188e393157521cec4b75693b60ebb79bbce728cff2232c
+	c6b1ff4e45e6ef6125f16871080475ddc51a2633374174d55a7ee3e56e51dc24
+)
+# udev restores the mixer when a card appears; the dinit service stores it at shutdown
+configure_args=(--disable-alsaconf --disable-xmlto --disable-rst2man --disable-bat
+	--with-udev-rules-dir=/usr/lib/udev/rules.d --with-asound-state-dir=/var/lib/alsa
+	--with-systemdsystemunitdir=no)
+configure_extra() { use_enable nls; }
+
+post_install() {
+	install -Dm644 "$FILES/alsa-state.dinit" "$DESTDIR/usr/lib/dinit.d/alsa-state"
+	install -dm755 "$DESTDIR/var/lib/alsa"
+}

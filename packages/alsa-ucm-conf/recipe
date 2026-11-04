@@ -1,0 +1,17 @@
+name=alsa-ucm-conf
+version=1.2.16.1
+release=1
+summary="ALSA Use Case Manager profiles: sound routing of laptops, handhelds and SoCs (SOF, Snapdragon, ...)"
+homepage=https://github.com/alsa-project/alsa-ucm-conf
+license=(BSD-3-Clause)
+category=drivers
+build_type=custom
+source=(https://www.alsa-project.org/files/pub/lib/alsa-ucm-conf-$version.tar.bz2)
+sha256=(cf3d1c07e089a83c4ece2c20f05dd6a8aab7fcd108768c38811386880575492b)
+
+do_build() { :; }
+do_install() {
+	install -d "$DESTDIR/usr/share/alsa"
+	cp -r ucm2 "$DESTDIR/usr/share/alsa/"
+	install -Dm644 LICENSE "$DESTDIR/usr/share/licenses/alsa-ucm-conf/LICENSE"
+}
