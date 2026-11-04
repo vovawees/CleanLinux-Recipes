@@ -12,11 +12,12 @@ source=(https://mirrors.edge.kernel.org/pub/software/scm/git/git-$version.tar.xz
 sha256=(26c56c296b38c0695b26fa95f475f1d01704d2d38e73465ca30b0b2f5dc789d3)
 
 # the C commands only: no Perl, Python or Tcl/Tk tools (send-email, svn, p4, gitk), no
-# translations; builtins as symlinks; the target's uname and libcurl without curl-config (the
-# host's one would answer for a cross build)
+# translations, no Rust parts (optional until Git 3.0; the base has no Rust toolchain yet);
+# builtins as symlinks; the target's uname and libcurl without curl-config (the host's one would
+# answer for a cross build)
 _make() {
 	make prefix=/usr gitexecdir=/usr/lib/git-core sysconfdir=/etc \
-		NO_PERL=1 NO_PYTHON=1 NO_TCLTK=1 NO_GETTEXT=1 NO_OPENSSL=1 INSTALL_SYMLINKS=1 \
+		NO_PERL=1 NO_PYTHON=1 NO_TCLTK=1 NO_GETTEXT=1 NO_OPENSSL=1 NO_RUST=1 INSTALL_SYMLINKS=1 \
 		uname_S=Linux uname_M="$CARCH" CURL_LDFLAGS=-lcurl CURL_CONFIG=true USE_CURL_FOR_IMAP_SEND=1 \
 		CC="$CC" AR="${AR:-ar}" CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" "$@"
 }
