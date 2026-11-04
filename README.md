@@ -121,12 +121,15 @@ Upstream определяется по ссылкам самого рецепт�
 | `btrfs-progs` | core | 7.3 | autotools | btrfs filesystem tools: mkfs.btrfs, btrfs (subvolumes, snapshots, scrub, send), btrfsck |
 | `burn` | core | 0.5.0 | make | The CleanLinux package manager: source based, rolling+++ |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
+| `dbus` | core | 1.16.2 | meson | D-Bus: the message bus daemon and libdbus |
 | `dhcpcd` | core | 10.5.2 | custom | DHCP and DHCPv6 client: IPv4LL, SLAAC, privilege separation |
 | `diffutils` | core | 3.12 | autotools | GNU diff, cmp, diff3 and sdiff |
 | `dinit` | core | 0.22.1 | custom | dinit: fast, small service manager and init with dependency handling |
 | `dosfstools` | core | 4.2 | autotools | FAT filesystem tools: mkfs.fat, fsck.fat, fatlabel (the EFI system partition) |
 | `e2fsprogs` | core | 1.47.4 | autotools | ext2/3/4 filesystem tools: mke2fs, e2fsck, tune2fs, resize2fs, debugfs |
+| `ell` | core | 0.83 | autotools | Embedded Linux Library: the D-Bus, netlink, crypto and TLS core of iwd |
 | `eudev` | core | 3.3.0 | autotools | udev without systemd: device manager (udevd, udevadm), rules, hwdb and libudev |
+| `expat` | core | 2.10.0 | autotools | Expat: stream-oriented XML parser library |
 | `filesystem` | core | 2026.1 | custom | CleanLinux base layout: merged /usr, default /etc files, os-release |
 | `findutils` | core | 4.11.0 | autotools | GNU find, xargs and locate |
 | `gawk` | core | 5.4.1 | autotools | GNU awk |
@@ -136,6 +139,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |
 | `gzip` | core | 1.15 | autotools | GNU gzip compression utility |
 | `iproute2` | core | 7.3.0 | custom | IP routing utilities: ip, ss, bridge, tc |
+| `iwd` | core | 3.12 | autotools | iwd: the wireless daemon (WPA2/WPA3, enterprise) and iwctl |
 | `kmod` | core | 34.3 | meson | Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo |
 | `libxcrypt` | core | 4.5.2 | autotools | Modern crypt(3): yescrypt, bcrypt and SHA-crypt password hashing (libcrypt) |
 | `linux-headers` | core | 7.3.1 | custom | Linux kernel userspace API headers |

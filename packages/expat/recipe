@@ -1,0 +1,11 @@
+name=expat
+version=2.10.0
+release=1
+summary="Expat: stream-oriented XML parser library"
+homepage=https://libexpat.github.io/
+license=(MIT)
+category=core
+depends=(glibc)
+source=(https://github.com/libexpat/libexpat/releases/download/R_${version//./_}/expat-$version.tar.xz)
+sha256=(c624ba2998fc65df1163a49641ff3f9ab73138b11641d92c86bee0fb01b1bc7f)
+configure_args=(--disable-static --without-docbook --without-examples --without-tests)

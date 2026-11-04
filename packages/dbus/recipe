@@ -1,0 +1,33 @@
+name=dbus
+version=1.16.2
+release=1
+summary="D-Bus: the message bus daemon and libdbus"
+homepage=https://www.freedesktop.org/wiki/Software/dbus/
+license=(AFL-2.1 GPL-2.0-or-later)
+category=core
+depends=(glibc expat)
+build_type=meson
+source=(https://dbus.freedesktop.org/releases/dbus/dbus-$version.tar.xz dbus.dinit dbus.sysusers dbus.tmpfiles)
+sha256=(
+	0ba2a1a4b16afe7bceb2c07e9ce99a8c2c3508e5dec290dbb643384bd6beb7e2
+	80d11d148ab1334737d1e8628877705b7a1e4f29f8a01632f7ad62a54d016b9f
+	05ebd566e30698fd7a7937ebefaa99593b26b1926f83105f744e03fa6effaa39
+	e78f4538a8e08616a64e5f74d7400489dc2efc396b71645aee7eab826d904ec9
+)
+# no systemd, X11 autolaunch, SELinux, AppArmor or audit; dinit starts the system bus, sessions
+# start their own (dbus-run-session or the session manager of a spin)
+meson_args=(-Ddbus_user=messagebus -Druntime_dir=/run -Dsystem_socket=/run/dbus/system_bus_socket
+	-Dsystem_pid_file=/run/dbus/pid -Dsession_socket_dir=/tmp -Dsystemd=disabled
+	-Dsystemd_system_unitdir=no -Dsystemd_user_unitdir=no -Dx11_autolaunch=disabled -Dselinux=disabled
+	-Dapparmor=disabled -Dlibaudit=disabled -Dmodular_tests=disabled -Dinstalled_tests=false
+	-Ddoxygen_docs=disabled -Dducktype_docs=disabled -Dqt_help=disabled -Dxml_docs=disabled
+	-Dvalgrind=disabled -Dlaunchd=disabled -Dinotify=enabled -Depoll=enabled)
+
+post_install() {
+	install -Dm644 "$FILES/dbus.dinit" "$DESTDIR/usr/lib/dinit.d/dbus"
+	install -Dm644 "$FILES/dbus.sysusers" "$DESTDIR/usr/lib/sysusers.d/dbus.conf"
+	install -Dm644 "$FILES/dbus.tmpfiles" "$DESTDIR/usr/lib/tmpfiles.d/dbus.conf"
+	# /var/run/dbus is /run/dbus, made by tmpfiles at boot; the files in /etc/dbus-1 are empty
+	# leftovers ("no longer required"): local settings go to /etc/dbus-1/system.d
+	rm -rf "$DESTDIR/var/run" "$DESTDIR/run" "$DESTDIR/etc/dbus-1/session.conf" "$DESTDIR/etc/dbus-1/system.conf"
+}

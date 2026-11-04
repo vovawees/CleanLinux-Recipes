@@ -1,0 +1,2 @@
+# the system bus runs as messagebus (81, as in most distributions)
+u messagebus 81 "System Message Bus"

@@ -1,0 +1,20 @@
+name=iwd
+version=3.12
+release=1
+summary="iwd: the wireless daemon (WPA2/WPA3, enterprise) and iwctl"
+homepage=https://iwd.wiki.kernel.org/
+license=(LGPL-2.1-or-later)
+category=core
+# the crypto of the kernel (AF_ALG, keyrings: see the linux recipe), the system bus, iwctl's readline
+depends=(glibc ell dbus readline)
+source=(kernel://network/wireless/iwd-$version.tar.xz iwd.dinit)
+sha256=(
+	d89a5e45c7180170e19be828f9e944a768c593758094fc57a358d0e7c4cb1a49
+	f282367cc515df78634706383da8a30b22cdf9c3eccea5fbc1335b6b377843c6
+)
+configure_args=(--libexecdir=/usr/lib/iwd --localstatedir=/var --enable-external-ell
+	--disable-systemd-service --disable-manual-pages --enable-dbus-policy --with-dbus-datadir=/usr/share)
+
+post_install() {
+	install -Dm644 "$FILES/iwd.dinit" "$DESTDIR/usr/lib/dinit.d/iwd"
+}

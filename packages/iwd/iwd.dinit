@@ -1,0 +1,8 @@
+# Wi-Fi (iwd): iwctl connects; the address comes from dhcpcd, or from iwd itself with
+# EnableNetworkConfiguration=true in /etc/iwd/main.conf (enable: dinitctl enable iwd)
+type = process
+command = /usr/lib/iwd/iwd
+restart = true
+smooth-recovery = true
+log-type = buffer
+depends-on: dbus

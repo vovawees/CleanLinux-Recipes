@@ -1,0 +1,9 @@
+# the system message bus: iwd, elogind, polkit and the services of desktops talk through it;
+# ready once it prints its address
+type = process
+command = /usr/bin/dbus-daemon --system --nofork --nopidfile --print-address=4
+ready-notification = pipefd:4
+restart = true
+smooth-recovery = true
+log-type = buffer
+depends-on: system

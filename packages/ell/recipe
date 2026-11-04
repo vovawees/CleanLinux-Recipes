@@ -1,0 +1,11 @@
+name=ell
+version=0.83
+release=1
+summary="Embedded Linux Library: the D-Bus, netlink, crypto and TLS core of iwd"
+homepage=https://git.kernel.org/pub/scm/libs/ell/ell.git
+license=(LGPL-2.1-or-later)
+category=core
+depends=(glibc)
+source=(kernel://libs/ell/ell-$version.tar.xz)
+sha256=(39a562f5ab2768e69da1ffbb1f98a8eb3483baffc7d2ef6adc3705e4fd4e53fb)
+configure_args=(--disable-static)
