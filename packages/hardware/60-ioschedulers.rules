@@ -1,0 +1,8 @@
+# I/O schedulers by the kind of drive: none for NVMe (they schedule themselves), mq-deadline for
+# SATA SSDs, eMMC and SD cards, BFQ for spinning disks (fair to interactive work under load)
+ACTION!="add|change", GOTO="ioschedulers_end"
+KERNEL=="nvme[0-9]*n[0-9]*", ATTR{queue/scheduler}="none", GOTO="ioschedulers_end"
+KERNEL!="sd[a-z]*|mmcblk[0-9]*|vd[a-z]*", GOTO="ioschedulers_end"
+ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="mq-deadline"
+ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="bfq"
+LABEL="ioschedulers_end"

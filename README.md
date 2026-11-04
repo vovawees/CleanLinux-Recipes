@@ -166,6 +166,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |
 | `groff` | core | 1.24.2 | autotools | GNU troff: formats manual pages for the terminal |
 | `gzip` | core | 1.15 | autotools | GNU gzip compression utility |
+| `hardware` | drivers | 1 | custom | The hardware profile of the device: its quirks (udev rules, hwdb, modprobe.d, sysctl.d) and boot modules |
 | `harfbuzz` | platform | 15.0.0 | meson | HarfBuzz: the text shaping engine (OpenType layout of every script) |
 | `hwdata` | platform | 0.413 | autotools | hwdata: PCI, USB and PNP id databases (lspci, lsusb, libdisplay-info) |
 | `iproute2` | core | 7.3.0 | custom | IP routing utilities: ip, ss, bridge, tc |
