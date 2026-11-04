@@ -67,6 +67,13 @@ do_configure() {
 	bt_configure
 }
 
+# a cross-built native compiler: make configures libcc1, whose plugin check runs "$gcc_cv_objdump -T",
+# which only gcc/configure sets
+do_build() {
+	if ((CROSS)); then export gcc_cv_objdump=$CHOST-objdump; fi
+	bt_build
+}
+
 do_install() {
 	bt_install
 	ln -sf gcc "$DESTDIR/usr/bin/cc"
