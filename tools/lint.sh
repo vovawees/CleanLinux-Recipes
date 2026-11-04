@@ -32,6 +32,13 @@ url_expand() {
 }
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
+# split packages of every recipe (split=(...)): valid dependencies like recipes
+declare -A SPLIT_OF=()
+for r in packages/*/recipe; do
+	while IFS= read -r s; do
+		[[ -n $s ]] && SPLIT_OF[$s]=${r#packages/} && SPLIT_OF[$s]=${SPLIT_OF[$s]%/recipe}
+	done < <(split=() CARCH=x86_64 CHOST=x86_64-cleanlinux-linux-gnu bash -c '. "$1" >/dev/null 2>&1; printf "%s\n" "${split[@]}"' _ "$r")
+done
 
 # check_one PKG: prints problems, one per line
 check_one() (
@@ -45,7 +52,7 @@ check_one() (
 		exit 0
 	}
 	name='' version='' release=1 summary='' homepage='' category='' build_type=autotools
-	license=() source=() sha256=() depends=() makedepends=() features=() patches=() options=()
+	license=() source=() sha256=() depends=() makedepends=() features=() patches=() options=() split=()
 	CARCH=x86_64 CHOST=x86_64-cleanlinux-linux-gnu
 	# shellcheck source=/dev/null
 	. "$dir/recipe"
@@ -98,8 +105,24 @@ check_one() (
 		[[ $f =~ ^[+-]?[a-z0-9][a-z0-9_-]*$ ]] || echo "$1: bad feature '$f'"
 		known+=("${f#[+-]}")
 	done
-	for p in "${depends[@]}" "${makedepends[@]}"; do
-		[[ -f packages/${p%%:*}/recipe ]] || echo "$1: unknown dependency '${p%%:*}'"
+	# split packages: own name, files_KEY and summary_KEY (KEY: the name, '_' for other characters)
+	local -a deps=("${depends[@]}" "${makedepends[@]}")
+	local key n
+	for s in "${split[@]}"; do
+		[[ $s =~ ^[a-z0-9][a-z0-9+._-]*$ ]] || echo "$1: bad split name '$s'"
+		[[ $s != "$name" ]] || echo "$1: split '$s' is the name of the recipe"
+		[[ ! -f packages/$s/recipe ]] || echo "$1: split '$s' is also a recipe"
+		key=${s//[^A-Za-z0-9_]/_}
+		local -n files_ref="files_$key" summary_ref="summary_$key" depends_ref="depends_$key"
+		n=0
+		if declare -p "files_$key" >/dev/null 2>&1; then n=${#files_ref[@]}; fi
+		((n)) || echo "$1: split '$s' has no files_$key"
+		[[ -n ${summary_ref:-} ]] || echo "$1: split '$s' has no summary_$key"
+		if declare -p "depends_$key" >/dev/null 2>&1; then deps+=("${depends_ref[@]}"); fi
+		unset -n files_ref summary_ref depends_ref
+	done
+	for p in "${deps[@]}"; do
+		[[ -f packages/${p%%:*}/recipe || -n ${SPLIT_OF[${p%%:*}]:-} ]] || echo "$1: unknown dependency '${p%%:*}'"
 		if [[ $p == *:* ]]; then
 			f=${p#*:}
 			in_list "${f#!}" "${known[@]}" || echo "$1: dependency '$p' uses undeclared feature '${f#!}'"

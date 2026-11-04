@@ -61,6 +61,7 @@ meson_extra() { meson_feature zlib; meson_feature lzma; meson_feature lz4; }
 | `out_of_tree`, `meson_subdir`, `cmake_subdir`, `srcdir` | раскладка исходников |
 | `options` | `!lto` `!strip` `!hardening` `!prune` `!linker` (только GNU ld) `staticlibs` `emptydirs` `o3` (горячий код: -O3) |
 | `backup` | конфиги, которые нельзя перезаписывать (новая версия ляжет как `.burnnew`) |
+| `split` | дополнительные пакеты из той же сборки (`split=(gcc-libs)`); для каждого: `files_KEY` (пути и glob-шаблоны внутри `$DESTDIR`, обязательно), `summary_KEY`, `depends_KEY`, `backup_KEY`, `license_KEY`, где `KEY` — имя с `_` вместо `-` и `.` |
 
 Функции (все необязательны, выполняются в каталоге исходников): `do_prepare`, `do_configure`, `do_build`, `do_check`, `do_install`, `post_install`, а также `configure_extra`/`meson_extra`/`cmake_extra` (печатают по аргументу в строке). Внутри доступны `$SRC $BUILD $DESTDIR $FILES $CC $CFLAGS $LDFLAGS $CHOST $CARCH $KARCH $CROSS $JOBS $VIDEO_CARDS`, помощники `use`, `use_enable`, `use_with`, `meson_feature`, `meson_use`, `cmake_use` и стандартные шаги `bt_configure`, `bt_build`, `bt_install`.
 

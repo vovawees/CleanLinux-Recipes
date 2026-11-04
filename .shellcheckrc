@@ -2,6 +2,8 @@
 # (SC2154, SC2153), and follow PKGBUILD conventions: unquoted versions in arrays (SC2206),
 # name=sed style assignments (SC2209), comma lists inside arguments (SC2054).
 disable=SC2034,SC2154,SC2153,SC2206,SC2209,SC2054
+# '$ROOT' and '${prefix}' in single quotes are literal on purpose: triggers, .pc files
+disable=SC2016
 # build phases run with errexit
 disable=SC2164
 shell=bash
