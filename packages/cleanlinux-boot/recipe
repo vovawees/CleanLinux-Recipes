@@ -1,0 +1,15 @@
+name=cleanlinux-boot
+version=0.1.0
+release=1
+summary="Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, kernels in the ESP)"
+homepage=https://github.com/vovawees/cleanlinux-boot
+license=(MIT)
+category=core
+# dinit runs the services; the helper loads modules through libkmod, probes disks through libblkid
+# (initramfs), compresses the initramfs with zstd; udevd and agetty/login do the rest
+depends=(glibc dinit eudev kmod util-linux zstd)
+build_type=make
+# /etc/dinit.d/boot.d: "dinitctl enable" puts the services started at boot there
+options=(emptydirs)
+source=(https://github.com/vovawees/cleanlinux-boot/releases/download/v$version/cleanlinux-boot-$version.tar.gz)
+sha256=(3223802f9162a3ef0c0fe34ee0c35d40073427603b0aba9e7ee456256413da26)
