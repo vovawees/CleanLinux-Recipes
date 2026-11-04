@@ -1,6 +1,6 @@
 name=linux
 version=7.3.1
-release=7
+release=8
 summary="The Linux kernel and modules (CleanLinux defaults + profile GPU drivers)"
 homepage=https://www.kernel.org/
 license=(GPL-2.0-only)
@@ -74,6 +74,8 @@ do_install() {
 	rm -f "$DESTDIR/usr/lib/modules/$kver/build" "$DESTDIR/usr/lib/modules/$kver/source"
 	install -Dm644 "$image" "$DESTDIR/usr/lib/modules/$kver/vmlinuz"
 	install -Dm644 .config "$DESTDIR/usr/lib/modules/$kver/config"
+	# the exported symbols, for modules built outside this tree (nvidia)
+	install -Dm644 Module.symvers "$DESTDIR/usr/lib/modules/$kver/Module.symvers"
 	if [[ $KARCH == arm64 ]]; then _kmake INSTALL_DTBS_PATH="$DESTDIR/usr/lib/modules/$kver/dtbs" dtbs_install; fi
 	if [[ -n $KERNEL_CMDLINE ]]; then printf '%s\n' "$KERNEL_CMDLINE" >"$DESTDIR/usr/lib/modules/$kver/cmdline"; fi
 }
