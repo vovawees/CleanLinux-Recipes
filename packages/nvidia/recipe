@@ -1,0 +1,132 @@
+name=nvidia
+version=595.104.02
+release=1
+summary="NVIDIA driver: open kernel modules, GSP firmware, OpenGL, EGL, Vulkan, GBM, NVENC/NVDEC, the CUDA driver, nvidia-smi"
+homepage=https://www.nvidia.com/en-us/drivers/unix/
+license=(LicenseRef-NVIDIA-Driver GPL-2.0-only MIT)
+category=nonfree
+# Proprietary (the kernel modules are GPL/MIT, the libraries are not): burn builds it only with
+# ALLOW_NONFREE=1 in /etc/burn/burn.conf. For Turing (GeForce RTX 20, GTX 16) and newer: the open
+# kernel modules run the driver on the GPU's GSP. Older cards stay with nouveau (VIDEO_CARDS).
+# x86_64 only.
+#
+# The kernel modules are built for the kernel of the linux recipe: _kernel follows its version
+# (tools/lint.sh checks that), the config and Module.symvers come from the installed linux package,
+# and options=(late) makes burn update build this once the new kernel is installed.
+#
+# Wayland compositors get GBM (nvidia-drm_gbm), EGL on GBM and Wayland and kernel modesetting
+# (modprobe.d). X11 takes only the client libraries (libGLX_nvidia is also the Vulkan driver); not
+# packaged: the Xorg driver, the 32-bit libraries, nvidia-settings, the systemd units of suspend.
+# Features: opencl (the OpenCL driver; the ICD loader comes from elsewhere), ngx (DLSS through
+# Proton), optix (OptiX ray tracing for renderers).
+_kernel=7.3.1
+features=(-opencl -ngx -optix)
+depends=(glibc gcc-libs linux libglvnd mesa libdrm wayland libx11 libxext libxcb)
+makedepends=(bc bison flex perl openssl elfutils)
+build_type=custom
+source=(https://download.nvidia.com/XFree86/Linux-x86_64/$version/NVIDIA-Linux-x86_64-$version.run
+	kernel://kernel/v${_kernel%%.*}.x/linux-$_kernel.tar.xz 60-nvidia.rules nvidia.conf)
+sha256=(
+	e421c202e4c79f58c3c7f3161bbe71454ebb3d88936f88205a0e327cd04c59ca
+	fa595aad93734f829c963c2a90ef7c3673224fd7fdae7b49406e397cde2de231
+	dc4cbbed6a71099dd91d07a625e71e018fb061933605c0c99093eba4117098d5
+	8443d4377678b2b70fd7608334358971dd0b89b2880802798cae8a11a10d466d
+)
+noextract=(NVIDIA-Linux-x86_64-$version.run)
+options=(!strip !lto !hardening late)
+
+_nv=NVIDIA-Linux-x86_64-$version
+
+# make in the kernel tree ($SRC), as the linux recipe runs it
+_kmake() {
+	local -a cross=()
+	if ((CROSS)); then cross=(CROSS_COMPILE="$CHOST-"); fi
+	env -u CFLAGS -u CXXFLAGS -u LDFLAGS make ARCH="$KARCH" HOSTCC=gcc "${cross[@]}" "$@"
+}
+
+do_prepare() {
+	[[ $CARCH == x86_64 ]] || die "nvidia: the driver of this recipe is for x86_64"
+	sh "$FILES/$_nv.run" --extract-only --target "$WORK/$_nv" >/dev/null
+}
+
+# the tree of the installed kernel: its config and exported symbols, then modules_prepare
+do_configure() {
+	local d kdir=''
+	for d in "$SYSROOT"/usr/lib/modules/"$_kernel"*/; do
+		if [[ -f $d/config && -f $d/Module.symvers ]]; then kdir=${d%/}; fi
+	done
+	[[ -n $kdir ]] || die "nvidia: linux $_kernel (with config and Module.symvers) is not installed in ${SYSROOT:-/}"
+	cp "$kdir/config" .config
+	cp "$kdir/Module.symvers" Module.symvers
+	_kmake olddefconfig
+	[[ $(_kmake -s kernelrelease) == "${kdir##*/}" ]] ||
+		die "nvidia: the kernel tree says $(_kmake -s kernelrelease), the installed kernel is ${kdir##*/}"
+	_kmake -j"$JOBS" modules_prepare
+	echo "${kdir##*/}" >"$WORK/kver"
+}
+
+do_build() {
+	local pre=''
+	if ((CROSS)); then pre=$CHOST-; fi
+	cd "$WORK/$_nv/kernel-open"
+	env -u CFLAGS -u CXXFLAGS -u LDFLAGS make -j"$JOBS" ARCH=x86_64 SYSSRC="$SRC" SYSOUT="$SRC" HOSTCC=gcc \
+		CROSS_COMPILE="$pre" CC="${pre}gcc" LD="${pre}ld" OBJDUMP="${pre}objdump" \
+		NV_KERNEL_MODULES="nvidia nvidia-uvm nvidia-modeset nvidia-drm" modules
+}
+
+do_install() {
+	local kver f so pre='' l
+	if ((CROSS)); then pre=$CHOST-; fi
+	kver=$(<"$WORK/kver")
+	cd "$WORK/$_nv"
+	# the kernel modules (depmod runs as a trigger) and the firmware of the GSP
+	install -Dm644 -t "$DESTDIR/usr/lib/modules/$kver/extra" kernel-open/nvidia{,-uvm,-modeset,-drm}.ko
+	"${pre}strip" --strip-debug "$DESTDIR/usr/lib/modules/$kver/extra/"*.ko
+	install -Dm644 -t "$DESTDIR/usr/lib/firmware/nvidia/$version" firmware/gsp_*.bin
+
+	# the libraries: OpenGL, OpenGL ES and EGL behind libglvnd, Vulkan (with ray tracing), GBM, the EGL
+	# platforms of Wayland, GBM and X11, video (NVDEC, NVENC, optical flow), the CUDA driver, NVML
+	local -a libs=(libGLX_nvidia libEGL_nvidia libGLESv2_nvidia libnvidia-glcore libnvidia-eglcore libnvidia-glsi
+		libnvidia-tls libnvidia-gpucomp libnvidia-glvkspirv libnvidia-rtcore libnvidia-allocator libnvidia-present
+		libnvidia-ml libcuda libnvidia-ptxjitcompiler libnvidia-nvvm libnvcuvid libnvidia-encode
+		libnvidia-opticalflow)
+	if use opencl; then libs+=(libnvidia-opencl); fi
+	if use ngx; then libs+=(libnvidia-ngx); fi
+	if use optix; then libs+=(libnvoptix); fi
+	for l in "${libs[@]}"; do install -Dm755 "$l.so.$version" "$DESTDIR/usr/lib/$l.so.$version"; done
+	install -m755 libnvidia-egl-gbm.so.1.* libnvidia-egl-wayland.so.1.* libnvidia-egl-wayland2.so.1.* \
+		libnvidia-egl-xcb.so.1.* libnvidia-egl-xlib.so.1.* libnvidia-nvvm70.so.4 "$DESTDIR/usr/lib/"
+	# the soname links (what ldconfig would make), the names programs open, the GBM backend
+	for f in "$DESTDIR"/usr/lib/lib*.so.*; do
+		so=$("${pre}readelf" -d "$f" | sed -n 's/.*Library soname: \[\(.*\)\]/\1/p')
+		if [[ -n $so && $so != "${f##*/}" ]]; then ln -sf "${f##*/}" "$DESTDIR/usr/lib/$so"; fi
+	done
+	for l in libcuda libnvidia-ml libnvcuvid libnvidia-encode libnvidia-opticalflow libnvidia-ptxjitcompiler; do
+		ln -s "$l.so.1" "$DESTDIR/usr/lib/$l.so"
+	done
+	ln -s libnvidia-nvvm.so.4 "$DESTDIR/usr/lib/libnvidia-nvvm.so"
+	install -d "$DESTDIR/usr/lib/gbm"
+	ln -s ../libnvidia-allocator.so.1 "$DESTDIR/usr/lib/gbm/nvidia-drm_gbm.so"
+
+	# how libglvnd, EGL and the Vulkan loader find the driver; application profiles
+	install -Dm644 10_nvidia.json "$DESTDIR/usr/share/glvnd/egl_vendor.d/10_nvidia.json"
+	install -Dm644 -t "$DESTDIR/usr/share/egl/egl_external_platform.d" 09_nvidia_wayland2.json \
+		10_nvidia_wayland.json 15_nvidia_gbm.json 20_nvidia_xcb.json 20_nvidia_xlib.json
+	install -Dm644 nvidia_icd.json "$DESTDIR/usr/share/vulkan/icd.d/nvidia_icd.json"
+	install -Dm644 nvidia_layers.json "$DESTDIR/usr/share/vulkan/implicit_layer.d/nvidia_layers.json"
+	install -Dm644 -t "$DESTDIR/usr/share/nvidia" "nvidia-application-profiles-$version-rc" \
+		"nvidia-application-profiles-$version-key-documentation"
+	if use opencl; then install -Dm644 nvidia.icd "$DESTDIR/etc/OpenCL/vendors/nvidia.icd"; fi
+	if use optix; then install -Dm644 nvoptix.bin "$DESTDIR/usr/share/nvidia/nvoptix.bin"; fi
+	if use ngx; then
+		install -Dm755 nvidia-ngx-updater "$DESTDIR/usr/bin/nvidia-ngx-updater"
+		install -Dm644 -t "$DESTDIR/usr/lib/nvidia/wine" nvngx.dll _nvngx.dll nvngx_dlssg.dll
+	fi
+
+	# nvidia-smi; nvidia-modprobe makes the device nodes, run by udev (so it is not setuid)
+	install -Dm755 -t "$DESTDIR/usr/bin" nvidia-smi nvidia-modprobe
+	install -Dm644 -t "$DESTDIR/usr/share/man/man1" nvidia-smi.1.gz nvidia-modprobe.1.gz
+	install -Dm644 "$FILES/60-nvidia.rules" "$DESTDIR/usr/lib/udev/rules.d/60-nvidia.rules"
+	install -Dm644 "$FILES/nvidia.conf" "$DESTDIR/usr/lib/modprobe.d/nvidia.conf"
+	install -Dm644 LICENSE "$DESTDIR/usr/share/licenses/nvidia/LICENSE"
+}

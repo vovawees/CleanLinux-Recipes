@@ -1,0 +1,7 @@
+# The device nodes of the NVIDIA driver (/dev/nvidiactl, /dev/nvidia0, /dev/nvidia-uvm,
+# /dev/nvidia-modeset): nvidia-modprobe makes them as soon as the driver binds a GPU, so CUDA,
+# Vulkan and Wayland work without the X driver that used to do it. A GPU given to a virtual machine
+# (vfio-pci) is left alone.
+ACTION=="add|bind", ATTR{vendor}=="0x10de", ATTR{class}=="0x03[0-9]*", DRIVER=="nvidia", \
+	TEST!="/dev/nvidia-uvm", RUN+="/usr/bin/nvidia-modprobe", RUN+="/usr/bin/nvidia-modprobe -c0 -u", \
+	RUN+="/usr/bin/nvidia-modprobe -m"
