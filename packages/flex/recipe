@@ -1,0 +1,15 @@
+name=flex
+version=2.6.4
+release=1
+summary="Fast lexical analyser generator (lex)"
+homepage=https://github.com/westes/flex
+license=(BSD-2-Clause)
+category=devel
+# the scanners it writes run m4
+depends=(glibc m4)
+build_type=autotools
+source=(https://github.com/westes/flex/releases/download/v$version/flex-$version.tar.gz)
+sha256=(e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995)
+configure_args=(--disable-static)
+# lex for the programs that call it by that name
+post_install() { ln -s flex "$DESTDIR/usr/bin/lex"; }

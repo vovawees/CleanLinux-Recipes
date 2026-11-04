@@ -114,16 +114,21 @@ Upstream определяется по ссылкам самого рецепт�
 
 | Пакет | Категория | Версия | Сборка | Описание |
 |---|---|---|---|---|
-| `base-devel` | meta | 2026.1 | meta | Toolchain for building recipes natively (meta package) |
+| `autoconf` | devel | 2.73 | autotools | GNU autoconf: configure scripts from configure.ac |
+| `automake` | devel | 1.19 | autotools | GNU automake: Makefile.in from Makefile.am |
+| `base-devel` | meta | 2026.1 | meta | Everything needed to build any recipe natively (meta package) |
 | `base` | meta | 2026.1 | meta | Minimal CleanLinux userland (meta package) |
 | `bash` | core | 5.3.20 | autotools | GNU Bourne Again shell (with all upstream patches) |
+| `bc` | devel | 1.08.2 | autotools | GNU bc and dc: arbitrary precision calculators (the kernel build uses bc) |
 | `binutils` | devel | 2.47 | autotools | GNU assembler, linker and binary utilities |
 | `bison` | devel | 3.8.2 | autotools | GNU parser generator (yacc replacement) |
 | `btrfs-progs` | core | 7.3 | autotools | btrfs filesystem tools: mkfs.btrfs, btrfs (subvolumes, snapshots, scrub, send), btrfsck |
 | `burn` | core | 0.7.0 | make | The CleanLinux package manager: source based, rolling+++ |
+| `bzip2` | core | 1.0.8 | custom | Block-sorting file compressor and libbz2 |
 | `ca-certificates` | core | 2026.10.20 | custom | Mozilla's trusted root certificates for TLS (the NSS bundle as extracted by curl.se) |
 | `cleanlinux-boot` | core | 0.1.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, kernels in the ESP) |
 | `cleanlinux-install` | core | 0.1.0 | make | The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, systemd-boot, users |
+| `cmake` | devel | 4.4.5 | custom | Cross-platform build system generator |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
 | `curl` | core | 8.23.0 | autotools | URL transfer tool and library (libcurl): HTTP/1.1, HTTPS through OpenSSL, FTP |
 | `dbus` | core | 1.16.2 | meson | D-Bus: the message bus daemon and libdbus |
@@ -132,13 +137,16 @@ Upstream определяется по ссылкам самого рецепт�
 | `dinit` | core | 0.22.1 | custom | dinit: fast, small service manager and init with dependency handling |
 | `dosfstools` | core | 4.2 | autotools | FAT filesystem tools: mkfs.fat, fsck.fat, fatlabel (the EFI system partition) |
 | `e2fsprogs` | core | 1.47.4 | autotools | ext2/3/4 filesystem tools: mke2fs, e2fsck, tune2fs, resize2fs, debugfs |
+| `elfutils` | devel | 0.197 | autotools | ELF and DWARF libraries and tools: libelf (objtool, BTF), libdw (pahole), eu-* tools |
 | `ell` | core | 0.83 | autotools | Embedded Linux Library: the D-Bus, netlink, crypto and TLS core of iwd |
 | `eudev` | core | 3.3.0 | autotools | udev without systemd: device manager (udevd, udevadm), rules, hwdb and libudev |
 | `expat` | core | 2.10.0 | autotools | Expat: stream-oriented XML parser library |
 | `filesystem` | core | 2026.1 | custom | CleanLinux base layout: merged /usr, default /etc files, os-release |
 | `findutils` | core | 4.11.0 | autotools | GNU find, xargs and locate |
+| `flex` | devel | 2.6.4 | autotools | Fast lexical analyser generator (lex) |
 | `gawk` | core | 5.4.1 | autotools | GNU awk |
 | `gcc` | devel | 16.2.0 | autotools | GNU Compiler Collection: C and C++ compilers |
+| `gettext` | devel | 1.0 | autotools | GNU gettext tools: msgfmt, xgettext, autopoint (glibc has libintl itself) |
 | `git` | core | 2.56.0 | custom | Distributed version control system |
 | `glibc` | core | 2.44 | autotools | GNU C library: libc, the dynamic loader and friends |
 | `gperf` | devel | 3.3 | autotools | GNU perfect hash function generator (builds the keyword tables of eudev) |
@@ -149,6 +157,8 @@ Upstream определяется по ссылкам самого рецепт�
 | `kbd` | core | 2.10.0 | autotools | Console keyboard maps and fonts: loadkeys, setfont, showkey, kbd_mode |
 | `kmod` | core | 34.3 | meson | Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo |
 | `less` | core | 710 | autotools | Terminal pager (man, git and burn show long output with it) |
+| `libffi` | devel | 3.8.0 | autotools | Foreign function interface library: calls with argument lists built at run time (Python ctypes, GLib) |
+| `libtool` | devel | 2.6.2 | autotools | GNU libtool: portable shared libraries for autotools builds, and libltdl |
 | `libxcrypt` | core | 4.5.2 | autotools | Modern crypt(3): yescrypt, bcrypt and SHA-crypt password hashing (libcrypt) |
 | `linux-headers` | core | 7.3.1 | custom | Linux kernel userspace API headers |
 | `linux-pam` | core | 1.7.3 | meson | Linux-PAM: pluggable authentication modules (pam_unix, pam_limits, pam_env, ...) |
@@ -156,14 +166,18 @@ Upstream определяется по ссылкам самого рецепт�
 | `lz4` | core | 1.10.0 | make | Extremely fast compression (library and lz4 tool) |
 | `m4` | devel | 1.4.21 | autotools | GNU m4 macro processor |
 | `make` | devel | 4.4.1 | autotools | GNU make |
+| `meson` | devel | 1.12.1 | custom | Build system: fast, user friendly (most of the base is built with it) |
 | `ncurses` | core | 6.6 | autotools | Terminal handling library (wide character build) |
+| `ninja` | devel | 1.13.2 | cmake | Small build system with a focus on speed (the backend of meson and cmake) |
 | `openresolv` | core | 3.17.4 | custom | resolvconf: /etc/resolv.conf from DHCP clients, VPNs and local resolvers |
 | `openssl` | core | 3.5.9 | custom | TLS and cryptography library and the openssl tool (3.5 LTS) |
 | `pambase` | core | 2026.1 | custom | CleanLinux PAM stacks: system-auth, system-login, system-services, other |
 | `patch` | devel | 2.8.1 | autotools | GNU patch: apply diff files |
+| `perl` | devel | 5.44.0 | custom | The Perl 5 language: autoconf, automake, OpenSSL and kernel builds need it |
 | `pkgconf` | devel | 3.0.10 | meson | pkg-config implementation (also installed as pkg-config) |
 | `procps-ng` | core | 4.0.7 | autotools | Process and memory tools: ps, top, free, vmstat, pgrep/pkill, watch, sysctl, uptime, w |
 | `psmisc` | core | 23.7 | autotools | Process tools that use /proc: fuser, killall, pstree, prtstat, peekfd |
+| `python` | devel | 3.15.2 | autotools | The Python 3 language: meson, the kernel's and Mesa's build scripts need it |
 | `readline` | core | 8.3.6 | autotools | GNU readline: line editing and history for interactive programs |
 | `sed` | core | 4.10 | autotools | GNU stream editor |
 | `shadow` | core | 4.20.3 | autotools | Password and account tools: passwd, useradd, usermod, groupadd, chage, newuidmap, ... |

@@ -1,0 +1,22 @@
+name=cmake
+version=4.4.5
+release=1
+summary="Cross-platform build system generator"
+homepage=https://cmake.org
+license=(BSD-3-Clause)
+category=devel
+# the system curl, expat, zlib, zstd, xz and bzip2; libarchive, libuv, jsoncpp, rhash, nghttp2
+# and cppdap bundled (nothing else in the base needs them)
+depends=(glibc gcc-libs curl expat zlib-ng zstd xz bzip2)
+build_type=custom
+source=(https://github.com/Kitware/CMake/releases/download/v$version/cmake-$version.tar.gz)
+sha256=(a0c54c88abb8078dd8eccadb717fc6bb194bf18e7d44c86309910288886e04e2)
+
+do_configure() {
+	./bootstrap --prefix=/usr --mandir=/share/man --docdir=/share/doc/cmake --datadir=/share/cmake \
+		--parallel="$JOBS" --system-curl --system-expat --system-zlib --system-zstd --system-liblzma \
+		--system-bzip2 --no-system-libarchive --no-system-libuv --no-system-jsoncpp --no-system-librhash \
+		--no-system-nghttp2 --no-system-cppdap --no-qt-gui -- -DCMAKE_BUILD_TYPE=None -DCMAKE_USE_OPENSSL=ON
+}
+do_build() { make; }
+do_install() { make DESTDIR="$DESTDIR" install; }

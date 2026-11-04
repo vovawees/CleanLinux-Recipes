@@ -1,0 +1,11 @@
+name=automake
+version=1.19
+release=1
+summary="GNU automake: Makefile.in from Makefile.am"
+homepage=https://www.gnu.org/software/automake/
+license=(GPL-2.0-or-later)
+category=devel
+depends=(perl autoconf)
+build_type=autotools
+source=(https://ftp.gnu.org/gnu/automake/automake-$version.tar.xz)
+sha256=(e3e2c2e3abf37898138db5b6c1d1dc35c9160c5978be7947d2c741705251d445)

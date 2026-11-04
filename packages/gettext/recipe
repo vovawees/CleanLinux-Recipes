@@ -1,0 +1,14 @@
+name=gettext
+version=1.0
+release=1
+summary="GNU gettext tools: msgfmt, xgettext, autopoint (glibc has libintl itself)"
+homepage=https://www.gnu.org/software/gettext/
+license=(GPL-3.0-or-later LGPL-2.1-or-later)
+category=devel
+depends=(glibc ncurses)
+build_type=autotools
+source=(https://ftp.gnu.org/gnu/gettext/gettext-$version.tar.xz)
+sha256=(71132a3fb71e68245b8f2ac4e9e97137d3e5c02f415636eb508ae607bc01add7)
+# the bundled libxml2 and libunistring, no Java, C# or Emacs integration
+configure_args=(--disable-static --without-emacs --disable-java --disable-csharp --without-git
+	--with-included-libxml --with-included-libunistring --without-libintl-prefix)

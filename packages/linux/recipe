@@ -6,8 +6,9 @@ homepage=https://www.kernel.org/
 license=(GPL-2.0-only)
 category=kernel
 build_type=custom
-# host tools needed to build: bc perl flex bison openssl libelf (recipes: see ROADMAP)
-makedepends=(bison)
+# the tools of the kernel build: bc, bison, flex, perl, openssl (module signing, certificates),
+# libelf (objtool); pahole for the BTF of sched_ext
+makedepends=(bc bison flex perl openssl elfutils dwarves:sched_ext)
 features=(-sched_ext)
 source=(kernel://kernel/v${version%%.*}.x/linux-$version.tar.xz cleanlinux.config x86.config)
 sha256=(

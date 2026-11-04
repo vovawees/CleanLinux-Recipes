@@ -1,9 +1,13 @@
 name=base-devel
 version=2026.1
-release=1
-summary="Toolchain for building recipes natively (meta package)"
+release=2
+summary="Everything needed to build any recipe natively (meta package)"
 homepage=https://github.com/vovawees/CleanLinux-Recipes
 license=(MIT)
 category=meta
 build_type=meta
-depends=(base binutils gcc linux-headers make patch m4 bison pkgconf)
+# the compiler and the build systems of the recipes (autotools, meson + ninja, cmake), the
+# interpreters builds run (perl, python), the kernel's tools (bc, flex, bison, libelf for objtool,
+# openssl for module signing) and gettext; ccache, mold and pahole are separate (accelerators)
+depends=(base binutils gcc linux-headers make patch m4 bison flex pkgconf perl python meson ninja cmake
+	bc elfutils openssl autoconf automake libtool gettext)

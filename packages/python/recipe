@@ -1,0 +1,15 @@
+name=python
+version=3.15.2
+release=1
+summary="The Python 3 language: meson, the kernel's and Mesa's build scripts need it"
+homepage=https://www.python.org
+license=(PSF-2.0)
+category=devel
+# ctypes (libffi), ssl, bz2/lzma/zlib/zstd, readline and curses, uuid (util-linux)
+depends=(glibc bzip2 expat libffi libxcrypt ncurses openssl readline util-linux xz zlib-ng zstd)
+build_type=autotools
+source=(https://www.python.org/ftp/python/$version/Python-$version.tar.xz)
+sha256=(8b5536d280142ecf6cdfe15d12a21ba1c65e300bbf7b28a8d0cdb849575797de)
+# no bundled pip (packages come from recipes), the system expat; python3 is the only name
+configure_args=(--enable-shared --with-system-expat --with-ensurepip=no --without-static-libpython
+	--enable-ipv6 --with-dbmliborder= --with-tzpath=/usr/share/zoneinfo)

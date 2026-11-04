@@ -1,0 +1,12 @@
+name=libtool
+version=2.6.2
+release=1
+summary="GNU libtool: portable shared libraries for autotools builds, and libltdl"
+homepage=https://www.gnu.org/software/libtool/
+license=(GPL-2.0-or-later)
+category=devel
+depends=(glibc bash)
+build_type=autotools
+source=(https://ftp.gnu.org/gnu/libtool/libtool-$version.tar.xz)
+sha256=(2ef1067c16c97db930fd740cc9bc3d3ba9a583804ae5ac42cc3e8719e49e191e)
+configure_args=(--disable-static)

@@ -1,0 +1,31 @@
+name=perl
+version=5.44.0
+release=1
+summary="The Perl 5 language: autoconf, automake, OpenSSL and kernel builds need it"
+homepage=https://www.perl.org
+license=(GPL-1.0-or-later Artistic-1.0-Perl)
+category=devel
+depends=(glibc libxcrypt zlib-ng bzip2)
+build_type=custom
+source=(https://www.cpan.org/src/5.0/perl-$version.tar.xz)
+sha256=(505cf43912e9480495c344c70260452e32aa2a73c546a026b3f100053b23ce91)
+
+# core, vendor (packages) and site (cpan) libraries apart, a shared libperl, threads; the
+# system zlib and bzip2 for Compress::Raw::*. Native builds only (cross needs perl-cross).
+do_configure() {
+	if ((CROSS)); then
+		echo "perl: cross builds are not supported, build it on the device" >&2
+		return 1
+	fi
+	local v=${version%.*}
+	export BUILD_ZLIB=False BUILD_BZIP2=0 BZIP2_LIB=/usr/lib BZIP2_INCLUDE=/usr/include
+	sh Configure -des -Dprefix=/usr -Dvendorprefix=/usr -Dsiteprefix=/usr/local \
+		-Dprivlib=/usr/share/perl5/core_perl -Darchlib="/usr/lib/perl5/$v/core_perl" \
+		-Dvendorlib=/usr/share/perl5/vendor_perl -Dvendorarch="/usr/lib/perl5/$v/vendor_perl" \
+		-Dsitelib=/usr/local/share/perl5/site_perl -Dsitearch="/usr/local/lib/perl5/$v/site_perl" \
+		-Dman1dir=/usr/share/man/man1 -Dman3dir=/usr/share/man/man3 -Dman1ext=1 -Dman3ext=3pm \
+		-Dpager="/usr/bin/less -isR" -Duseshrplib -Dusethreads -Dcc="$CC" \
+		-Doptimize="$CFLAGS" -Dldflags="$LDFLAGS" -Dlddlflags="-shared $LDFLAGS"
+}
+do_build() { make; }
+do_install() { make DESTDIR="$DESTDIR" install; }

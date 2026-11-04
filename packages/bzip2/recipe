@@ -1,0 +1,29 @@
+name=bzip2
+version=1.0.8
+release=1
+summary="Block-sorting file compressor and libbz2"
+homepage=https://sourceware.org/bzip2/
+license=(bzip2-1.0.6)
+category=core
+depends=(glibc)
+build_type=custom
+source=(https://mirrors.kernel.org/sourceware/bzip2/bzip2-$version.tar.gz)
+sha256=(ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269)
+
+# the upstream Makefiles: libbz2.so.1.0 from Makefile-libbz2_so, the tools linked against it
+do_build() {
+	make -f Makefile-libbz2_so CC="$CC" CFLAGS="$CFLAGS -fPIC -D_FILE_OFFSET_BITS=64"
+	make bzip2 bzip2recover CC="$CC" CFLAGS="$CFLAGS -D_FILE_OFFSET_BITS=64" LDFLAGS="$LDFLAGS"
+}
+do_install() {
+	install -Dm755 bzip2-shared "$DESTDIR/usr/bin/bzip2"
+	install -m755 bzip2recover bzdiff bzgrep bzmore "$DESTDIR/usr/bin/"
+	ln -s bzip2 "$DESTDIR/usr/bin/bunzip2"
+	ln -s bzip2 "$DESTDIR/usr/bin/bzcat"
+	install -Dm755 libbz2.so.$version "$DESTDIR/usr/lib/libbz2.so.$version"
+	ln -s libbz2.so.$version "$DESTDIR/usr/lib/libbz2.so.1.0"
+	ln -s libbz2.so.$version "$DESTDIR/usr/lib/libbz2.so.1"
+	ln -s libbz2.so.$version "$DESTDIR/usr/lib/libbz2.so"
+	install -Dm644 bzlib.h "$DESTDIR/usr/include/bzlib.h"
+	install -Dm644 bzip2.1 "$DESTDIR/usr/share/man/man1/bzip2.1"
+}

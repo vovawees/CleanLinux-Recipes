@@ -1,0 +1,13 @@
+name=elfutils
+version=0.197
+release=1
+summary="ELF and DWARF libraries and tools: libelf (objtool, BTF), libdw (pahole), eu-* tools"
+homepage=https://sourceware.org/elfutils/
+license=(GPL-3.0-or-later LGPL-3.0-or-later)
+category=devel
+depends=(glibc zlib-ng zstd xz bzip2)
+build_type=autotools
+source=(https://mirrors.kernel.org/sourceware/elfutils/$version/elfutils-$version.tar.bz2)
+sha256=(1fdf525f22dcf796d99a99ba3ea00a1f7b1ae5421bc62e8443a708920b99b904)
+# no debuginfod server or client (it needs libcurl, libarchive, sqlite, libmicrohttpd)
+configure_args=(--disable-debuginfod --enable-libdebuginfod=dummy --program-prefix=eu- --disable-static)

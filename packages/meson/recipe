@@ -1,0 +1,19 @@
+name=meson
+version=1.12.1
+release=1
+summary="Build system: fast, user friendly (most of the base is built with it)"
+homepage=https://mesonbuild.com
+license=(Apache-2.0)
+category=devel
+depends=(python ninja)
+build_type=custom
+source=(https://github.com/mesonbuild/meson/releases/download/$version/meson-$version.tar.gz)
+sha256=(ab0a6ca09f8ef70c564c8241fb5a23957886a0b53fb58412b5e07eaf07dba743)
+
+# one executable zip application: no setuptools, pip or wheel tools needed to install it
+do_build() { python3 packaging/create_zipapp.py --outfile meson.pyz --interpreter /usr/bin/python3 --compress; }
+do_install() {
+	install -Dm755 meson.pyz "$DESTDIR/usr/bin/meson"
+	install -Dm644 man/meson.1 "$DESTDIR/usr/share/man/man1/meson.1"
+	install -Dm644 data/shell-completions/bash/meson "$DESTDIR/usr/share/bash-completion/completions/meson"
+}

@@ -1,0 +1,12 @@
+name=libffi
+version=3.8.0
+release=1
+summary="Foreign function interface library: calls with argument lists built at run time (Python ctypes, GLib)"
+homepage=https://sourceware.org/libffi/
+license=(MIT)
+category=devel
+depends=(glibc)
+build_type=autotools
+source=(https://github.com/libffi/libffi/releases/download/v$version/libffi-$version.tar.gz)
+sha256=(7da3e2d9a171eb0a038f592ecad3ff2bb2550f3496d87b3b29ad0cf4430c0db4)
+configure_args=(--disable-static --disable-multi-os-directory --disable-docs)
