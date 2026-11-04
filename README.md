@@ -185,6 +185,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `libxcrypt` | core | 4.5.2 | autotools | Modern crypt(3): yescrypt, bcrypt and SHA-crypt password hashing (libcrypt) |
 | `libxkbcommon` | platform | 1.13.2 | meson | libxkbcommon: keymaps and keyboard state for Wayland compositors and clients, xkbregistry, xkbcli |
 | `libxml2` | platform | 2.15.4 | meson | libxml2: the XML parser and toolkit of GNOME (xmllint) |
+| `linux-firmware` | firmware | 20261019 | custom | Firmware of GPUs, Wi-Fi, Bluetooth, audio DSPs and other devices (what the profile needs: FIRMWARE) |
 | `linux-headers` | core | 7.3.1 | custom | Linux kernel userspace API headers |
 | `linux-pam` | core | 1.7.3 | meson | Linux-PAM: pluggable authentication modules (pam_unix, pam_limits, pam_env, ...) |
 | `linux` | kernel | 7.3.1 | custom | The Linux kernel and modules (CleanLinux defaults + profile GPU drivers) |
@@ -216,11 +217,13 @@ Upstream определяется по ссылкам самого рецепт�
 | `seatd` | platform | 0.9.3 | meson | seatd and libseat: seat management (GPU and input devices) for Wayland compositors without logind |
 | `sed` | core | 4.10 | autotools | GNU stream editor |
 | `shadow` | core | 4.20.3 | autotools | Password and account tools: passwd, useradd, usermod, groupadd, chage, newuidmap, ... |
+| `sof-firmware` | firmware | 2026.09.2 | custom | Sound Open Firmware: the audio DSP firmware and topologies of Intel laptops and handhelds |
 | `systemd-boot` | core | 261.4 | meson | systemd-boot: the UEFI boot manager of systemd, built alone (no systemd) |
 | `tar` | core | 1.35 | autotools | GNU tar archiver |
 | `util-linux` | core | 2.42.4 | autotools | Core Linux system utilities: mount, fdisk, lsblk, agetty, kill, ... |
 | `wayland-protocols` | platform | 1.50 | meson | Wayland protocol extensions (XML): xdg-shell, linux-dmabuf, presentation-time, ... |
 | `wayland` | platform | 1.26.0 | meson | Wayland: the display protocol library (libwayland-client, -server, -cursor, -egl) and wayland-scanner |
+| `wireless-regdb` | firmware | 2026.09.03 | custom | Wireless regulatory database: the allowed Wi-Fi channels and power of each country (signed) |
 | `wireplumber` | platform | 0.5.19 | meson | WirePlumber: the session and policy manager of PipeWire (devices, routing, Bluetooth profiles) |
 | `xkeyboard-config` | platform | 2.48 | meson | XKB data: keyboard models, layouts and options for libxkbcommon and X11 |
 | `xz` | core | 5.8.4 | autotools | XZ Utils: LZMA/xz compression library and tools |

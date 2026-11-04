@@ -1,0 +1,18 @@
+name=wireless-regdb
+version=2026.09.03
+release=1
+summary="Wireless regulatory database: the allowed Wi-Fi channels and power of each country (signed)"
+homepage=https://wireless.docs.kernel.org/en/latest/en/developers/regulatory/wireless-regdb.html
+license=(ISC)
+category=firmware
+build_type=custom
+source=(https://cdn.kernel.org/pub/software/network/wireless-regdb/wireless-regdb-$version.tar.xz)
+sha256=(b22e0901227b820cd1c280abe681a15b773a5103a5e10dc442e94ebb34cbf58d)
+
+do_build() { :; }
+# cfg80211 loads regulatory.db through the firmware loader and checks the signature with the keys
+# built into the kernel
+do_install() {
+	install -Dm644 -t "$DESTDIR/usr/lib/firmware" regulatory.db regulatory.db.p7s
+	install -Dm644 LICENSE "$DESTDIR/usr/share/licenses/wireless-regdb/LICENSE"
+}

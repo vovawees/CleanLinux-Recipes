@@ -1,0 +1,19 @@
+name=sof-firmware
+version=2026.09.2
+release=1
+summary="Sound Open Firmware: the audio DSP firmware and topologies of Intel laptops and handhelds"
+homepage=https://thesofproject.github.io/
+license=(BSD-3-Clause)
+category=firmware
+build_type=custom
+source=(https://github.com/thesofproject/sof-bin/releases/download/v$version/sof-bin-$version.tar.gz)
+sha256=(5f7bc30b2b5c1e6b0da55a33fc44e2b7f56ae9b06952edcde614f51ef6b943e1)
+options=(!strip)
+
+do_build() { :; }
+# the firmware only: the prebuilt debugging tools (sof-logger, ...) are left out
+do_install() {
+	FW_DEST="$DESTDIR/usr/lib/firmware/intel" TOOLS_DEST="$WORK/sof-tools" ./install.sh
+	install -Dm644 LICENCE.Intel "$DESTDIR/usr/share/licenses/sof-firmware/LICENCE.Intel"
+	install -Dm644 LICENCE.NXP "$DESTDIR/usr/share/licenses/sof-firmware/LICENCE.NXP"
+}

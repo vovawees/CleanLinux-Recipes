@@ -1,0 +1,68 @@
+name=linux-firmware
+version=20261019
+release=1
+summary="Firmware of GPUs, Wi-Fi, Bluetooth, audio DSPs and other devices (what the profile needs: FIRMWARE)"
+homepage=https://gitlab.com/kernel-firmware/linux-firmware
+license=(custom)
+category=firmware
+build_type=custom
+source=(kernel://kernel/firmware/linux-firmware-$version.tar.xz)
+sha256=(a10d1ab5baf2c74ba92e8c7cf313e691696c26bddfa6df00db795e48d70cd4ca)
+options=(!strip)
+
+do_build() { :; }
+# FIRMWARE in the profile lists the firmware of its devices as paths under /usr/lib/firmware
+# (directories or file name prefixes: "amdgpu/vangogh_ rtw88/rtw8822c rtl_bt/rtl8822cu"); without
+# it (generic profiles) everything is installed. WHENCE is cut down to the matching files and
+# links plus whatever those links point to, and copy-firmware.sh installs just that. Files are
+# compressed with zstd, as the kernel loads them (FW_LOADER_COMPRESS_ZSTD).
+do_install() {
+	cp WHENCE WHENCE.all
+	[[ -z ${FIRMWARE:-} ]] || firmware_select <WHENCE.all >WHENCE
+	./copy-firmware.sh --zstd "$DESTDIR/usr/lib/firmware"
+	install -Dm644 WHENCE.all "$DESTDIR/usr/share/licenses/linux-firmware/WHENCE"
+	install -Dm644 -t "$DESTDIR/usr/share/licenses/linux-firmware" LICEN[CS]E*
+}
+
+# WHENCE on stdin -> the entries FIRMWARE needs on stdout
+firmware_select() {
+	local line f t p n hit
+	local -a names=() queue=()
+	local -A entry=() target=() want=()
+	while IFS= read -r line; do
+		case $line in
+		File:* | RawFile:*) f=${line#*:} ;;
+		Link:*) f=${line#Link:} t=${f#* -> } f=${f%% -> *} ;;
+		*) continue ;;
+		esac
+		f=${f//\"/} f=${f#"${f%%[! ]*}"}
+		names+=("$f") entry[$f]=$line
+		[[ $line != Link:* ]] || target[$f]=${t//\"/}
+	done
+	for p in $FIRMWARE; do
+		hit=
+		for f in "${names[@]}"; do
+			[[ $f == "$p"* ]] || continue
+			hit=1
+			[[ -n ${want[$f]:-} ]] || want[$f]=1 queue+=("$f")
+		done
+		[[ -n $hit ]] || die "FIRMWARE: nothing in linux-firmware matches '$p'"
+	done
+	# links point to files, to other links or to whole directories
+	while ((${#queue[@]})); do
+		f=${queue[0]} queue=("${queue[@]:1}")
+		[[ -n ${target[$f]:-} ]] || continue
+		t=$(realpath -m -s --relative-to=/ "/$(dirname "$f")/${target[$f]}")
+		hit=
+		for n in "${names[@]}"; do
+			[[ $n == "$t" || $n == "$t"/* ]] || continue
+			hit=1
+			[[ -n ${want[$n]:-} ]] || want[$n]=1 queue+=("$n")
+		done
+		[[ -n $hit ]] || die "linux-firmware: the link $f points to nothing ($t)"
+	done
+	for f in "${names[@]}"; do
+		[[ -z ${want[$f]:-} ]] || printf '%s\n' "${entry[$f]}"
+	done
+	msg "FIRMWARE: ${#want[@]} of ${#names[@]} files and links"
+}
