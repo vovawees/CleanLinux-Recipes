@@ -1,6 +1,6 @@
 name=linux
 version=7.3.1
-release=11
+release=12
 summary="The Linux kernel and modules (CleanLinux defaults + profile GPU drivers)"
 homepage=https://www.kernel.org/
 license=(GPL-2.0-only)
@@ -21,7 +21,14 @@ options=(!lto !strip !hardening)
 
 _kmake() {
 	local -a cross=() repro=(KBUILD_BUILD_USER=burn KBUILD_BUILD_HOST=cleanlinux)
-	if ((CROSS)); then cross=(CROSS_COMPILE="$CHOST-"); fi
+	if ((CROSS)); then
+		# the host programs of the build (extract-cert, sign-file, objtool) link the build
+		# machine's libcrypto and libelf: their pkg-config must not see the target's sysroot
+		printf '%s\n' '#!/bin/sh' 'unset PKG_CONFIG_SYSROOT_DIR PKG_CONFIG_LIBDIR' \
+			'export PKG_CONFIG_PATH="${PKG_CONFIG_PATH_FOR_BUILD:-}"' 'exec pkg-config "$@"' >"$WORK/host-pkg-config"
+		chmod +x "$WORK/host-pkg-config"
+		cross=(CROSS_COMPILE="$CHOST-" HOSTPKG_CONFIG="$WORK/host-pkg-config")
+	fi
 	# reproducible: the build timestamp comes from the recipe (burn sets SOURCE_DATE_EPOCH)
 	if [[ -n ${SOURCE_DATE_EPOCH:-} ]]; then repro+=(KBUILD_BUILD_TIMESTAMP="$(LC_ALL=C date -u -d "@$SOURCE_DATE_EPOCH")"); fi
 	env -u CFLAGS -u CXXFLAGS -u LDFLAGS "${repro[@]}" make ARCH="$KARCH" HOSTCC=gcc "${cross[@]}" "$@"
