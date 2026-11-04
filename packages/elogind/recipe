@@ -1,0 +1,26 @@
+name=elogind
+version=257.16
+release=1
+summary="elogind: the logind API of systemd without systemd (sessions, seats, device access, suspend)"
+homepage=https://github.com/elogind/elogind
+license=(LGPL-2.1-or-later GPL-2.0-or-later)
+category=platform
+# for spins that need the logind API (KDE Plasma, GNOME, polkit's active sessions); seatd is the
+# small alternative. Started by D-Bus activation or by dinit (dinitctl enable elogind)
+depends=(glibc libcap util-linux eudev dbus linux-pam)
+build_type=meson
+source=(https://github.com/elogind/elogind/archive/v$version/elogind-$version.tar.gz elogind.dinit)
+sha256=(
+	3c8146409bfb9daa77f272212c2b0bf0ae727c782ec87ece0d2d25e0e5bf5f4c
+	68b6b81d411e383ab6eef6ee7473a839d2ec34c4669710f0369238888b802a44
+)
+# dinit powers off and reboots; PAM files go next to the other vendor files (/usr/lib/pam.d)
+meson_args=(-Dmode=release -Dman=disabled -Dhtml=disabled -Dtests=false -Dpamlibdir=/usr/lib/security
+	-Dpamconfdir=/usr/lib/pam.d -Dhalt-path=/usr/bin/halt -Dpoweroff-path=/usr/bin/poweroff
+	-Dreboot-path=/usr/bin/reboot -Dkexec-path=/usr/bin/kexec -Dnologin-path=/usr/bin/nologin
+	-Dpam=enabled -Dacl=disabled -Daudit=disabled -Dselinux=disabled -Dsmack=false -Dpolkit=disabled
+	-Dutmp=false -Dzshcompletiondir=no -Dbashcompletiondir=no -Dtranslations=false)
+
+post_install() {
+	install -Dm644 "$FILES/elogind.dinit" "$DESTDIR/usr/lib/dinit.d/elogind"
+}

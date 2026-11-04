@@ -1,0 +1,23 @@
+name=polkit
+version=128
+release=1
+summary="polkit: authorization for privileged actions of unprivileged programs (rules in JavaScript)"
+homepage=https://github.com/polkit-org/polkit
+license=(LGPL-2.0-or-later)
+category=platform
+# active sessions come from elogind; the rules run in Duktape; members of wheel are the admins
+depends=(glibc glib expat duktape linux-pam elogind)
+build_type=meson
+source=(https://github.com/polkit-org/polkit/archive/$version/polkit-$version.tar.gz polkit.sysusers)
+sha256=(
+	6edb06bf1448e49e428f9597a97af6a05d62146dd0b58f86eeaebcee3f5ecfaa
+	9b42c233390796c3c6fe09c4047c18cbb5c8bae7613cb2c31eaa71991c0505d0
+)
+meson_args=(-Dsession_tracking=elogind -Dpolkitd_user=polkitd -Dprivileged_group=wheel -Dauthfw=pam
+	-Dpam_include=system-auth -Dpam_module_dir=/usr/lib/security -Dpam_prefix=/usr/lib/pam.d
+	-Dexamples=false -Dtests=false -Dintrospection=false -Dgtk_doc=false -Dman=false)
+
+post_install() {
+	install -Dm644 "$FILES/polkit.sysusers" "$DESTDIR/usr/lib/sysusers.d/polkit.conf"
+	rm -rf "$DESTDIR/usr/lib/systemd"
+}

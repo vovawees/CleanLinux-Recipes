@@ -1,0 +1,2 @@
+# polkitd runs as its own user (102, as in Arch)
+u polkitd 102 "PolicyKit daemon"

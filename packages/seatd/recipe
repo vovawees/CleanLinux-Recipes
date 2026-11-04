@@ -1,0 +1,27 @@
+name=seatd
+version=0.9.3
+release=1
+summary="seatd and libseat: seat management (GPU and input devices) for Wayland compositors without logind"
+homepage=https://git.sr.ht/~kennylevinsen/seatd
+license=(MIT)
+category=platform
+# libseat talks to seatd, to elogind (feature elogind, for spins that run elogind) or, for root,
+# opens the devices itself (builtin)
+features=(-elogind)
+depends=(glibc elogind:elogind)
+build_type=meson
+source=(seatd-$version.tar.gz::https://git.sr.ht/~kennylevinsen/seatd/archive/$version.tar.gz seatd.dinit
+	seatd.sysusers)
+sha256=(
+	302564d54d8e28191fadfd734f2675ecb0c9e0615a58011b89ef15dfa4dbaa96
+	4e1f9c5473aebefe8e36bac5b61239ce420b50756d2a03e41d4b6046f7d48152
+	8ab2191ab9181b7d3afd56c6659f1d2ada8344633cfee5654a185383d53b9777
+)
+meson_args=(-Dserver=enabled -Dlibseat-seatd=enabled -Dlibseat-builtin=enabled -Dexamples=disabled
+	-Dman-pages=disabled)
+meson_extra() { if use elogind; then echo -Dlibseat-logind=elogind; else echo -Dlibseat-logind=disabled; fi; }
+
+post_install() {
+	install -Dm644 "$FILES/seatd.dinit" "$DESTDIR/usr/lib/dinit.d/seatd"
+	install -Dm644 "$FILES/seatd.sysusers" "$DESTDIR/usr/lib/sysusers.d/seatd.conf"
+}

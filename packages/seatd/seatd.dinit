@@ -1,0 +1,8 @@
+# seat management for compositors: members of the group "seat" may open a session
+# (dinitctl enable seatd; usermod -aG seat USER)
+type = process
+command = /usr/bin/seatd -g seat
+restart = true
+smooth-recovery = true
+log-type = buffer
+depends-on: system

@@ -137,10 +137,12 @@ Upstream определяется по ссылкам самого рецепт�
 | `diffutils` | core | 3.12 | autotools | GNU diff, cmp, diff3 and sdiff |
 | `dinit` | core | 0.22.1 | custom | dinit: fast, small service manager and init with dependency handling |
 | `dosfstools` | core | 4.2 | autotools | FAT filesystem tools: mkfs.fat, fsck.fat, fatlabel (the EFI system partition) |
+| `duktape` | platform | 2.7.0 | custom | Duktape: an embeddable JavaScript engine (the rules of polkit) |
 | `dwarves` | devel | 1.32 | cmake | pahole and the DWARF tools: BTF for the kernel (sched_ext, BPF), struct layouts |
 | `e2fsprogs` | core | 1.47.4 | autotools | ext2/3/4 filesystem tools: mke2fs, e2fsck, tune2fs, resize2fs, debugfs |
 | `elfutils` | devel | 0.197 | autotools | ELF and DWARF libraries and tools: libelf (objtool, BTF), libdw (pahole), eu-* tools |
 | `ell` | core | 0.83 | autotools | Embedded Linux Library: the D-Bus, netlink, crypto and TLS core of iwd |
+| `elogind` | platform | 257.16 | meson | elogind: the logind API of systemd without systemd (sessions, seats, device access, suspend) |
 | `eudev` | core | 3.3.0 | autotools | udev without systemd: device manager (udevd, udevadm), rules, hwdb and libudev |
 | `expat` | core | 2.10.0 | autotools | Expat: stream-oriented XML parser library |
 | `filesystem` | core | 2026.1 | custom | CleanLinux base layout: merged /usr, default /etc files, os-release |
@@ -151,6 +153,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `gdbm` | core | 1.26 | autotools | GNU dbm: key/value database library (man-db's index) |
 | `gettext` | devel | 1.0 | autotools | GNU gettext tools: msgfmt, xgettext, autopoint (glibc has libintl itself) |
 | `git` | core | 2.56.0 | custom | Distributed version control system |
+| `glib` | platform | 2.90.1 | meson | GLib: the core library of GNOME and many others (GObject, GIO, D-Bus bindings) |
 | `glibc` | core | 2.44 | autotools | GNU C library: libc, the dynamic loader and friends |
 | `gperf` | devel | 3.3 | autotools | GNU perfect hash function generator (builds the keyword tables of eudev) |
 | `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |
@@ -162,6 +165,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `kbd` | core | 2.10.0 | autotools | Console keyboard maps and fonts: loadkeys, setfont, showkey, kbd_mode |
 | `kmod` | core | 34.3 | meson | Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo |
 | `less` | core | 710 | autotools | Terminal pager (man, git and burn show long output with it) |
+| `libcap` | platform | 2.78 | custom | libcap: POSIX capabilities library and tools (getcap, setcap, capsh) |
 | `libdisplay-info` | platform | 0.4.0 | meson | libdisplay-info: EDID and DisplayID parser for compositors (wlroots, KWin, Mutter) |
 | `libdrm` | drivers | 2.4.134 | meson | libdrm: userspace interface to the kernel DRM (KMS, GEM) and the GPU-specific helpers of Mesa |
 | `libevdev` | platform | 1.14.0 | meson | libevdev: the evdev input device interface for libinput (and its debugging tools) |
@@ -188,13 +192,16 @@ Upstream определяется по ссылкам самого рецепт�
 | `openssl` | core | 3.5.9 | custom | TLS and cryptography library and the openssl tool (3.5 LTS) |
 | `pambase` | core | 2026.1 | custom | CleanLinux PAM stacks: system-auth, system-login, system-services, other |
 | `patch` | devel | 2.8.1 | autotools | GNU patch: apply diff files |
+| `pcre2` | platform | 10.49 | autotools | PCRE2: Perl-compatible regular expressions (8, 16 and 32 bit, JIT) for GLib, Qt, grep |
 | `perl` | devel | 5.44.0 | custom | The Perl 5 language: autoconf, automake, OpenSSL and kernel builds need it |
 | `pixman` | platform | 0.46.4 | meson | pixman: low-level pixel manipulation (compositing, scaling) for cairo, wlroots and Xwayland |
 | `pkgconf` | devel | 3.0.10 | meson | pkg-config implementation (also installed as pkg-config) |
+| `polkit` | platform | 128 | meson | polkit: authorization for privileged actions of unprivileged programs (rules in JavaScript) |
 | `procps-ng` | core | 4.0.7 | autotools | Process and memory tools: ps, top, free, vmstat, pgrep/pkill, watch, sysctl, uptime, w |
 | `psmisc` | core | 23.7 | autotools | Process tools that use /proc: fuser, killall, pstree, prtstat, peekfd |
 | `python` | devel | 3.15.2 | autotools | The Python 3 language: meson, the kernel's and Mesa's build scripts need it |
 | `readline` | core | 8.3.6 | autotools | GNU readline: line editing and history for interactive programs |
+| `seatd` | platform | 0.9.3 | meson | seatd and libseat: seat management (GPU and input devices) for Wayland compositors without logind |
 | `sed` | core | 4.10 | autotools | GNU stream editor |
 | `shadow` | core | 4.20.3 | autotools | Password and account tools: passwd, useradd, usermod, groupadd, chage, newuidmap, ... |
 | `systemd-boot` | core | 261.4 | meson | systemd-boot: the UEFI boot manager of systemd, built alone (no systemd) |
