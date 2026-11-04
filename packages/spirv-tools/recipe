@@ -1,0 +1,15 @@
+name=spirv-tools
+version=1.4.363.0
+release=1
+summary="SPIRV-Tools: the SPIR-V assembler, validator and optimizer (the OpenCL C kernels of Mesa for Intel and Mali)"
+homepage=https://github.com/KhronosGroup/SPIRV-Tools
+license=(Apache-2.0)
+category=devel
+depends=(glibc gcc-libs)
+makedepends=(cmake ninja python spirv-headers)
+build_type=cmake
+source=(spirv-tools-$version.tar.gz::https://github.com/KhronosGroup/SPIRV-Tools/archive/refs/tags/vulkan-sdk-$version.tar.gz)
+sha256=(e6c83a215538fbfd265ccf398d3877985055df1273dbed73912bd05307664688)
+# the same Vulkan SDK release as spirv-headers, which it reads from /usr
+cmake_args=(-DBUILD_SHARED_LIBS=ON -DSPIRV_TOOLS_BUILD_STATIC=OFF -DSPIRV_WERROR=OFF -DSPIRV_SKIP_TESTS=ON)
+cmake_extra() { echo "-DSPIRV-Headers_SOURCE_DIR=${SYSROOT:-}/usr"; }

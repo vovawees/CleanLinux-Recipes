@@ -1,0 +1,16 @@
+name=python-installer
+version=1.1.0
+release=1
+summary="installer: installs Python wheels into a destination root (the python build type of burn)"
+homepage=https://installer.pypa.io/
+license=(MIT)
+category=devel
+depends=(python)
+makedepends=(python-flit-core)
+build_type=custom
+source=(https://files.pythonhosted.org/packages/source/i/installer/installer-$version.tar.gz)
+sha256=(5adc0c01ce62d809989e246987cd68944fe5df8af562d0358f65b2ab15cb5de7)
+
+do_build() { python3 -m flit_core.wheel --outdir dist; }
+# installs itself from its own source tree
+do_install() { PYTHONPATH=src python3 -m installer --destdir="$DESTDIR" --prefix=/usr dist/*.whl; }

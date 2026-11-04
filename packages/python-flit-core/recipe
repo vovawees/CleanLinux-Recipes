@@ -1,0 +1,19 @@
+name=python-flit-core
+version=4.2.0
+release=1
+summary="flit_core: the PEP 517 build backend of the pure Python packages (it builds itself, no pip)"
+homepage=https://flit.pypa.io/
+license=(BSD-3-Clause)
+category=devel
+depends=(python)
+build_type=custom
+source=(https://files.pythonhosted.org/packages/source/f/flit_core/flit_core-$version.tar.gz)
+sha256=(84e4e4d8fdd45ba2613800a3ebc6834de26d47ec9746efc3719f94181137b460)
+
+# the first package of the Python build tools: its own wheel, unpacked by its own bootstrap script
+do_build() { python3 -m flit_core.wheel --outdir dist; }
+do_install() {
+	local site
+	site=$(python3 -c 'import sysconfig; print(sysconfig.get_path("purelib"))')
+	python3 bootstrap_install.py --installdir "$DESTDIR$site" dist/flit_core-*.whl
+}

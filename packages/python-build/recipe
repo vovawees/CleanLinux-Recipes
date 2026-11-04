@@ -1,0 +1,16 @@
+name=python-build
+version=1.6.1
+release=1
+summary="build: the PEP 517 front end; with installer, the python build type of burn"
+homepage=https://build.pypa.io/
+license=(MIT)
+category=devel
+depends=(python python-packaging python-pyproject-hooks)
+makedepends=(python-flit-core python-installer)
+build_type=custom
+source=(https://files.pythonhosted.org/packages/source/b/build/build-$version.tar.gz)
+sha256=(51cc11666391ab6f092070437ac747002ff46f3e4113a3622177ee6b488bfc53)
+
+# built before python-build exists: flit_core builds the wheel itself
+do_build() { python3 -m flit_core.wheel --outdir dist; }
+do_install() { python3 -m installer --destdir="$DESTDIR" --prefix=/usr dist/*.whl; }

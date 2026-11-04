@@ -1,0 +1,17 @@
+name=libepoxy
+version=1.5.10
+release=1
+summary="libepoxy: OpenGL function pointer management over EGL and GLX (Xwayland's glamor, GTK)"
+homepage=https://github.com/anholt/libepoxy
+license=(MIT)
+category=platform
+# GLX with feature x11; EGL always (the libraries are opened at run time, Mesa gives their headers)
+features=(-x11)
+depends=(glibc mesa libx11:x11)
+build_type=meson
+source=(libepoxy-$version.tar.gz::https://github.com/anholt/libepoxy/archive/refs/tags/$version.tar.gz)
+sha256=(a7ced37f4102b745ac86d6a70a9da399cc139ff168ba6b8002b4d8d43c900c15)
+meson_args=(-Ddocs=false -Dtests=false -Degl=yes)
+meson_extra() {
+	if use x11; then printf '%s\n' -Dglx=yes -Dx11=true; else printf '%s\n' -Dglx=no -Dx11=false; fi
+}

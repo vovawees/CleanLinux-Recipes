@@ -1,0 +1,12 @@
+name=python-markupsafe
+version=3.0.4
+release=1
+summary="MarkupSafe: escaped strings for templates (Mako, Jinja)"
+homepage=https://palletsprojects.com/p/markupsafe/
+license=(BSD-3-Clause)
+category=devel
+depends=(python)
+makedepends=(python-build python-installer python-setuptools)
+build_type=python
+source=(https://files.pythonhosted.org/packages/source/m/markupsafe/markupsafe-$version.tar.gz)
+sha256=(2e9ad7dd851bf45fab9f75cbff4cb493fee9979e8d8c7c9c3ee119022518edd6)

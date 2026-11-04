@@ -1,0 +1,16 @@
+name=python-packaging
+version=26.3
+release=1
+summary="packaging: versions, specifiers and markers of Python packages (Mesa, build)"
+homepage=https://github.com/pypa/packaging
+license=(Apache-2.0 BSD-2-Clause)
+category=devel
+depends=(python)
+makedepends=(python-flit-core python-installer)
+build_type=custom
+source=(https://files.pythonhosted.org/packages/source/p/packaging/packaging-$version.tar.gz)
+sha256=(94edc256424af38762eb31306eed28beb9f0efc50a8837492c9d6fd6004aed79)
+
+# built before python-build exists: flit_core builds the wheel itself
+do_build() { python3 -m flit_core.wheel --outdir dist; }
+do_install() { python3 -m installer --destdir="$DESTDIR" --prefix=/usr dist/*.whl; }

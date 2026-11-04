@@ -1,0 +1,12 @@
+name=spirv-headers
+version=1.4.363.0
+release=1
+summary="SPIR-V headers and grammar of SPIRV-Tools and SPIRV-LLVM-Translator (the Vulkan SDK release)"
+homepage=https://github.com/KhronosGroup/SPIRV-Headers
+license=(MIT)
+category=devel
+makedepends=(cmake ninja)
+build_type=cmake
+source=(spirv-headers-$version.tar.gz::https://github.com/KhronosGroup/SPIRV-Headers/archive/refs/tags/vulkan-sdk-$version.tar.gz)
+sha256=(5b3a0d099f5c7649e29c0938476c462e71d66ad89a0bde42fa1ba3eb476956c9)
+cmake_args=(-DSPIRV_HEADERS_ENABLE_TESTS=OFF)

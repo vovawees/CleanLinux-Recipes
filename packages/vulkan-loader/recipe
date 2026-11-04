@@ -1,0 +1,22 @@
+name=vulkan-loader
+version=1.4.367
+release=1
+summary="Vulkan loader (libvulkan): finds the drivers in /usr/share/vulkan/icd.d and the layers"
+homepage=https://github.com/KhronosGroup/Vulkan-Loader
+license=(Apache-2.0)
+category=drivers
+# the window systems of the WSI follow the features; the loader only needs their headers
+features=(+wayland -x11)
+depends=(glibc)
+makedepends=(cmake ninja python vulkan-headers wayland:wayland libxcb:x11 libx11:x11 libxrandr:x11)
+build_type=cmake
+source=(vulkan-loader-$version.tar.gz::https://github.com/KhronosGroup/Vulkan-Loader/archive/refs/tags/v$version.tar.gz)
+sha256=(f70da1e3c63b55bae070dd44dfb9ca77523dba3781b6cb8aad3a1ceef4e902b7)
+cmake_args=(-DBUILD_TESTS=OFF -DBUILD_WERROR=OFF -DBUILD_WSI_DIRECTFB_SUPPORT=OFF -DCMAKE_INSTALL_DATADIR=share
+	-DCMAKE_INSTALL_SYSCONFDIR=/etc -DSYSCONFDIR=/etc)
+cmake_extra() {
+	cmake_use wayland BUILD_WSI_WAYLAND_SUPPORT
+	cmake_use x11 BUILD_WSI_XCB_SUPPORT
+	cmake_use x11 BUILD_WSI_XLIB_SUPPORT
+	cmake_use x11 BUILD_WSI_XLIB_XRANDR_SUPPORT
+}

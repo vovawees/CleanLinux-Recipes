@@ -1,0 +1,16 @@
+name=python-pyyaml
+version=6.0.3
+release=1
+summary="PyYAML: the YAML parser of Python (Mesa's build scripts)"
+homepage=https://pyyaml.org/
+license=(MIT)
+category=devel
+depends=(python)
+makedepends=(python-build python-installer python-setuptools)
+build_type=custom
+source=(https://files.pythonhosted.org/packages/source/p/pyyaml/pyyaml-$version.tar.gz)
+sha256=(d76623373421df22fb4cf8817020cbb7ef15c725b9d5e45f17e189bfc384190f)
+
+# the pure Python parser: the C extension would need Cython and libyaml, the build scripts do not
+do_build() { python3 -m build --wheel --no-isolation --skip-dependency-check --outdir dist; }
+do_install() { python3 -m installer --destdir="$DESTDIR" --prefix=/usr dist/*.whl; }

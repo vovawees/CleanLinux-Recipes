@@ -1,0 +1,12 @@
+name=python-mako
+version=1.4.3
+release=1
+summary="Mako: the template library that generates the sources of Mesa"
+homepage=https://www.makotemplates.org/
+license=(MIT)
+category=devel
+depends=(python python-markupsafe)
+makedepends=(python-build python-installer python-setuptools)
+build_type=python
+source=(https://files.pythonhosted.org/packages/source/m/mako/mako-$version.tar.gz)
+sha256=(cd6537fe88d5fec315c55c2f8529bc4ce7a9a352ad7db3eeaa6a66e2dd4ec37a)

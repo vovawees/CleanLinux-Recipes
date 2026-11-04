@@ -1,0 +1,15 @@
+name=glslang
+version=16.6.0
+release=1
+summary="glslang: the Khronos GLSL/HLSL front end and glslangValidator (Mesa compiles the shaders of its Vulkan drivers with it)"
+homepage=https://github.com/KhronosGroup/glslang
+license=(BSD-3-Clause)
+category=devel
+depends=(glibc gcc-libs)
+makedepends=(cmake ninja python)
+build_type=cmake
+source=(glslang-$version.tar.gz::https://github.com/KhronosGroup/glslang/archive/refs/tags/$version.tar.gz)
+sha256=(9c09b901149c729df745057dafa815278aaa101b84d2b6e14f16a42de52f97f2)
+# without the SPIRV-Tools optimizer (spirv-opt): Mesa only needs SPIR-V out of GLSL
+cmake_args=(-DBUILD_SHARED_LIBS=ON -DENABLE_OPT=OFF -DALLOW_EXTERNAL_SPIRV_TOOLS=OFF -DBUILD_EXTERNAL=OFF
+	-DGLSLANG_TESTS=OFF -DENABLE_PCH=OFF)

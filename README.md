@@ -162,6 +162,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `git` | core | 2.56.0 | custom | Distributed version control system |
 | `glib` | platform | 2.90.1 | meson | GLib: the core library of GNOME and many others (GObject, GIO, D-Bus bindings) |
 | `glibc` | core | 2.44 | autotools | GNU C library: libc, the dynamic loader and friends |
+| `glslang` | devel | 16.6.0 | cmake | glslang: the Khronos GLSL/HLSL front end and glslangValidator (Mesa compiles the shaders of its Vulkan drivers with it) |
 | `gperf` | devel | 3.3 | autotools | GNU perfect hash function generator (builds the keyword tables of eudev) |
 | `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |
 | `groff` | core | 1.24.2 | autotools | GNU troff: formats manual pages for the terminal |
@@ -177,6 +178,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `libcap` | platform | 2.78 | custom | libcap: POSIX capabilities library and tools (getcap, setcap, capsh) |
 | `libdisplay-info` | platform | 0.4.0 | meson | libdisplay-info: EDID and DisplayID parser for compositors (wlroots, KWin, Mutter) |
 | `libdrm` | drivers | 2.4.134 | meson | libdrm: userspace interface to the kernel DRM (KMS, GEM) and the GPU-specific helpers of Mesa |
+| `libepoxy` | platform | 1.5.10 | meson | libepoxy: OpenGL function pointer management over EGL and GLX (Xwayland's glamor, GTK) |
 | `libevdev` | platform | 1.14.0 | meson | libevdev: the evdev input device interface for libinput (and its debugging tools) |
 | `libffi` | devel | 3.8.0 | autotools | Foreign function interface library: calls with argument lists built at run time (Python ctypes, GLib) |
 | `libfontenc` | platform | 1.1.9 | autotools | libfontenc: font encodings of the X11 font library |
@@ -211,11 +213,13 @@ Upstream определяется по ссылкам самого рецепт�
 | `linux-headers` | core | 7.3.1 | custom | Linux kernel userspace API headers |
 | `linux-pam` | core | 1.7.3 | meson | Linux-PAM: pluggable authentication modules (pam_unix, pam_limits, pam_env, ...) |
 | `linux` | kernel | 7.3.1 | custom | The Linux kernel and modules (CleanLinux defaults + profile GPU drivers) |
+| `llvm` | devel | 23.1.5 | cmake | LLVM and clang: the compiler of llvmpipe and lavapipe and of the OpenCL C kernels of Mesa (Intel, Mali) |
 | `lua` | platform | 5.4.9 | custom | Lua 5.4: the embeddable scripting language (WirePlumber's scripts), shared liblua |
 | `lz4` | core | 1.10.0 | make | Extremely fast compression (library and lz4 tool) |
 | `m4` | devel | 1.4.21 | autotools | GNU m4 macro processor |
 | `make` | devel | 4.4.1 | autotools | GNU make |
 | `man-db` | core | 2.13.1 | autotools | man, apropos and whatis with an index of the installed manual pages |
+| `mesa` | drivers | 26.2.6 | meson | Mesa: OpenGL, OpenGL ES, EGL, GBM and Vulkan drivers for the GPUs of the profile (VIDEO_CARDS) |
 | `meson` | devel | 1.12.1 | custom | Build system: fast, user friendly (most of the base is built with it) |
 | `mold` | devel | 3.0.0 | cmake | Fast linker for ELF (burn LINKER=mold) |
 | `mtdev` | platform | 1.1.7 | autotools | mtdev: multitouch protocol A to B translation for libinput |
@@ -233,6 +237,15 @@ Upstream определяется по ссылкам самого рецепт�
 | `polkit` | platform | 128 | meson | polkit: authorization for privileged actions of unprivileged programs (rules in JavaScript) |
 | `procps-ng` | core | 4.0.7 | autotools | Process and memory tools: ps, top, free, vmstat, pgrep/pkill, watch, sysctl, uptime, w |
 | `psmisc` | core | 23.7 | autotools | Process tools that use /proc: fuser, killall, pstree, prtstat, peekfd |
+| `python-build` | devel | 1.6.1 | custom | build: the PEP 517 front end; with installer, the python build type of burn |
+| `python-flit-core` | devel | 4.2.0 | custom | flit_core: the PEP 517 build backend of the pure Python packages (it builds itself, no pip) |
+| `python-installer` | devel | 1.1.0 | custom | installer: installs Python wheels into a destination root (the python build type of burn) |
+| `python-mako` | devel | 1.4.3 | python | Mako: the template library that generates the sources of Mesa |
+| `python-markupsafe` | devel | 3.0.4 | python | MarkupSafe: escaped strings for templates (Mako, Jinja) |
+| `python-packaging` | devel | 26.3 | custom | packaging: versions, specifiers and markers of Python packages (Mesa, build) |
+| `python-pyproject-hooks` | devel | 1.3.3 | custom | pyproject_hooks: the PEP 517 hooks that front ends (build) call |
+| `python-pyyaml` | devel | 6.0.3 | custom | PyYAML: the YAML parser of Python (Mesa's build scripts) |
+| `python-setuptools` | devel | 84.2.1 | python | setuptools: the build backend of most Python packages with C extensions (it builds itself) |
 | `python` | devel | 3.15.2 | autotools | The Python 3 language: meson, the kernel's and Mesa's build scripts need it |
 | `readline` | core | 8.3.6 | autotools | GNU readline: line editing and history for interactive programs |
 | `sbc` | drivers | 2.2 | autotools | SBC: the Bluetooth A2DP audio codec (PipeWire's Bluetooth audio) |
@@ -240,9 +253,14 @@ Upstream определяется по ссылкам самого рецепт�
 | `sed` | core | 4.10 | autotools | GNU stream editor |
 | `shadow` | core | 4.20.3 | autotools | Password and account tools: passwd, useradd, usermod, groupadd, chage, newuidmap, ... |
 | `sof-firmware` | firmware | 2026.09.2 | custom | Sound Open Firmware: the audio DSP firmware and topologies of Intel laptops and handhelds |
+| `spirv-headers` | devel | 1.4.363.0 | cmake | SPIR-V headers and grammar of SPIRV-Tools and SPIRV-LLVM-Translator (the Vulkan SDK release) |
+| `spirv-llvm-translator` | devel | 23.1.3 | cmake | SPIRV-LLVM-Translator: LLVM IR to SPIR-V and back (LLVMSPIRVLib, llvm-spirv) for the OpenCL C kernels of Mesa |
+| `spirv-tools` | devel | 1.4.363.0 | cmake | SPIRV-Tools: the SPIR-V assembler, validator and optimizer (the OpenCL C kernels of Mesa for Intel and Mali) |
 | `systemd-boot` | core | 261.4 | meson | systemd-boot: the UEFI boot manager of systemd, built alone (no systemd) |
 | `tar` | core | 1.35 | autotools | GNU tar archiver |
 | `util-linux` | core | 2.42.4 | autotools | Core Linux system utilities: mount, fdisk, lsblk, agetty, kill, ... |
+| `vulkan-headers` | drivers | 1.4.367 | cmake | Vulkan headers and the API registry (vk.xml) of the Vulkan loader, Mesa and Vulkan applications |
+| `vulkan-loader` | drivers | 1.4.367 | cmake | Vulkan loader (libvulkan): finds the drivers in /usr/share/vulkan/icd.d and the layers |
 | `wayland-protocols` | platform | 1.50 | meson | Wayland protocol extensions (XML): xdg-shell, linux-dmabuf, presentation-time, ... |
 | `wayland` | platform | 1.26.0 | meson | Wayland: the display protocol library (libwayland-client, -server, -cursor, -egl) and wayland-scanner |
 | `wireless-regdb` | firmware | 2026.09.03 | custom | Wireless regulatory database: the allowed Wi-Fi channels and power of each country (signed) |
@@ -252,6 +270,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `xkeyboard-config` | platform | 2.48 | meson | XKB data: keyboard models, layouts and options for libxkbcommon and X11 |
 | `xorgproto` | platform | 2026.1 | meson | X11 protocol headers: xproto, the extensions (randr, render, xinput, dri3, present, ...) and GL/GLX |
 | `xtrans` | platform | 1.6.0 | autotools | xtrans: the transport layer of the X11 libraries and servers (headers only) |
+| `xwayland` | platform | 24.1.14 | meson | Xwayland: the X server that runs X11 applications on a Wayland compositor (glamor, GLX, DRI3) |
 | `xz` | core | 5.8.4 | autotools | XZ Utils: LZMA/xz compression library and tools |
 | `zlib-ng` | core | 2.3.3 | cmake | zlib replacement with SIMD optimisations (zlib-compatible API and ABI) |
 | `zstd` | core | 1.5.7 | meson | Zstandard: fast real-time compression (library and zstd tool) |

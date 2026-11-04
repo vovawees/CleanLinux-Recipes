@@ -1,0 +1,74 @@
+name=mesa
+version=26.2.6
+release=1
+summary="Mesa: OpenGL, OpenGL ES, EGL, GBM and Vulkan drivers for the GPUs of the profile (VIDEO_CARDS)"
+homepage=https://mesa3d.org/
+license=(MIT)
+category=drivers
+# The drivers follow VIDEO_CARDS of the profile (the video_cards_* features switch by themselves):
+#   amd        radeonsi and RADV, both with the ACO compiler: no LLVM
+#   intel      iris, crocus, ANV and hasvk (Gen4 and newer); their OpenCL C kernels (mesa-clc) need LLVM, clang,
+#              SPIRV-LLVM-Translator and SPIRV-Tools while Mesa builds, not at run time
+#   nouveau    nouveau (OpenGL); NVK (feature nvk) needs a Rust toolchain, which the base does not package yet
+#   freedreno  freedreno and turnip (Adreno: the Snapdragon handhelds)
+#   panfrost   panfrost and panvk (Mali), LLVM as for intel
+#   v3d        v3d, vc4 and v3dv (Raspberry Pi)
+#   lima etnaviv virgl   lima; etnaviv; virgl and venus (virtio-gpu of virtual machines)
+# The software fallback is softpipe; llvmpipe and lavapipe (feature llvmpipe) need libLLVM at run time.
+# Features: the window systems (wayland, x11: GLX and the X11 WSI of Vulkan).
+features=(+wayland -x11 -llvmpipe -nvk video_cards_amd video_cards_intel video_cards_nouveau video_cards_freedreno
+	video_cards_panfrost video_cards_v3d video_cards_lima video_cards_etnaviv video_cards_virgl)
+depends=(glibc gcc-libs expat zlib-ng zstd libdrm eudev libdisplay-info elfutils:video_cards_amd wayland:wayland
+	libx11:x11 libxcb:x11 libxext:x11 libxfixes:x11 libxshmfence:x11 libxxf86vm:x11 libxrandr:x11
+	llvm-libs:llvmpipe)
+makedepends=(python python-mako python-pyyaml python-packaging wayland-protocols:wayland xorgproto:x11
+	glslang:video_cards_amd glslang:video_cards_intel glslang:video_cards_freedreno glslang:llvmpipe
+	llvm:llvmpipe llvm:video_cards_intel llvm:video_cards_panfrost
+	spirv-llvm-translator:video_cards_intel spirv-llvm-translator:video_cards_panfrost
+	spirv-tools:video_cards_intel spirv-tools:video_cards_panfrost)
+build_type=meson
+source=(https://archive.mesa3d.org/mesa-$version.tar.xz)
+sha256=(b9436b3e1a8be76fbd4823dc884f90596ab7c6ac5e1867a305e66ffccfb31a92)
+# every codec of the hardware video engines (Vulkan video): the device builds its own packages
+meson_args=(-Db_ndebug=true -Dgles1=disabled -Dgles2=enabled -Degl=enabled -Dgbm=enabled -Dglvnd=disabled
+	-Dshader-cache=enabled -Dzstd=enabled -Dexpat=enabled -Dxmlconfig=enabled -Ddisplay-info=enabled
+	-Dallow-kcmp=enabled -Dvalgrind=disabled -Dlibunwind=disabled -Dlmsensors=disabled -Dgallium-va=disabled
+	-Dandroid-libbacktrace=disabled -Dmicrosoft-clc=disabled -Dgallium-rusticl=false -Dbuild-tests=false
+	-Dhtml-docs=disabled -Dvideo-codecs=all -Damd-use-llvm=false -Dvulkan-layers=device-select)
+
+meson_extra() {
+	local v gallium=() vulkan=() platforms=() llvm=disabled
+	for v in $VIDEO_CARDS; do
+		case $v in
+			amd) gallium+=(radeonsi) vulkan+=(amd) ;;
+			intel) gallium+=(iris crocus) vulkan+=(intel intel_hasvk) llvm=enabled ;;
+			nouveau) gallium+=(nouveau) ;;
+			freedreno) gallium+=(freedreno) vulkan+=(freedreno) ;;
+			panfrost) gallium+=(panfrost) vulkan+=(panfrost) llvm=enabled ;;
+			v3d) gallium+=(v3d vc4) vulkan+=(broadcom) ;;
+			lima | etnaviv) gallium+=("$v") ;;
+			virgl) gallium+=(virgl) vulkan+=(virtio) ;;
+		esac
+	done
+	if use nvk; then
+		die "mesa: NVK needs a Rust toolchain (rustc, bindgen) and the crates of Mesa's wraps, not packaged yet"
+	fi
+	if use llvmpipe; then
+		gallium+=(llvmpipe) vulkan+=(swrast) llvm=enabled
+		echo -Ddraw-use-llvm=true
+	else
+		gallium+=(softpipe)
+		echo -Ddraw-use-llvm=false
+	fi
+	if use wayland; then platforms+=(wayland); fi
+	if use x11; then
+		platforms+=(x11)
+		printf '%s\n' -Dglx=dri -Dxlib-lease=enabled
+	else
+		printf '%s\n' -Dglx=disabled -Dxlib-lease=disabled
+	fi
+	if [[ " ${vulkan[*]} " == *" intel "* ]]; then echo -Dintel-rt=enabled; else echo -Dintel-rt=disabled; fi
+	local IFS=,
+	printf '%s\n' "-Dgallium-drivers=${gallium[*]}" "-Dvulkan-drivers=${vulkan[*]}" "-Dplatforms=${platforms[*]}" \
+		"-Dllvm=$llvm" "-Dshared-llvm=$llvm" "-Dspirv-tools=$llvm"
+}

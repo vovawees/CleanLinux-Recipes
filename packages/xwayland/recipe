@@ -1,0 +1,20 @@
+name=xwayland
+version=24.1.14
+release=1
+summary="Xwayland: the X server that runs X11 applications on a Wayland compositor (glamor, GLX, DRI3)"
+homepage=https://wayland.freedesktop.org/xserver.html
+license=(MIT)
+category=platform
+# X11 compatibility (feature x11 of the spin): Mesa must be built with x11 too (GLX); glamor renders on the
+# GPU through GBM and EGL. The compositor starts Xwayland, xkbcomp compiles its keymaps.
+depends=(glibc pixman libdrm mesa libepoxy libxshmfence libxfont2 libxkbfile libxcvt libxau libx11 wayland
+	openssl xkbcomp xkeyboard-config)
+makedepends=(xorgproto xtrans wayland-protocols)
+build_type=meson
+source=(https://www.x.org/archive/individual/xserver/xwayland-$version.tar.xz)
+sha256=(4eb6b98d678299a4b96138d886345b294130695760345ef84596225a8224078a)
+meson_args=(-Dxvfb=false -Dglamor=true -Dglx=true -Ddri3=true -Ddrm=true -Dxdmcp=false -Dxdm-auth-1=false
+	-Dsecure-rpc=false -Dipv6=true -Dxcsecurity=true -Dxselinux=false -Dsha1=libcrypto -Dlibdecor=false
+	-Dxwayland_ei=false -Ddocs=false -Ddevel-docs=false -Ddocs-pdf=false -Dsystemd_notify=false -Ddtrace=false
+	-Dlibunwind=false -Dmitshm=true -Dinput_thread=true -Dxkb_dir=/usr/share/X11/xkb -Dxkb_output_dir=/var/lib/xkb
+	-Dxkb_bin_dir=/usr/bin -Ddefault_font_path=/usr/share/fonts/misc,built-ins)
