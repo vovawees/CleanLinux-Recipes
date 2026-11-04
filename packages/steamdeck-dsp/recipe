@@ -1,0 +1,35 @@
+name=steamdeck-dsp
+version=1.03
+release=1
+_rel=2 # the release of Valve's source package
+summary="Steam Deck OLED sound: Valve's Sound Open Firmware for the ACP of Van Gogh and the UCM profile of the sof-nau8821-max card"
+homepage=https://steamdeck-packages.steamos.cloud/archlinux-mirror/sources/jupiter-main/
+license=(LicenseRef-Valve-Proprietary)
+category=nonfree
+# The Steam Deck OLED (Galileo) plays through Sound Open Firmware on the audio coprocessor of its
+# APU (a NAU8821 headset codec, two MAX98388 speaker amplifiers). The firmware is signed for the
+# device and is in neither linux-firmware nor sof-bin, and alsa-ucm-conf has no profile of the card:
+# both come only with Valve's steamdeck-dsp of SteamOS, published as a source package (a bare git
+# repository). This recipe takes just those files: amd/sof and amd/sof-tplg for the kernel's
+# snd-sof-amd-vangogh, ucm2/conf.d/sof-nau8821-max for alsa-lib. Left out: Valve's speaker filters
+# (LV2 plugins of a PipeWire filter-chain, built with Faust) and its UCM of the LCD model, which
+# upstream alsa-ucm-conf covers (acp5x). Proprietary, so burn builds it only with ALLOW_NONFREE=1.
+makedepends=(git)
+build_type=custom
+source=(https://steamdeck-packages.steamos.cloud/archlinux-mirror/sources/jupiter-main/steamdeck-dsp-$version-$_rel.src.tar.gz)
+sha256=(409e6a97c6cba8afd0e2198fabe7a72a6ee66c4205b5e913e81e833f9977f07f)
+options=(!strip)
+
+do_build() {
+	rm -rf "$WORK/dsp" && mkdir -p "$WORK/dsp"
+	git -c safe.directory='*' --git-dir=valve-hardware-audio-processing archive --format=tar "$version" \
+		sof_fw/sof/sof-vangogh-code.bin sof_fw/sof/sof-vangogh-data.bin \
+		sof_fw/sof-tplg/sof-vangogh-nau8821-max.tplg ucm2/conf.d/sof-nau8821-max | tar -x -C "$WORK/dsp"
+}
+
+do_install() {
+	local d=$WORK/dsp
+	install -Dm644 -t "$DESTDIR/usr/lib/firmware/amd/sof" "$d"/sof_fw/sof/sof-vangogh-{code,data}.bin
+	install -Dm644 -t "$DESTDIR/usr/lib/firmware/amd/sof-tplg" "$d"/sof_fw/sof-tplg/sof-vangogh-nau8821-max.tplg
+	install -Dm644 -t "$DESTDIR/usr/share/alsa/ucm2/conf.d/sof-nau8821-max" "$d"/ucm2/conf.d/sof-nau8821-max/*.conf
+}

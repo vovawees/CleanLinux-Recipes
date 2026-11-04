@@ -80,7 +80,7 @@ meson_extra() { meson_feature zlib; meson_feature lzma; meson_feature lz4; }
 | `firmware` | hardware | firmware из upstream; на устройство ставится только нужное его профилю |
 | `drivers` | hardware | драйверы и поддержка железа в userspace: Mesa, ALSA UCM, правила и quirks устройств |
 | `platform` | platform | нейтральный фундамент для сборок: Wayland, libinput, seatd, D-Bus, PipeWire, … — в `base` не входит |
-| `nonfree` | hardware | драйверы под несвободной лицензией (NVIDIA): burn собирает и ставит их, только если в `burn.conf` стоит `ALLOW_NONFREE=1` |
+| `nonfree` | hardware | драйверы и firmware под несвободной лицензией (NVIDIA, звук Steam Deck OLED от Valve): burn собирает и ставит их, только если в `burn.conf` стоит `ALLOW_NONFREE=1` |
 
 DE, WM, приложений и игр здесь нет: их рецепты живут в репозиториях сборок и личных оверлеях, с категорией `extra`.
 `tools/lint.sh` не пропускает в этот репозиторий рецепты без категории слоя.
@@ -278,6 +278,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `spirv-headers` | devel | 1.4.363.0 | cmake | SPIR-V headers and grammar of SPIRV-Tools and SPIRV-LLVM-Translator (the Vulkan SDK release) |
 | `spirv-llvm-translator` | devel | 23.1.3 | cmake | SPIRV-LLVM-Translator: LLVM IR to SPIR-V and back (LLVMSPIRVLib, llvm-spirv) for the OpenCL C kernels of Mesa |
 | `spirv-tools` | devel | 1.4.363.0 | cmake | SPIRV-Tools: the SPIR-V assembler, validator and optimizer (the OpenCL C kernels of Mesa for Intel and Mali) |
+| `steamdeck-dsp` | nonfree | 1.03 | custom | Steam Deck OLED sound: Valve's Sound Open Firmware for the ACP of Van Gogh and the UCM profile of the sof-nau8821-max card |
 | `systemd-boot` | core | 261.4 | meson | systemd-boot: the UEFI boot manager of systemd, built alone (no systemd) |
 | `tar` | core | 1.35 | autotools | GNU tar archiver |
 | `turnstile` | platform | 0.1.11 | meson | turnstile: a user service manager (dinit --user) and XDG_RUNTIME_DIR for every login, without systemd |
