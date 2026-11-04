@@ -1,13 +1,14 @@
 name=cleanlinux-install
-version=0.3.0
+version=0.4.0
 release=1
-summary="The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, systemd-boot, users"
+summary="The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, the boot loader of the profile, users"
 homepage=https://github.com/vovawees/cleanlinux-install
 license=(MIT)
 category=core
 # sfdisk and libblkid (util-linux), mkfs.vfat and mkfs.btrfs, useradd (shadow), yescrypt hashes
 # (libxcrypt); burn copies the packages, cleanlinux-boot puts the kernel and the loader in the ESP
+# (systemd-boot, extlinux, rpi or android, from /usr/lib/cleanlinux/boot.d)
 depends=(glibc util-linux libxcrypt dosfstools btrfs-progs shadow burn cleanlinux-boot)
 build_type=make
 source=(https://github.com/vovawees/cleanlinux-install/releases/download/v$version/cleanlinux-install-$version.tar.gz)
-sha256=(8735212d5dfa587e878373a351eed51767ef58012b656f390a8e048096d36784)
+sha256=(349bbfdead61fe6f99474d6ce342c6c2468468a5b9175bcf6a814bdce725eb4f)
