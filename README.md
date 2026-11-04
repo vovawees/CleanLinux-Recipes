@@ -139,7 +139,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `cleanlinux-profiles` | core | 2026.11.4 | custom | The hardware profiles of CleanLinux for burn: generic, native and the devices |
 | `cmake` | devel | 4.4.5 | custom | Cross-platform build system generator |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
-| `curl` | core | 8.23.0 | autotools | URL transfer tool and library (libcurl): HTTP/1.1, HTTPS through OpenSSL, FTP |
+| `curl` | core | 8.23.0 | autotools | URL transfer tool and library (libcurl): HTTP/1.1, HTTP/2 (nghttp2), HTTPS through OpenSSL, FTP |
 | `dbus` | core | 1.16.2 | meson | D-Bus: the message bus daemon and libdbus |
 | `dhcpcd` | core | 10.5.2 | custom | DHCP and DHCPv6 client: IPv4LL, SLAAC, privilege separation |
 | `diffutils` | core | 3.12 | autotools | GNU diff, cmp, diff3 and sdiff |
@@ -234,6 +234,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `mold` | devel | 3.0.0 | cmake | Fast linker for ELF (burn LINKER=mold) |
 | `mtdev` | platform | 1.1.7 | autotools | mtdev: multitouch protocol A to B translation for libinput |
 | `ncurses` | core | 6.6 | autotools | Terminal handling library (wide character build) |
+| `nghttp2` | core | 1.71.0 | autotools | HTTP/2 library (libnghttp2): HTTP/2 of curl, git over HTTPS and the downloads of burn |
 | `ninja` | devel | 1.13.2 | cmake | Small build system with a focus on speed (the backend of meson and cmake) |
 | `nvidia` | nonfree | 595.104.02 | custom | NVIDIA driver: open kernel modules, GSP firmware, OpenGL, EGL, Vulkan, GBM, NVENC/NVDEC, the CUDA driver, nvidia-smi |
 | `openresolv` | core | 3.17.4 | custom | resolvconf: /etc/resolv.conf from DHCP clients, VPNs and local resolvers |

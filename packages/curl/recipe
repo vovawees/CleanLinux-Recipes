@@ -1,18 +1,18 @@
 name=curl
 version=8.23.0
-release=1
-summary="URL transfer tool and library (libcurl): HTTP/1.1, HTTPS through OpenSSL, FTP"
+release=2
+summary="URL transfer tool and library (libcurl): HTTP/1.1, HTTP/2 (nghttp2), HTTPS through OpenSSL, FTP"
 homepage=https://curl.se
 license=(curl)
 category=core
 # burn fetches sources with it, git talks HTTPS through libcurl
-depends=(glibc openssl zlib-ng zstd ca-certificates)
+depends=(glibc openssl zlib-ng zstd nghttp2 ca-certificates)
 build_type=autotools
 source=(https://curl.se/download/curl-$version.tar.xz)
 sha256=(8dadd7d2536a314f982ad05a651b713f426bf7d02cc2c76cffb9796f2218e6c5)
 configure_args=(
 	--with-openssl --with-ca-bundle=/etc/ssl/certs/ca-certificates.crt --with-ca-path=/etc/ssl/certs
 	--with-zlib --with-zstd --enable-threaded-resolver --enable-ipv6
-	--without-libpsl --without-brotli --without-nghttp2 --without-libidn2 --without-libssh2
+	--with-nghttp2 --without-libpsl --without-brotli --without-libidn2 --without-libssh2
 	--disable-ldap --disable-ldaps --disable-static
 )
