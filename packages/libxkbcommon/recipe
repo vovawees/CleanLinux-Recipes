@@ -1,6 +1,6 @@
 name=libxkbcommon
 version=1.13.2
-release=2
+release=3
 summary="libxkbcommon: keymaps and keyboard state for Wayland compositors and clients, xkbregistry, xkbcli"
 homepage=https://xkbcommon.org/
 license=(MIT)
@@ -16,3 +16,10 @@ sha256=(acc4d5f7c3cbba5f9f8d08d8bdbeede84ecede46792f47929aa9321873385528)
 meson_args=(-Denable-wayland=false -Denable-xkbregistry=true -Denable-tools=true
 	-Denable-docs=false -Denable-bash-completion=false)
 meson_extra() { meson_use x11 enable-x11; }
+# in cross builds pkgconf puts the sysroot in front of every path variable, so xkb_root of
+# xkeyboard-config (the data root compiled into the library) would be the build machine's path
+# of the data; the freedesktop rules prefix only the -I and -L flags
+do_configure() {
+	export PKG_CONFIG_FDO_SYSROOT_RULES=1
+	bt_configure
+}
