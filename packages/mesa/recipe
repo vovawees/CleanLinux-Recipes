@@ -5,7 +5,8 @@ summary="Mesa: OpenGL, OpenGL ES, EGL, GBM and Vulkan drivers for the GPUs of th
 homepage=https://mesa3d.org/
 license=(MIT)
 category=drivers
-# The drivers follow VIDEO_CARDS of the profile (the video_cards_* features switch by themselves):
+# The drivers follow VIDEO_CARDS of the profile through the video_cards_* features (package.features
+# can turn one off: mesa -video_cards_intel):
 #   amd        radeonsi and RADV, both with the ACO compiler: no LLVM
 #   intel      iris, crocus, ANV and hasvk (Gen4 and newer); their OpenCL C kernels (mesa-clc) need LLVM, clang,
 #              SPIRV-LLVM-Translator and SPIRV-Tools while Mesa builds, not at run time
@@ -38,7 +39,8 @@ meson_args=(-Db_ndebug=true -Dgles1=disabled -Dgles2=enabled -Degl=enabled -Dgbm
 
 meson_extra() {
 	local v gallium=() vulkan=() platforms=() llvm=disabled
-	for v in $VIDEO_CARDS; do
+	for v in amd intel nouveau freedreno panfrost v3d lima etnaviv virgl; do
+		use "video_cards_$v" || continue
 		case $v in
 			amd) gallium+=(radeonsi) vulkan+=(amd) ;;
 			intel) gallium+=(iris crocus) vulkan+=(intel intel_hasvk) llvm=enabled ;;
