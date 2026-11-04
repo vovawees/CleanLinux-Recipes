@@ -1,6 +1,6 @@
 name=hardware
 version=1
-release=2
+release=3
 summary="The hardware profile of the device: its quirks (udev rules, hwdb, modprobe.d, sysctl.d), boot modules, kernel command line and boot loader"
 homepage=https://github.com/vovawees/CleanLinux/tree/main/profiles
 license=(MIT)
@@ -10,8 +10,9 @@ source=(60-ioschedulers.rules)
 sha256=(7e03b3241035d202dac8210034283af83e5055e8837476e9c710fcdb6b0a73f8)
 # for every device: the I/O scheduler of each drive by its kind. From the profile of
 # /etc/burn/burn.conf: QUIRKS, a directory laid out like /usr/lib (udev/rules.d, udev/hwdb.d,
-# modprobe.d, sysctl.d, tmpfiles.d, libinput, cleanlinux/boot.d, ...), MODULES, loaded at every
-# boot, KERNEL_CMDLINE (kernel/cmdline.d), BOOTLOADER and DEVICE_TREE (cleanlinux/boot.d, read by
+# modprobe.d, sysctl.d, tmpfiles.d, cleanlinux/boot.d, cleanlinux/initramfs.d, ...; libinput/
+# goes to /usr/share/libinput, where libinput reads its quirks), MODULES, loaded at every boot,
+# KERNEL_CMDLINE (kernel/cmdline.d), BOOTLOADER and DEVICE_TREE (cleanlinux/boot.d, read by
 # cleanlinux-boot kernel sync). burn rebuilds the package whenever they change.
 
 do_build() { :; }
@@ -22,7 +23,10 @@ do_install() {
 		[[ -d $QUIRKS ]] || die "QUIRKS=$QUIRKS: no such directory"
 		mkdir -p "$d"
 		cp -R --no-preserve=ownership "$QUIRKS"/. "$d/"
-		find "$d" -type d -exec chmod 755 {} + -o -type f -exec chmod 644 {} +
+		if [[ -d $d/libinput ]]; then
+			mkdir -p "$DESTDIR/usr/share" && mv "$d/libinput" "$DESTDIR/usr/share/libinput"
+		fi
+		find "$DESTDIR/usr" -type d -exec chmod 755 {} + -o -type f -exec chmod 644 {} +
 	fi
 	if [[ -n ${MODULES:-} ]]; then
 		install -d "$d/modules-load.d"
