@@ -1,6 +1,6 @@
 name=libdrm
 version=2.4.134
-release=1
+release=2
 summary="libdrm: userspace interface to the kernel DRM (KMS, GEM) and the GPU-specific helpers of Mesa"
 homepage=https://dri.freedesktop.org/
 license=(MIT)
@@ -9,21 +9,23 @@ depends=(glibc)
 build_type=meson
 source=(https://dri.freedesktop.org/libdrm/libdrm-$version.tar.xz)
 sha256=(ac5e74d157830eb8bee44c6a6bf3ad49774ef0dd2a72bdad74a8f20308b52a95)
-# the helper libraries follow VIDEO_CARDS of the profile (libdrm_amdgpu for radeonsi/RADV, ...)
+# the helper libraries follow VIDEO_CARDS of the profile (libdrm_amdgpu for radeonsi/RADV, ...);
+# no libdrm_intel: iris, crocus and ANV of Mesa do without it (only i915g and xf86-video-intel,
+# which CleanLinux does not have, use it, and it would need libpciaccess)
 meson_args=(-Dudev=false -Dvalgrind=disabled -Dcairo-tests=disabled -Dman-pages=disabled -Dtests=false
-	-Dinstall-test-programs=false -Domap=disabled -Dexynos=disabled -Dtegra=disabled -Dvmwgfx=disabled)
+	-Dinstall-test-programs=false -Domap=disabled -Dexynos=disabled -Dtegra=disabled -Dvmwgfx=disabled
+	-Dintel=disabled)
 meson_extra() {
-	local v amd=disabled intel=disabled nouveau=disabled freedreno=disabled vc4=disabled etnaviv=disabled
+	local v amd=disabled nouveau=disabled freedreno=disabled vc4=disabled etnaviv=disabled
 	for v in $VIDEO_CARDS; do
 		case $v in
 			amd) amd=enabled ;;
-			intel) intel=enabled ;;
 			nouveau) nouveau=enabled ;;
 			freedreno) freedreno=enabled ;;
 			v3d) vc4=enabled ;;
 			etnaviv) etnaviv=enabled ;;
 		esac
 	done
-	printf '%s\n' -Damdgpu=$amd -Dradeon=$amd -Dintel=$intel -Dnouveau=$nouveau -Dfreedreno=$freedreno \
+	printf '%s\n' -Damdgpu=$amd -Dradeon=$amd -Dnouveau=$nouveau -Dfreedreno=$freedreno \
 		-Dvc4=$vc4 -Detnaviv=$etnaviv
 }

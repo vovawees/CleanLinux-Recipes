@@ -1,6 +1,6 @@
 name=libxml2
 version=2.15.4
-release=1
+release=2
 summary="libxml2: the XML parser and toolkit of GNOME (xmllint)"
 homepage=https://gitlab.gnome.org/GNOME/libxml2
 license=(MIT)
@@ -9,6 +9,12 @@ depends=(glibc zlib-ng)
 build_type=meson
 source=(https://download.gnome.org/sources/libxml2/${version%.*}/libxml2-$version.tar.xz)
 sha256=(98087fd181d9070724f3fbc65c7377db03038eb92bd882374daff44940138821)
-# no Python bindings, ICU or readline in xmllint; zlib for compressed documents
+# no Python bindings, ICU or readline in xmllint; zlib for compressed documents. The parts of the
+# library are meson features, so with auto features off they are named: the usual full set (DTD
+# validation for xkbregistry, HTML, XPath and XInclude for libxslt, schemas, the reader and writer)
 meson_args=(-Dpython=disabled -Dicu=disabled -Dreadline=disabled -Dhistory=disabled -Dzlib=enabled
-	-Ddocs=disabled)
+	-Ddocs=disabled -Dhttp=disabled -Dlegacy=disabled -Dc14n=enabled -Dcatalog=enabled -Ddebugging=enabled
+	-Dhtml=enabled -Diconv=enabled -Dmodules=enabled -Doutput=enabled -Dpattern=enabled -Dpush=enabled
+	-Dreader=enabled -Dregexps=enabled -Drelaxng=enabled -Dsax1=enabled -Dschemas=enabled
+	-Dschematron=enabled -Dthreads=enabled -Dvalid=enabled -Dwriter=enabled -Dxinclude=enabled
+	-Dxpath=enabled -Dxptr=enabled)
