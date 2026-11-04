@@ -8,9 +8,10 @@ cd "$(dirname "$0")/.."
 GNU_MIRROR=${GNU_MIRROR:-https://ftpmirror.gnu.org/gnu}
 KERNEL_MIRROR=${KERNEL_MIRROR:-https://cdn.kernel.org/pub/linux}
 BUILD_TYPES=(autotools meson cmake make cargo python custom meta)
-OPTIONS=('!lto' '!strip' '!hardening' '!prune' '!linker' staticlibs emptydirs o3)
-# layers of the base (see README): spin and user overlays use 'extra', not this repository
-CATEGORIES=(core devel meta kernel firmware drivers platform)
+OPTIONS=('!lto' '!strip' '!hardening' '!prune' '!linker' staticlibs emptydirs o3 late)
+# layers of the base (see README): spin and user overlays use 'extra', not this repository;
+# nonfree: proprietary licenses (the NVIDIA driver), built only with ALLOW_NONFREE=1 in burn.conf
+CATEGORIES=(core devel meta kernel firmware drivers platform nonfree)
 FETCH=0
 if [[ ${1:-} == --fetch ]]; then FETCH=1 && shift; fi
 pkgs=("$@")
@@ -129,6 +130,12 @@ check_one() (
 		fi
 	done
 	for f in "${options[@]}"; do in_list "$f" "${OPTIONS[@]}" || echo "$1: unknown option '$f'"; done
+	# out-of-tree kernel modules (_kernel=): built for the kernel of the linux recipe, they move with it
+	if [[ -n ${_kernel:-} ]]; then
+		local kv
+		kv=$(sed -n 's/^version=//p' packages/linux/recipe)
+		[[ $_kernel == "$kv" ]] || echo "$1: _kernel=$_kernel, but the linux recipe is $kv (bump both)"
+	fi
 	while IFS= read -r -d '' f; do
 		if (($(stat -c %s "$f") > 262144)); then
 			echo "$1: file too large for a recipe repository: ${f#"$dir"/}"
