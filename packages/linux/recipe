@@ -1,6 +1,6 @@
 name=linux
 version=7.3.1
-release=8
+release=9
 summary="The Linux kernel and modules (CleanLinux defaults + profile GPU drivers)"
 homepage=https://www.kernel.org/
 license=(GPL-2.0-only)
@@ -10,11 +10,12 @@ build_type=custom
 # libelf (objtool); pahole for the BTF of sched_ext
 makedepends=(bc bison flex perl openssl elfutils dwarves:sched_ext)
 features=(-sched_ext)
-source=(kernel://kernel/v${version%%.*}.x/linux-$version.tar.xz cleanlinux.config x86.config)
+source=(kernel://kernel/v${version%%.*}.x/linux-$version.tar.xz cleanlinux.config x86.config arm64.config)
 sha256=(
 	fa595aad93734f829c963c2a90ef7c3673224fd7fdae7b49406e397cde2de231
 	ce571ee1e0a533f85d184008262bcf99659b281f42513f84c3acb927529ebaad
 	848304723897fe231c5879ae0b63c189f37547872c024c8978af413809ffe8ca
+	9afafac2dc14d98baaf41f7d8ffbfc06ffb3558e0a5341e39623d1a5d819f7e9
 )
 options=(!lto !strip !hardening)
 
@@ -36,6 +37,8 @@ do_configure() {
 	{
 		# x86-64 PCs, laptops and handhelds: power, platform drivers, input, sensors, sound
 		if [[ $KARCH == x86 ]]; then cat "$FILES/x86.config"; fi
+		# arm64: an EFI vmlinuz (zboot) for UEFI, the plain Image for the other loaders
+		if [[ $KARCH == arm64 ]]; then cat "$FILES/arm64.config"; fi
 		# sched_ext: BPF CPU schedulers (scx_lavd, scx_bpfland...); needs pahole on the build host
 		if use sched_ext; then
 			printf '%s\n' CONFIG_BPF=y CONFIG_BPF_SYSCALL=y CONFIG_BPF_JIT=y CONFIG_DEBUG_INFO=y \
@@ -76,6 +79,11 @@ do_install() {
 	install -Dm644 .config "$DESTDIR/usr/lib/modules/$kver/config"
 	# the exported symbols, for modules built outside this tree (nvidia)
 	install -Dm644 Module.symvers "$DESTDIR/usr/lib/modules/$kver/Module.symvers"
-	if [[ $KARCH == arm64 ]]; then _kmake INSTALL_DTBS_PATH="$DESTDIR/usr/lib/modules/$kver/dtbs" dtbs_install; fi
-	if [[ -n $KERNEL_CMDLINE ]]; then printf '%s\n' "$KERNEL_CMDLINE" >"$DESTDIR/usr/lib/modules/$kver/cmdline"; fi
+	# arm64: the device trees, and the plain Image for U-Boot, the Raspberry Pi firmware and Android
+	# boot images (cleanlinux-boot kernel sync takes it for them; vmlinuz is the EFI program)
+	if [[ $KARCH == arm64 ]]; then
+		_kmake INSTALL_DTBS_PATH="$DESTDIR/usr/lib/modules/$kver/dtbs" dtbs_install
+		if [[ $image != */Image ]]; then install -Dm644 arch/arm64/boot/Image "$DESTDIR/usr/lib/modules/$kver/Image"; fi
+	fi
+	# the command line of the profile comes with the package hardware (kernel/cmdline.d)
 }
