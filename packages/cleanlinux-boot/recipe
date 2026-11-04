@@ -1,5 +1,5 @@
 name=cleanlinux-boot
-version=0.3.0
+version=0.3.1
 release=1
 summary="Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, zram, power, kernels for the boot loader of the device)"
 homepage=https://github.com/vovawees/cleanlinux-boot
@@ -13,4 +13,4 @@ build_type=make
 # /etc/dinit.d/boot.d: "dinitctl enable" puts the services started at boot there
 options=(emptydirs)
 source=(https://github.com/vovawees/cleanlinux-boot/releases/download/v$version/cleanlinux-boot-$version.tar.gz)
-sha256=(5bc469aa20b243cce17f1fb050fd8aaa2c804e1565672c9382353861de49d37f)
+sha256=(b0f33ec52ee0cee9c45ad19f141c3ca5b45d8b15340ef8caa32abc500c8a869e)
