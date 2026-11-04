@@ -127,7 +127,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `bzip2` | core | 1.0.8 | custom | Block-sorting file compressor and libbz2 |
 | `ca-certificates` | core | 2026.10.20 | custom | Mozilla's trusted root certificates for TLS (the NSS bundle as extracted by curl.se) |
 | `ccache` | devel | 4.14.2 | cmake | Compiler cache: rebuilds of the same sources come from the cache (burn CCACHE=1) |
-| `cleanlinux-boot` | core | 0.1.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, kernels in the ESP) |
+| `cleanlinux-boot` | core | 0.2.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, zram, power, kernels in the ESP) |
 | `cleanlinux-install` | core | 0.1.0 | make | The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, systemd-boot, users |
 | `cmake` | devel | 4.4.5 | custom | Cross-platform build system generator |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
@@ -156,15 +156,21 @@ Upstream определяется по ссылкам самого рецепт�
 | `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |
 | `groff` | core | 1.24.2 | autotools | GNU troff: formats manual pages for the terminal |
 | `gzip` | core | 1.15 | autotools | GNU gzip compression utility |
+| `hwdata` | platform | 0.413 | autotools | hwdata: PCI, USB and PNP id databases (lspci, lsusb, libdisplay-info) |
 | `iproute2` | core | 7.3.0 | custom | IP routing utilities: ip, ss, bridge, tc |
 | `iwd` | core | 3.12 | autotools | iwd: the wireless daemon (WPA2/WPA3, enterprise) and iwctl |
 | `kbd` | core | 2.10.0 | autotools | Console keyboard maps and fonts: loadkeys, setfont, showkey, kbd_mode |
 | `kmod` | core | 34.3 | meson | Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo |
 | `less` | core | 710 | autotools | Terminal pager (man, git and burn show long output with it) |
+| `libdisplay-info` | platform | 0.4.0 | meson | libdisplay-info: EDID and DisplayID parser for compositors (wlroots, KWin, Mutter) |
+| `libevdev` | platform | 1.14.0 | meson | libevdev: the evdev input device interface for libinput (and its debugging tools) |
 | `libffi` | devel | 3.8.0 | autotools | Foreign function interface library: calls with argument lists built at run time (Python ctypes, GLib) |
+| `libinput` | platform | 1.32.0 | meson | libinput: input devices for Wayland compositors and X11 (touchpads, touchscreens, tablets, quirks) |
 | `libpipeline` | core | 1.5.8 | autotools | Library for running pipelines of subprocesses (man-db) |
 | `libtool` | devel | 2.6.2 | autotools | GNU libtool: portable shared libraries for autotools builds, and libltdl |
 | `libxcrypt` | core | 4.5.2 | autotools | Modern crypt(3): yescrypt, bcrypt and SHA-crypt password hashing (libcrypt) |
+| `libxkbcommon` | platform | 1.13.2 | meson | libxkbcommon: keymaps and keyboard state for Wayland compositors and clients, xkbregistry, xkbcli |
+| `libxml2` | platform | 2.15.4 | meson | libxml2: the XML parser and toolkit of GNOME (xmllint) |
 | `linux-headers` | core | 7.3.1 | custom | Linux kernel userspace API headers |
 | `linux-pam` | core | 1.7.3 | meson | Linux-PAM: pluggable authentication modules (pam_unix, pam_limits, pam_env, ...) |
 | `linux` | kernel | 7.3.1 | custom | The Linux kernel and modules (CleanLinux defaults + profile GPU drivers) |
@@ -174,6 +180,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `man-db` | core | 2.13.1 | autotools | man, apropos and whatis with an index of the installed manual pages |
 | `meson` | devel | 1.12.1 | custom | Build system: fast, user friendly (most of the base is built with it) |
 | `mold` | devel | 3.0.0 | cmake | Fast linker for ELF (burn LINKER=mold) |
+| `mtdev` | platform | 1.1.7 | autotools | mtdev: multitouch protocol A to B translation for libinput |
 | `ncurses` | core | 6.6 | autotools | Terminal handling library (wide character build) |
 | `ninja` | devel | 1.13.2 | cmake | Small build system with a focus on speed (the backend of meson and cmake) |
 | `openresolv` | core | 3.17.4 | custom | resolvconf: /etc/resolv.conf from DHCP clients, VPNs and local resolvers |
@@ -181,6 +188,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `pambase` | core | 2026.1 | custom | CleanLinux PAM stacks: system-auth, system-login, system-services, other |
 | `patch` | devel | 2.8.1 | autotools | GNU patch: apply diff files |
 | `perl` | devel | 5.44.0 | custom | The Perl 5 language: autoconf, automake, OpenSSL and kernel builds need it |
+| `pixman` | platform | 0.46.4 | meson | pixman: low-level pixel manipulation (compositing, scaling) for cairo, wlroots and Xwayland |
 | `pkgconf` | devel | 3.0.10 | meson | pkg-config implementation (also installed as pkg-config) |
 | `procps-ng` | core | 4.0.7 | autotools | Process and memory tools: ps, top, free, vmstat, pgrep/pkill, watch, sysctl, uptime, w |
 | `psmisc` | core | 23.7 | autotools | Process tools that use /proc: fuser, killall, pstree, prtstat, peekfd |
@@ -191,6 +199,9 @@ Upstream определяется по ссылкам самого рецепт�
 | `systemd-boot` | core | 261.4 | meson | systemd-boot: the UEFI boot manager of systemd, built alone (no systemd) |
 | `tar` | core | 1.35 | autotools | GNU tar archiver |
 | `util-linux` | core | 2.42.4 | autotools | Core Linux system utilities: mount, fdisk, lsblk, agetty, kill, ... |
+| `wayland-protocols` | platform | 1.50 | meson | Wayland protocol extensions (XML): xdg-shell, linux-dmabuf, presentation-time, ... |
+| `wayland` | platform | 1.26.0 | meson | Wayland: the display protocol library (libwayland-client, -server, -cursor, -egl) and wayland-scanner |
+| `xkeyboard-config` | platform | 2.48 | meson | XKB data: keyboard models, layouts and options for libxkbcommon and X11 |
 | `xz` | core | 5.8.4 | autotools | XZ Utils: LZMA/xz compression library and tools |
 | `zlib-ng` | core | 2.3.3 | cmake | zlib replacement with SIMD optimisations (zlib-compatible API and ABI) |
 | `zstd` | core | 1.5.7 | meson | Zstandard: fast real-time compression (library and zstd tool) |

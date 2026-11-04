@@ -1,0 +1,11 @@
+name=hwdata
+version=0.413
+release=1
+summary="hwdata: PCI, USB and PNP id databases (lspci, lsusb, libdisplay-info)"
+homepage=https://github.com/vcrhonek/hwdata
+license=(GPL-2.0-or-later)
+category=platform
+source=(https://github.com/vcrhonek/hwdata/archive/v$version/hwdata-$version.tar.gz)
+sha256=(5a71ab7a48c668ef912fcfdbec046949087019f8dd7fb967445d36fbeb778350)
+# without Fedora's modprobe blacklist
+configure_args=(--disable-blacklist)

@@ -1,0 +1,15 @@
+name=libinput
+version=1.32.0
+release=1
+summary="libinput: input devices for Wayland compositors and X11 (touchpads, touchscreens, tablets, quirks)"
+homepage=https://gitlab.freedesktop.org/libinput/libinput
+license=(MIT)
+category=platform
+# device quirks (/usr/share/libinput/*.quirks) come with it; tablets get their names from libwacom
+# in spins that want it; no Lua plugins, debug GUI (GTK) or test suite
+depends=(glibc eudev mtdev libevdev)
+build_type=meson
+source=(https://gitlab.freedesktop.org/libinput/libinput/-/archive/$version/libinput-$version.tar.bz2)
+sha256=(3a6065c07b118c08d0c7b7b85a265ecb050a8cfc91eeb360890d768a51b4cce9)
+meson_args=(-Dlibwacom=false -Ddebug-gui=false -Dtests=false -Dinstall-tests=false -Ddocumentation=false
+	-Dlua-plugins=disabled -Dmtdev=true -Dzshcompletiondir=no)

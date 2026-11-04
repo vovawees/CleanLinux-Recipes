@@ -1,0 +1,13 @@
+name=libdisplay-info
+version=0.4.0
+release=1
+summary="libdisplay-info: EDID and DisplayID parser for compositors (wlroots, KWin, Mutter)"
+homepage=https://gitlab.freedesktop.org/emersion/libdisplay-info
+license=(MIT)
+category=platform
+depends=(glibc)
+# the vendor names are built in from hwdata's pnp.ids
+makedepends=(hwdata)
+build_type=meson
+source=(https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/$version/downloads/libdisplay-info-$version.tar.xz)
+sha256=(43b180baa143e2035654759d84e2b2f5ee77d5fe817c423838c7fe59c0d68459)

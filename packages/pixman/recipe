@@ -1,0 +1,13 @@
+name=pixman
+version=0.46.4
+release=1
+summary="pixman: low-level pixel manipulation (compositing, scaling) for cairo, wlroots and Xwayland"
+homepage=https://pixman.org/
+license=(MIT)
+category=platform
+depends=(glibc)
+build_type=meson
+source=(https://www.x.org/releases/individual/lib/pixman-$version.tar.xz)
+sha256=(a098c33924754ad43f981b740f6d576c70f9ed1006e12221b1845431ebce1239)
+# the SIMD paths (SSE2, SSSE3, NEON, ...) are chosen at run time
+meson_args=(-Dtests=disabled -Ddemos=disabled -Dgtk=disabled -Dlibpng=disabled -Dopenmp=disabled)

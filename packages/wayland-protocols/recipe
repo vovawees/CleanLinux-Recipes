@@ -1,0 +1,13 @@
+name=wayland-protocols
+version=1.50
+release=1
+summary="Wayland protocol extensions (XML): xdg-shell, linux-dmabuf, presentation-time, ..."
+homepage=https://gitlab.freedesktop.org/wayland/wayland-protocols
+license=(MIT)
+category=platform
+# only XML files and a pkg-config file: compositors and clients generate their code from them
+makedepends=(wayland)
+build_type=meson
+source=(https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$version/downloads/wayland-protocols-$version.tar.xz)
+sha256=(4460c20cfcf68b994a5ee206ed15fc19ad312f16c96075186e83b0e3f4aa48a5)
+meson_args=(-Dtests=false)

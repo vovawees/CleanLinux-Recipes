@@ -1,0 +1,12 @@
+name=libevdev
+version=1.14.0
+release=1
+summary="libevdev: the evdev input device interface for libinput (and its debugging tools)"
+homepage=https://www.freedesktop.org/wiki/Software/libevdev/
+license=(MIT)
+category=platform
+depends=(glibc)
+build_type=meson
+source=(https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz)
+sha256=(5a0966c7110648665983848bad696c7acba614a2160d2865d535397101007332)
+meson_args=(-Dtests=disabled -Ddocumentation=disabled -Dtools=enabled)

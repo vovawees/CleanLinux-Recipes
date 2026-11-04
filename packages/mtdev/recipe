@@ -1,0 +1,11 @@
+name=mtdev
+version=1.1.7
+release=1
+summary="mtdev: multitouch protocol A to B translation for libinput"
+homepage=https://bitmath.org/code/mtdev/
+license=(MIT)
+category=platform
+depends=(glibc)
+source=(https://bitmath.org/code/mtdev/mtdev-$version.tar.bz2)
+sha256=(a107adad2101fecac54ac7f9f0e0a0dd155d954193da55c2340c97f2ff1d814e)
+configure_args=(--disable-static)

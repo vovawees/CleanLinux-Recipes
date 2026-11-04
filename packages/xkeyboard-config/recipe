@@ -1,0 +1,14 @@
+name=xkeyboard-config
+version=2.48
+release=1
+summary="XKB data: keyboard models, layouts and options for libxkbcommon and X11"
+homepage=https://www.freedesktop.org/wiki/Software/XKeyboardConfig/
+license=(MIT)
+category=platform
+features=(+nls)
+build_type=meson
+source=(https://www.x.org/releases/individual/data/xkeyboard-config/xkeyboard-config-$version.tar.xz)
+sha256=(b77041324f0109f77161ee43743fe04baa485866af8460d31e476ad3f7648fd5)
+# the "xorg" rules names of X11 point to "evdev", as everywhere
+meson_args=(-Dxorg-rules-symlinks=true -Dcompat-rules=true)
+meson_extra() { meson_use nls; }

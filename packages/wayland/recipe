@@ -1,0 +1,12 @@
+name=wayland
+version=1.26.0
+release=1
+summary="Wayland: the display protocol library (libwayland-client, -server, -cursor, -egl) and wayland-scanner"
+homepage=https://wayland.freedesktop.org/
+license=(MIT)
+category=platform
+depends=(glibc libffi expat)
+build_type=meson
+source=(https://gitlab.freedesktop.org/wayland/wayland/-/releases/$version/downloads/wayland-$version.tar.xz)
+sha256=(64176eaa46e4969903e286f8e5ef8331affc17fdf03ac9b58381d2b23162b7a3)
+meson_args=(-Dtests=false -Ddocumentation=false -Ddtd_validation=false)
