@@ -1,6 +1,6 @@
 name=curl
 version=8.23.0
-release=2
+release=3
 summary="URL transfer tool and library (libcurl): HTTP/1.1, HTTP/2 (nghttp2), HTTPS through OpenSSL, FTP"
 homepage=https://curl.se
 license=(curl)
@@ -16,3 +16,12 @@ configure_args=(
 	--with-nghttp2 --without-libpsl --without-brotli --without-libidn2 --without-libssh2
 	--disable-ldap --disable-ldaps --disable-static
 )
+
+# in cross builds the pkg-config flags of the dependencies are -L<sysroot>/usr/lib, which
+# libcurl.pc and curl-config keep for static linking: on the device it is /usr/lib anyway
+do_install() {
+	bt_install
+	if ((CROSS)); then
+		sed -i "s| -L$SYSROOT/usr/lib||g" "$DESTDIR/usr/lib/pkgconfig/libcurl.pc" "$DESTDIR/usr/bin/curl-config"
+	fi
+}
