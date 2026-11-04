@@ -1,12 +1,13 @@
 name=burn
 version=0.7.0
-release=1
+release=2
 summary="The CleanLinux package manager: source based, rolling+++"
 homepage=https://github.com/vovawees/burn
 license=(MIT)
 category=core
-# bash runs the functions of recipes; git (sync) and curl or wget (fetch) come with base-devel
-depends=(glibc zstd bash)
+# bash runs the functions of recipes, curl downloads the sources, git syncs the recipe
+# repositories and the spins
+depends=(glibc zstd bash curl git)
 build_type=make
 source=(https://github.com/vovawees/burn/releases/download/v$version/burn-$version.tar.gz)
 sha256=(aefcefa97ee94f70812dac20e1c84d79650d53c119d9991ea6ed6ad6330a6a22)

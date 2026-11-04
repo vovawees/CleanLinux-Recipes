@@ -1,0 +1,31 @@
+name=openssl
+version=3.5.9
+release=1
+summary="TLS and cryptography library and the openssl tool (3.5 LTS)"
+homepage=https://www.openssl.org
+license=(Apache-2.0)
+category=core
+# the 3.5 series is the long term support one (to 2030): one ABI for everything built on it
+depends=(glibc)
+build_type=custom
+source=(https://github.com/openssl/openssl/releases/download/openssl-$version/openssl-$version.tar.gz)
+sha256=(603f5602e2eef00d77fbd429d34dcd5822bb301757a1bc9cdb24c670f1eb859a)
+backup=(etc/ssl/openssl.cnf etc/ssl/ct_log_list.cnf)
+
+do_configure() {
+	local target
+	case $CARCH in
+		x86_64) target=linux-x86_64 ;;
+		aarch64) target=linux-aarch64 ;;
+		riscv64) target=linux64-riscv64 ;;
+		*) target=linux-generic64 ;;
+	esac
+	# libraries in /usr/lib, configuration and certificates in /etc/ssl (ca-certificates);
+	# kernel TLS offload; no test programs (half of the build); CC, CFLAGS and LDFLAGS come
+	# from burn
+	./Configure "$target" --prefix=/usr --openssldir=/etc/ssl --libdir=lib shared enable-ktls no-docs \
+		no-tests
+}
+do_build() { make; }
+# the libraries, the tool and /etc/ssl; no HTML documentation
+do_install() { make DESTDIR="$DESTDIR" install_sw install_ssldirs; }

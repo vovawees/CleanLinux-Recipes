@@ -121,9 +121,11 @@ Upstream определяется по ссылкам самого рецепт�
 | `bison` | devel | 3.8.2 | autotools | GNU parser generator (yacc replacement) |
 | `btrfs-progs` | core | 7.3 | autotools | btrfs filesystem tools: mkfs.btrfs, btrfs (subvolumes, snapshots, scrub, send), btrfsck |
 | `burn` | core | 0.7.0 | make | The CleanLinux package manager: source based, rolling+++ |
+| `ca-certificates` | core | 2026.10.20 | custom | Mozilla's trusted root certificates for TLS (the NSS bundle as extracted by curl.se) |
 | `cleanlinux-boot` | core | 0.1.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, kernels in the ESP) |
 | `cleanlinux-install` | core | 0.1.0 | make | The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, systemd-boot, users |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
+| `curl` | core | 8.23.0 | autotools | URL transfer tool and library (libcurl): HTTP/1.1, HTTPS through OpenSSL, FTP |
 | `dbus` | core | 1.16.2 | meson | D-Bus: the message bus daemon and libdbus |
 | `dhcpcd` | core | 10.5.2 | custom | DHCP and DHCPv6 client: IPv4LL, SLAAC, privilege separation |
 | `diffutils` | core | 3.12 | autotools | GNU diff, cmp, diff3 and sdiff |
@@ -137,6 +139,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `findutils` | core | 4.11.0 | autotools | GNU find, xargs and locate |
 | `gawk` | core | 5.4.1 | autotools | GNU awk |
 | `gcc` | devel | 16.2.0 | autotools | GNU Compiler Collection: C and C++ compilers |
+| `git` | core | 2.56.0 | custom | Distributed version control system |
 | `glibc` | core | 2.44 | autotools | GNU C library: libc, the dynamic loader and friends |
 | `gperf` | devel | 3.3 | autotools | GNU perfect hash function generator (builds the keyword tables of eudev) |
 | `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |
@@ -153,6 +156,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `make` | devel | 4.4.1 | autotools | GNU make |
 | `ncurses` | core | 6.6 | autotools | Terminal handling library (wide character build) |
 | `openresolv` | core | 3.17.4 | custom | resolvconf: /etc/resolv.conf from DHCP clients, VPNs and local resolvers |
+| `openssl` | core | 3.5.9 | custom | TLS and cryptography library and the openssl tool (3.5 LTS) |
 | `pambase` | core | 2026.1 | custom | CleanLinux PAM stacks: system-auth, system-login, system-services, other |
 | `patch` | devel | 2.8.1 | autotools | GNU patch: apply diff files |
 | `pkgconf` | devel | 3.0.10 | meson | pkg-config implementation (also installed as pkg-config) |
