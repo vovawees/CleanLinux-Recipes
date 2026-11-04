@@ -109,6 +109,7 @@ tools/lint.sh --fetch foo                 # то же, что проверяет
 tools/updates.sh -v                       # что отстало от upstream (GITHUB_TOKEN поднимает лимиты API)
 tools/updates.sh --write foo bar          # новые версии, release=1, скачать исходники, новые sha256
 tools/lint.sh --fetch foo bar
+tools/readme.sh --write                   # таблица пакетов ниже (tools/check.sh сверяет её с рецептами)
 ```
 
 Upstream определяется по ссылкам самого рецепта, отдельные метаданные не нужны: листинги GNU и kernel.org (включая каталоги версий вроде `gcc-X/` и `util-linux/vX.Y/`), stable-ядро из `releases.json`, GitHub releases (теги как запасной вариант), любые https-каталоги, официальные патчи bash/readline (`_patches=({001..NNN})`).
@@ -131,12 +132,12 @@ Upstream определяется по ссылкам самого рецепт�
 | `bluez` | drivers | 5.87 | autotools | BlueZ: the Bluetooth daemon (bluetoothd), bluetoothctl and libbluetooth |
 | `btrfs-progs` | core | 7.3 | autotools | btrfs filesystem tools: mkfs.btrfs, btrfs (subvolumes, snapshots, scrub, send), btrfsck |
 | `bubblewrap` | platform | 0.13.1 | meson | bubblewrap (bwrap): unprivileged sandboxes in user namespaces (xdg-desktop-portal, Flatpak, Steam) |
-| `burn` | core | 0.8.0 | make | The CleanLinux package manager: source based, rolling+++ |
+| `burn` | core | 0.9.2 | make | The CleanLinux package manager: source based, rolling+++ |
 | `bzip2` | core | 1.0.8 | custom | Block-sorting file compressor and libbz2 |
 | `ca-certificates` | core | 2026.10.20 | custom | Mozilla's trusted root certificates for TLS (the NSS bundle as extracted by curl.se) |
-| `cairo` | platform | 1.18.6 | meson | cairo: 2D vector graphics (image, PNG, PDF, PS, SVG, X11 and XCB surfaces), drawn by pixman |
+| `cairo` | platform | 1.18.6 | meson | cairo: 2D vector graphics (image, PNG, PDF, PS, SVG surfaces; X11 and XCB ones with x11), drawn by pixman |
 | `ccache` | devel | 4.14.2 | cmake | Compiler cache: rebuilds of the same sources come from the cache (burn CCACHE=1) |
-| `cleanlinux-boot` | core | 0.2.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, zram, power, kernels in the ESP) |
+| `cleanlinux-boot` | core | 0.3.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, zram, power, kernels for the boot loader of the device) |
 | `cleanlinux-install` | core | 0.3.0 | make | The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, systemd-boot, users |
 | `cleanlinux-profiles` | core | 2026.11.4 | custom | The hardware profiles of CleanLinux for burn: generic, native and the devices |
 | `cmake` | devel | 4.4.5 | custom | Cross-platform build system generator |
@@ -177,7 +178,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `gst-plugins-base` | platform | 1.28.8 | meson | GStreamer base plugins and libraries (pbutils, audio, video, app): playback, conversion, ALSA |
 | `gstreamer` | platform | 1.28.8 | meson | GStreamer: the multimedia framework core (pipelines, plugin registry, gst-launch-1.0, gst-inspect-1.0) |
 | `gzip` | core | 1.15 | autotools | GNU gzip compression utility |
-| `hardware` | drivers | 1 | custom | The hardware profile of the device: its quirks (udev rules, hwdb, modprobe.d, sysctl.d) and boot modules |
+| `hardware` | drivers | 1 | custom | The hardware profile of the device: its quirks (udev rules, hwdb, modprobe.d, sysctl.d), boot modules, kernel command line and boot loader |
 | `harfbuzz` | platform | 15.0.0 | meson | HarfBuzz: the text shaping engine (OpenType layout of every script) |
 | `hwdata` | platform | 0.413 | autotools | hwdata: PCI, USB and PNP id databases (lspci, lsusb, libdisplay-info) |
 | `iproute2` | core | 7.3.0 | custom | IP routing utilities: ip, ss, bridge, tc |

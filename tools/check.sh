@@ -26,6 +26,8 @@ shellcheck -x tools/*.sh tools/hooks/pre-push
 shellcheck -s bash packages/*/recipe
 step "lint every recipe"
 tools/lint.sh
+step "the package table of README.md"
+tools/readme.sh --check
 [[ $MODE == quick ]] && exit 0
 
 if [[ $MODE == all ]]; then
