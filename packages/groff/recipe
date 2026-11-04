@@ -1,0 +1,14 @@
+name=groff
+version=1.24.2
+release=1
+summary="GNU troff: formats manual pages for the terminal"
+homepage=https://www.gnu.org/software/groff/
+license=(GPL-3.0-or-later)
+category=core
+# some of its tools (grog, gropdf, mmroff) are Perl scripts
+depends=(glibc gcc-libs perl)
+build_type=autotools
+source=(https://ftp.gnu.org/gnu/groff/groff-$version.tar.gz)
+sha256=(f9c1efd5bebbe37fc6e1063db7473ce8df1e3e0be4ff0f43ce04fce57e9c5dd9)
+# the terminal and PostScript output; no X11 viewer, Ghostscript or uchardet
+configure_args=(--without-x --without-gs --without-uchardet --with-paper=A4)

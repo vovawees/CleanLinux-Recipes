@@ -148,11 +148,13 @@ Upstream определяется по ссылкам самого рецепт�
 | `flex` | devel | 2.6.4 | autotools | Fast lexical analyser generator (lex) |
 | `gawk` | core | 5.4.1 | autotools | GNU awk |
 | `gcc` | devel | 16.2.0 | autotools | GNU Compiler Collection: C and C++ compilers |
+| `gdbm` | core | 1.26 | autotools | GNU dbm: key/value database library (man-db's index) |
 | `gettext` | devel | 1.0 | autotools | GNU gettext tools: msgfmt, xgettext, autopoint (glibc has libintl itself) |
 | `git` | core | 2.56.0 | custom | Distributed version control system |
 | `glibc` | core | 2.44 | autotools | GNU C library: libc, the dynamic loader and friends |
 | `gperf` | devel | 3.3 | autotools | GNU perfect hash function generator (builds the keyword tables of eudev) |
 | `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |
+| `groff` | core | 1.24.2 | autotools | GNU troff: formats manual pages for the terminal |
 | `gzip` | core | 1.15 | autotools | GNU gzip compression utility |
 | `iproute2` | core | 7.3.0 | custom | IP routing utilities: ip, ss, bridge, tc |
 | `iwd` | core | 3.12 | autotools | iwd: the wireless daemon (WPA2/WPA3, enterprise) and iwctl |
@@ -160,6 +162,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `kmod` | core | 34.3 | meson | Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo |
 | `less` | core | 710 | autotools | Terminal pager (man, git and burn show long output with it) |
 | `libffi` | devel | 3.8.0 | autotools | Foreign function interface library: calls with argument lists built at run time (Python ctypes, GLib) |
+| `libpipeline` | core | 1.5.8 | autotools | Library for running pipelines of subprocesses (man-db) |
 | `libtool` | devel | 2.6.2 | autotools | GNU libtool: portable shared libraries for autotools builds, and libltdl |
 | `libxcrypt` | core | 4.5.2 | autotools | Modern crypt(3): yescrypt, bcrypt and SHA-crypt password hashing (libcrypt) |
 | `linux-headers` | core | 7.3.1 | custom | Linux kernel userspace API headers |
@@ -168,6 +171,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `lz4` | core | 1.10.0 | make | Extremely fast compression (library and lz4 tool) |
 | `m4` | devel | 1.4.21 | autotools | GNU m4 macro processor |
 | `make` | devel | 4.4.1 | autotools | GNU make |
+| `man-db` | core | 2.13.1 | autotools | man, apropos and whatis with an index of the installed manual pages |
 | `meson` | devel | 1.12.1 | custom | Build system: fast, user friendly (most of the base is built with it) |
 | `mold` | devel | 3.0.0 | cmake | Fast linker for ELF (burn LINKER=mold) |
 | `ncurses` | core | 6.6 | autotools | Terminal handling library (wide character build) |

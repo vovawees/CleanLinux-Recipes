@@ -1,0 +1,15 @@
+name=man-db
+version=2.13.1
+release=1
+summary="man, apropos and whatis with an index of the installed manual pages"
+homepage=https://man-db.gitlab.io/man-db/
+license=(GPL-2.0-or-later)
+category=core
+depends=(glibc gdbm libpipeline groff less zlib-ng)
+build_type=autotools
+source=(https://download.savannah.gnu.org/releases/man-db/man-db-$version.tar.xz)
+sha256=(8afebb6f7eb6bb8542929458841f5c7e6f240e30c86358c1fbcefbea076c87d9)
+backup=(etc/man_db.conf)
+# not setuid (no man user); the cache directory comes from its tmpfiles.d entry
+configure_args=(--disable-setuid --disable-cache-owner --with-db=gdbm --with-pager=less
+	--with-systemdtmpfilesdir=/usr/lib/tmpfiles.d --with-systemdsystemunitdir=no --disable-static)
