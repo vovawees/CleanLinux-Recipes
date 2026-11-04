@@ -1,0 +1,13 @@
+name=freetype
+version=2.15.0
+release=1
+summary="FreeType: the font rasterizer (TrueType, OpenType, CFF, WOFF, bitmap fonts)"
+homepage=https://freetype.org/
+license=(FTL GPL-2.0-or-later)
+category=platform
+# HarfBuzz (better hinting of OpenType fonts) is loaded at run time when installed: no cycle
+depends=(glibc zlib-ng libpng bzip2)
+build_type=meson
+source=(https://download.savannah.gnu.org/releases/freetype/freetype-$version.tar.xz)
+sha256=(93cd47eb719c325107f2d3cf087d06299e944c3b48a40b55537302304dea1dd5)
+meson_args=(-Dharfbuzz=dynamic -Dpng=enabled -Dzlib=system -Dbzip2=enabled -Dbrotli=disabled -Dtests=disabled)

@@ -1,0 +1,12 @@
+name=fribidi
+version=1.0.18
+release=1
+summary="GNU FriBidi: the Unicode bidirectional algorithm (Arabic, Hebrew) for Pango and others"
+homepage=https://github.com/fribidi/fribidi
+license=(LGPL-2.1-or-later)
+category=platform
+depends=(glibc)
+build_type=meson
+source=(https://github.com/fribidi/fribidi/releases/download/v$version/fribidi-$version.tar.xz)
+sha256=(1de5e8073d035388b71d0b2d452b1da1f8caeea8a7702997b401fe1b6250727f)
+meson_args=(-Ddocs=false -Dtests=false -Dbin=true)

@@ -1,0 +1,11 @@
+name=libpng
+version=1.6.59
+release=1
+summary="libpng: the PNG reference library (freetype's color glyphs, image loaders)"
+homepage=http://www.libpng.org/pub/png/libpng.html
+license=(libpng-2.0)
+category=platform
+depends=(glibc zlib-ng)
+source=(https://downloads.sourceforge.net/libpng/libpng-$version.tar.xz)
+sha256=(d80dd2a38a37f803cb9b6ac7b14bd6e74ddc3b654780a8380bdf93523fdb4389)
+configure_args=(--disable-static)

@@ -1,0 +1,24 @@
+name=fontconfig
+version=2.18.3
+release=1
+summary="Fontconfig: font discovery and configuration (fc-list, fc-match, fc-cache)"
+homepage=https://www.freedesktop.org/wiki/Software/fontconfig/
+license=(HPND)
+category=platform
+features=(+nls)
+depends=(glibc freetype expat)
+build_type=meson
+source=(https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/$version/fontconfig-$version.tar.xz
+	fontconfig.trigger)
+sha256=(
+	4f7b554a38cdf78c033f666c8871f3749e14a094f65a07f630c91ed0b43d35e3
+	ef8fef26016a51b5b23223044eb5acc7b16dce0e906f3c44355adb23d52941ae
+)
+# the cache is built on the device whenever fonts change (burn trigger), not here
+meson_args=(-Ddoc=disabled -Dtests=disabled -Dtools=enabled -Dcache-build=disabled -Dxml-backend=expat
+	-Dfontations=disabled -Diconv=disabled)
+meson_extra() { meson_feature nls; }
+
+post_install() {
+	install -Dm644 "$FILES/fontconfig.trigger" "$DESTDIR/usr/share/burn/triggers/fontconfig.trigger"
+}

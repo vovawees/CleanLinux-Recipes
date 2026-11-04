@@ -152,6 +152,9 @@ Upstream определяется по ссылкам самого рецепт�
 | `filesystem` | core | 2026.1 | custom | CleanLinux base layout: merged /usr, default /etc files, os-release |
 | `findutils` | core | 4.11.0 | autotools | GNU find, xargs and locate |
 | `flex` | devel | 2.6.4 | autotools | Fast lexical analyser generator (lex) |
+| `fontconfig` | platform | 2.18.3 | meson | Fontconfig: font discovery and configuration (fc-list, fc-match, fc-cache) |
+| `freetype` | platform | 2.15.0 | meson | FreeType: the font rasterizer (TrueType, OpenType, CFF, WOFF, bitmap fonts) |
+| `fribidi` | platform | 1.0.18 | meson | GNU FriBidi: the Unicode bidirectional algorithm (Arabic, Hebrew) for Pango and others |
 | `gawk` | core | 5.4.1 | autotools | GNU awk |
 | `gcc` | devel | 16.2.0 | autotools | GNU Compiler Collection: C and C++ compilers |
 | `gdbm` | core | 1.26 | autotools | GNU dbm: key/value database library (man-db's index) |
@@ -163,6 +166,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |
 | `groff` | core | 1.24.2 | autotools | GNU troff: formats manual pages for the terminal |
 | `gzip` | core | 1.15 | autotools | GNU gzip compression utility |
+| `harfbuzz` | platform | 15.0.0 | meson | HarfBuzz: the text shaping engine (OpenType layout of every script) |
 | `hwdata` | platform | 0.413 | autotools | hwdata: PCI, USB and PNP id databases (lspci, lsusb, libdisplay-info) |
 | `iproute2` | core | 7.3.0 | custom | IP routing utilities: ip, ss, bridge, tc |
 | `iwd` | core | 3.12 | autotools | iwd: the wireless daemon (WPA2/WPA3, enterprise) and iwctl |
@@ -176,6 +180,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `libffi` | devel | 3.8.0 | autotools | Foreign function interface library: calls with argument lists built at run time (Python ctypes, GLib) |
 | `libinput` | platform | 1.32.0 | meson | libinput: input devices for Wayland compositors and X11 (touchpads, touchscreens, tablets, quirks) |
 | `libpipeline` | core | 1.5.8 | autotools | Library for running pipelines of subprocesses (man-db) |
+| `libpng` | platform | 1.6.59 | autotools | libpng: the PNG reference library (freetype's color glyphs, image loaders) |
 | `libtool` | devel | 2.6.2 | autotools | GNU libtool: portable shared libraries for autotools builds, and libltdl |
 | `libxcrypt` | core | 4.5.2 | autotools | Modern crypt(3): yescrypt, bcrypt and SHA-crypt password hashing (libcrypt) |
 | `libxkbcommon` | platform | 1.13.2 | meson | libxkbcommon: keymaps and keyboard state for Wayland compositors and clients, xkbregistry, xkbcli |

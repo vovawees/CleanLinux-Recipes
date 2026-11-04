@@ -1,0 +1,16 @@
+name=harfbuzz
+version=15.0.0
+release=1
+summary="HarfBuzz: the text shaping engine (OpenType layout of every script)"
+homepage=https://harfbuzz.github.io/
+license=(MIT)
+category=platform
+# GLib's Unicode data and FreeType's fonts; subsetting for PDF and font tools; no Cairo/ICU/Rust parts
+depends=(glibc gcc-libs glib freetype)
+build_type=meson
+source=(https://github.com/harfbuzz/harfbuzz/releases/download/$version/harfbuzz-$version.tar.xz)
+sha256=(968536e9abd782f07f7954044c0c4020199fcdd39b41d221ec42d2a3be4a44df)
+meson_args=(-Dglib=enabled -Dgobject=disabled -Dfreetype=enabled -Dcairo=disabled -Dchafa=disabled
+	-Dicu=disabled -Dgraphite2=disabled -Dfontations=disabled -Dharfrust=disabled -Dkbts=disabled
+	-Dwasm=disabled -Dsubset=enabled -Dtests=disabled -Dintrospection=disabled -Ddocs=disabled
+	-Dutilities=disabled -Dbenchmark=disabled)
