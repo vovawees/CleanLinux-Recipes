@@ -258,6 +258,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `spirv-tools` | devel | 1.4.363.0 | cmake | SPIRV-Tools: the SPIR-V assembler, validator and optimizer (the OpenCL C kernels of Mesa for Intel and Mali) |
 | `systemd-boot` | core | 261.4 | meson | systemd-boot: the UEFI boot manager of systemd, built alone (no systemd) |
 | `tar` | core | 1.35 | autotools | GNU tar archiver |
+| `turnstile` | platform | 0.1.11 | meson | turnstile: a user service manager (dinit --user) and XDG_RUNTIME_DIR for every login, without systemd |
 | `util-linux` | core | 2.42.4 | autotools | Core Linux system utilities: mount, fdisk, lsblk, agetty, kill, ... |
 | `vulkan-headers` | drivers | 1.4.367 | cmake | Vulkan headers and the API registry (vk.xml) of the Vulkan loader, Mesa and Vulkan applications |
 | `vulkan-loader` | drivers | 1.4.367 | cmake | Vulkan loader (libvulkan): finds the drivers in /usr/share/vulkan/icd.d and the layers |

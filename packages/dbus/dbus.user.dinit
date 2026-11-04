@@ -1,0 +1,7 @@
+# the session message bus of the user (dinit --user, started by turnstile): $XDG_RUNTIME_DIR/bus,
+# the address turnstile exports into the session as DBUS_SESSION_BUS_ADDRESS
+type = process
+command = /usr/bin/dbus-daemon --session --address=unix:path=$XDG_RUNTIME_DIR/bus --nofork --nopidfile --print-address=4
+ready-notification = pipefd:4
+restart = true
+log-type = buffer

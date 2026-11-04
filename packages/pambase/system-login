@@ -18,4 +18,6 @@ session    optional   pam_mail.so     dir=/var/spool/mail standard quiet
 session    optional   pam_umask.so
 # seat and session tracking for spins that install elogind; skipped while it is missing
 -session   optional   pam_elogind.so
+# dinit --user and XDG_RUNTIME_DIR of the session (turnstile); skipped while it is missing
+-session   optional   pam_turnstile.so
 session    required   pam_env.so
