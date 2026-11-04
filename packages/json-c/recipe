@@ -1,0 +1,16 @@
+name=json-c
+version=0.19
+release=1
+summary="JSON-C: JSON objects in C (the LUKS2 metadata of cryptsetup)"
+homepage=https://github.com/json-c/json-c
+license=(MIT)
+category=core
+depends=(glibc)
+build_type=cmake
+source=(https://s3.amazonaws.com/json-c_releases/releases/json-c-$version.tar.gz)
+sha256=(37ad0249902e301bd9052bf712e511fcc6acff4ecaad4b5900aad9ce564e26de)
+# the shared library only: no static one, no json_parse/json_pointer_get apps, no tests; threading
+# for the users with threads; the random seed from getrandom(), not RDRAND (broken on some CPUs);
+# no libbsd; warnings are not errors (new compilers)
+cmake_args=(-DBUILD_STATIC_LIBS=OFF -DBUILD_APPS=OFF -DBUILD_TESTING=OFF -DENABLE_THREADING=ON -DENABLE_RDRAND=OFF
+	-DDISABLE_EXTRA_LIBS=ON -DDISABLE_WERROR=ON)

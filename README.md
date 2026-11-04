@@ -138,10 +138,11 @@ Upstream определяется по ссылкам самого рецепт�
 | `cairo` | platform | 1.18.6 | meson | cairo: 2D vector graphics (image, PNG, PDF, PS, SVG surfaces; X11 and XCB ones with x11), drawn by pixman |
 | `ccache` | devel | 4.14.2 | cmake | Compiler cache: rebuilds of the same sources come from the cache (burn CCACHE=1) |
 | `cleanlinux-boot` | core | 0.3.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, zram, power, kernels for the boot loader of the device) |
-| `cleanlinux-install` | core | 0.4.0 | make | The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, the boot loader of the profile, users |
+| `cleanlinux-install` | core | 0.5.0 | make | The CleanLinux installer: GPT, ESP and btrfs (optionally in LUKS2), the running system's packages (burn clone), fstab, the boot loader of the profile, users |
 | `cleanlinux-profiles` | core | 2026.11.4.1 | custom | The hardware profiles of CleanLinux for burn: generic, native and the devices |
 | `cmake` | devel | 4.4.5 | custom | Cross-platform build system generator |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
+| `cryptsetup` | core | 2.8.8 | autotools | cryptsetup: disk encryption with dm-crypt (LUKS2, LUKS1, BitLocker, VeraCrypt), veritysetup, integritysetup |
 | `curl` | core | 8.23.0 | autotools | URL transfer tool and library (libcurl): HTTP/1.1, HTTP/2 (nghttp2), HTTPS through OpenSSL, FTP |
 | `dbus` | core | 1.16.2 | meson | D-Bus: the message bus daemon and libdbus |
 | `dhcpcd` | core | 10.5.2 | custom | DHCP and DHCPv6 client: IPv4LL, SLAAC, privilege separation |
@@ -183,6 +184,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `hwdata` | platform | 0.413 | autotools | hwdata: PCI, USB and PNP id databases (lspci, lsusb, libdisplay-info) |
 | `iproute2` | core | 7.3.0 | custom | IP routing utilities: ip, ss, bridge, tc |
 | `iwd` | core | 3.12 | autotools | iwd: the wireless daemon (WPA2/WPA3, enterprise) and iwctl |
+| `json-c` | core | 0.19 | cmake | JSON-C: JSON objects in C (the LUKS2 metadata of cryptsetup) |
 | `json-glib` | platform | 1.10.8 | meson | JSON-GLib: JSON parsing and generation for GLib and GObject (xdg-desktop-portal) |
 | `kbd` | core | 2.10.0 | autotools | Console keyboard maps and fonts: loadkeys, setfont, showkey, kbd_mode |
 | `kmod` | core | 34.3 | meson | Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo |
@@ -228,6 +230,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `linux` | kernel | 7.3.1 | custom | The Linux kernel and modules (CleanLinux defaults + profile GPU drivers) |
 | `llvm` | devel | 23.1.5 | cmake | LLVM and clang: the compiler of llvmpipe and lavapipe and of the OpenCL C kernels of Mesa (Intel, Mali) |
 | `lua` | platform | 5.4.9 | custom | Lua 5.4: the embeddable scripting language (WirePlumber's scripts), shared liblua |
+| `lvm2` | core | 2.03.43 | autotools | device-mapper of LVM2: libdevmapper, dmsetup and its udev rules (cryptsetup, dm-crypt) |
 | `lz4` | core | 1.10.0 | make | Extremely fast compression (library and lz4 tool) |
 | `m4` | devel | 1.4.21 | autotools | GNU m4 macro processor |
 | `make` | devel | 4.4.1 | autotools | GNU make |
@@ -251,6 +254,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `pixman` | platform | 0.46.4 | meson | pixman: low-level pixel manipulation (compositing, scaling) for cairo, wlroots and Xwayland |
 | `pkgconf` | devel | 3.0.10 | meson | pkg-config implementation (also installed as pkg-config) |
 | `polkit` | platform | 128 | meson | polkit: authorization for privileged actions of unprivileged programs (rules in JavaScript) |
+| `popt` | core | 1.19 | autotools | popt: command line option parsing (cryptsetup, veritysetup, integritysetup) |
 | `procps-ng` | core | 4.0.7 | autotools | Process and memory tools: ps, top, free, vmstat, pgrep/pkill, watch, sysctl, uptime, w |
 | `psmisc` | core | 23.7 | autotools | Process tools that use /proc: fuser, killall, pstree, prtstat, peekfd |
 | `python-build` | devel | 1.6.1 | custom | build: the PEP 517 front end; with installer, the python build type of burn |
