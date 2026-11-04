@@ -163,6 +163,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `kmod` | core | 34.3 | meson | Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo |
 | `less` | core | 710 | autotools | Terminal pager (man, git and burn show long output with it) |
 | `libdisplay-info` | platform | 0.4.0 | meson | libdisplay-info: EDID and DisplayID parser for compositors (wlroots, KWin, Mutter) |
+| `libdrm` | drivers | 2.4.134 | meson | libdrm: userspace interface to the kernel DRM (KMS, GEM) and the GPU-specific helpers of Mesa |
 | `libevdev` | platform | 1.14.0 | meson | libevdev: the evdev input device interface for libinput (and its debugging tools) |
 | `libffi` | devel | 3.8.0 | autotools | Foreign function interface library: calls with argument lists built at run time (Python ctypes, GLib) |
 | `libinput` | platform | 1.32.0 | meson | libinput: input devices for Wayland compositors and X11 (touchpads, touchscreens, tablets, quirks) |
