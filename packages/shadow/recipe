@@ -1,6 +1,6 @@
 name=shadow
 version=4.20.3
-release=1
+release=2
 summary="Password and account tools: passwd, useradd, usermod, groupadd, chage, newuidmap, ..."
 homepage=https://github.com/shadow-maint/shadow
 license=(BSD-3-Clause)
@@ -9,6 +9,7 @@ depends=(glibc libxcrypt linux-pam pambase)
 features=(+nls)
 source=(https://github.com/shadow-maint/shadow/releases/download/$version/shadow-$version.tar.xz)
 sha256=(623be9429f64fa2165bfc5957c6a642ec309c5cf23c0d53855c99f7591922297)
+patches=(shadow-nscd-stub.patch)
 # login, su, nologin, chfn and chsh come from util-linux; no logind (elogind is for spins),
 # audit, SELinux, ACL/xattr copies, tcb, nscd or sssd in the base
 configure_args=(
