@@ -133,7 +133,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `ca-certificates` | core | 2026.10.20 | custom | Mozilla's trusted root certificates for TLS (the NSS bundle as extracted by curl.se) |
 | `ccache` | devel | 4.14.2 | cmake | Compiler cache: rebuilds of the same sources come from the cache (burn CCACHE=1) |
 | `cleanlinux-boot` | core | 0.2.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, zram, power, kernels in the ESP) |
-| `cleanlinux-install` | core | 0.1.0 | make | The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, systemd-boot, users |
+| `cleanlinux-install` | core | 0.2.0 | make | The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, systemd-boot, users |
 | `cmake` | devel | 4.4.5 | custom | Cross-platform build system generator |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
 | `curl` | core | 8.23.0 | autotools | URL transfer tool and library (libcurl): HTTP/1.1, HTTPS through OpenSSL, FTP |
