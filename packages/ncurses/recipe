@@ -1,6 +1,6 @@
 name=ncurses
 version=6.6
-release=2
+release=3
 summary="Terminal handling library (wide character build)"
 homepage=https://invisible-island.net/ncurses/
 license=(MIT-open-group)
@@ -8,10 +8,12 @@ category=core
 depends=(glibc gcc-libs)
 source=(gnu://ncurses/ncurses-$version.tar.gz)
 sha256=(355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11)
+# --disable-pkg-ldflags: the LDFLAGS of the build (--sysroot of a cross build, -flto) stay out of
+# ncursesw.pc and ncursesw6-config
 configure_args=(
 	--with-shared --without-debug --without-normal --without-ada --enable-widec
 	--with-cxx-binding --with-cxx-shared --enable-pc-files --with-pkg-config-libdir=/usr/lib/pkgconfig
-	--with-manpage-format=normal --disable-stripping --without-tests AWK=awk
+	--disable-pkg-ldflags --with-manpage-format=normal --disable-stripping --without-tests AWK=awk
 )
 
 # shellcheck disable=SC2016 # literal ${cf_includedir} from configure
