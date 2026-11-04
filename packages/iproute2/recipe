@@ -1,0 +1,18 @@
+name=iproute2
+version=7.3.0
+release=1
+summary="IP routing utilities: ip, ss, bridge, tc"
+homepage=https://wiki.linuxfoundation.org/networking/iproute2
+license=(GPL-2.0-or-later)
+category=core
+depends=(glibc)
+build_type=custom
+source=(kernel://utils/net/iproute2/iproute2-$version.tar.xz)
+sha256=(5c1789d290bba048a6135ed1ab81b0402dd0fb528d1f1421765c42b1fc3d6289)
+# ip, ss, bridge and tc on glibc alone: without libmnl, libelf/libbpf, libcap and SELinux
+# devlink, rdma, tipc and vdpa are not built, tc loads no eBPF objects (arpd needs Berkeley DB)
+
+do_configure() { ./configure --prefix=/usr --libbpf_force off --color auto; }
+# HOSTCC builds the netem distribution tables, which run during the build
+do_build() { make CC="$CC" HOSTCC=gcc AR="$AR" SBINDIR=/usr/bin; }
+do_install() { make DESTDIR="$DESTDIR" SBINDIR=/usr/bin install; }

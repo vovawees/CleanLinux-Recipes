@@ -121,6 +121,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `btrfs-progs` | core | 7.3 | autotools | btrfs filesystem tools: mkfs.btrfs, btrfs (subvolumes, snapshots, scrub, send), btrfsck |
 | `burn` | core | 0.5.0 | make | The CleanLinux package manager: source based, rolling+++ |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
+| `dhcpcd` | core | 10.5.2 | custom | DHCP and DHCPv6 client: IPv4LL, SLAAC, privilege separation |
 | `diffutils` | core | 3.12 | autotools | GNU diff, cmp, diff3 and sdiff |
 | `dinit` | core | 0.22.1 | custom | dinit: fast, small service manager and init with dependency handling |
 | `dosfstools` | core | 4.2 | autotools | FAT filesystem tools: mkfs.fat, fsck.fat, fatlabel (the EFI system partition) |
@@ -134,6 +135,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `gperf` | devel | 3.3 | autotools | GNU perfect hash function generator (builds the keyword tables of eudev) |
 | `grep` | core | 3.12 | autotools | GNU grep: search text with regular expressions |
 | `gzip` | core | 1.15 | autotools | GNU gzip compression utility |
+| `iproute2` | core | 7.3.0 | custom | IP routing utilities: ip, ss, bridge, tc |
 | `kmod` | core | 34.3 | meson | Kernel module tools and library: modprobe, depmod, lsmod, insmod, rmmod, modinfo |
 | `libxcrypt` | core | 4.5.2 | autotools | Modern crypt(3): yescrypt, bcrypt and SHA-crypt password hashing (libcrypt) |
 | `linux-headers` | core | 7.3.1 | custom | Linux kernel userspace API headers |
@@ -143,6 +145,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `m4` | devel | 1.4.21 | autotools | GNU m4 macro processor |
 | `make` | devel | 4.4.1 | autotools | GNU make |
 | `ncurses` | core | 6.6 | autotools | Terminal handling library (wide character build) |
+| `openresolv` | core | 3.17.4 | custom | resolvconf: /etc/resolv.conf from DHCP clients, VPNs and local resolvers |
 | `pambase` | core | 2026.1 | custom | CleanLinux PAM stacks: system-auth, system-login, system-services, other |
 | `patch` | devel | 2.8.1 | autotools | GNU patch: apply diff files |
 | `pkgconf` | devel | 3.0.10 | meson | pkg-config implementation (also installed as pkg-config) |

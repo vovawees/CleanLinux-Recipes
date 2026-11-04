@@ -1,0 +1,8 @@
+# DHCP, DHCPv6, IPv6 router advertisements and IPv4LL on every network interface
+# (enable: dinitctl enable dhcpcd); resolv.conf through resolvconf
+type = process
+command = /usr/bin/dhcpcd --nobackground
+restart = true
+smooth-recovery = true
+log-type = buffer
+depends-on: system

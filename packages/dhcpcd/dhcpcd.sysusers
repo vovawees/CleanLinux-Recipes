@@ -1,0 +1,2 @@
+# the unprivileged processes of dhcpcd (privilege separation) chroot to its home
+u dhcpcd - "dhcpcd privilege separation" /var/lib/dhcpcd

@@ -1,0 +1,32 @@
+name=dhcpcd
+version=10.5.2
+release=1
+summary="DHCP and DHCPv6 client: IPv4LL, SLAAC, privilege separation"
+homepage=https://roy.marples.name/projects/dhcpcd
+license=(BSD-2-Clause)
+category=core
+# libudev: interfaces are configured once udev has renamed them; resolvconf: resolv.conf
+depends=(glibc eudev openresolv)
+build_type=custom
+source=(https://github.com/NetworkConfiguration/dhcpcd/releases/download/v$version/dhcpcd-$version.tar.xz
+	dhcpcd.dinit dhcpcd.sysusers)
+sha256=(
+	3e476657fdb6eeb38b277da3a48d0ac0113ecce5858ebdcddff2b629faed52b4
+	70666040b8e801698a4c5d07777cb6354d57aa1dce5bd512255fd8a19919823b
+	91b3a03761cccbba13c98d9bcf478b411ece01729ff8d4777a7149f2cdf7530a
+)
+backup=(etc/dhcpcd.conf)
+
+do_configure() {
+	local -a cross=()
+	if ((CROSS)); then cross=(--host="$CHOST" --build="$CBUILD"); fi
+	./configure --prefix=/usr --sbindir=/usr/bin --sysconfdir=/etc --libexecdir=/usr/lib/dhcpcd \
+		--dbdir=/var/lib/dhcpcd --rundir=/run/dhcpcd --mandir=/usr/share/man --privsepuser=dhcpcd \
+		--with-udev "${cross[@]}" CC="$CC"
+}
+do_build() { make; }
+do_install() {
+	make DESTDIR="$DESTDIR" install
+	install -Dm644 "$FILES/dhcpcd.dinit" "$DESTDIR/usr/lib/dinit.d/dhcpcd"
+	install -Dm644 "$FILES/dhcpcd.sysusers" "$DESTDIR/usr/lib/sysusers.d/dhcpcd.conf"
+}

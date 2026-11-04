@@ -1,0 +1,20 @@
+name=openresolv
+version=3.17.4
+release=1
+summary="resolvconf: /etc/resolv.conf from DHCP clients, VPNs and local resolvers"
+homepage=https://roy.marples.name/projects/openresolv
+license=(BSD-2-Clause)
+category=core
+# a POSIX shell script
+depends=(bash)
+build_type=custom
+source=(https://github.com/NetworkConfiguration/openresolv/releases/download/v$version/openresolv-$version.tar.xz)
+sha256=(901d83a15520b80e117aeca8cb6f5b70ceb205ba050a638d45cebcf304df729b)
+backup=(etc/resolvconf.conf)
+
+do_configure() {
+	./configure --prefix=/usr --sbindir=/usr/bin --sysconfdir=/etc --libexecdir=/usr/lib/resolvconf \
+		--rundir=/run --mandir=/usr/share/man
+}
+do_build() { make; }
+do_install() { make DESTDIR="$DESTDIR" install; }
