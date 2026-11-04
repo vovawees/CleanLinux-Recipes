@@ -1,0 +1,2 @@
+# the unprivileged user that runs root's builds (burn.conf: BUILD_USER, ISOLATE)
+u burn - "burn package builds" /var/tmp/burn

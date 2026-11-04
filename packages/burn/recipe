@@ -1,6 +1,6 @@
 name=burn
-version=0.7.0
-release=2
+version=0.8.0
+release=1
 summary="The CleanLinux package manager: source based, rolling+++"
 homepage=https://github.com/vovawees/burn
 license=(MIT)
@@ -9,5 +9,14 @@ category=core
 # repositories and the spins
 depends=(glibc zstd bash curl git)
 build_type=make
-source=(https://github.com/vovawees/burn/releases/download/v$version/burn-$version.tar.gz)
-sha256=(aefcefa97ee94f70812dac20e1c84d79650d53c119d9991ea6ed6ad6330a6a22)
+source=(https://github.com/vovawees/burn/releases/download/v$version/burn-$version.tar.gz burn.sysusers)
+sha256=(
+	527d67f84dd91ae9f29833714fa0e6bd112ca970764ef21975b763599aab0de2
+	17f344844d9f6418d11c3c8ef3cfb03b673f42270b4918c32629e94b43844a3a
+)
+
+# root's builds run as the user burn, in their own network namespace (ISOLATE, BUILD_USER)
+do_install() {
+	bt_install
+	install -Dm644 "$FILES/burn.sysusers" "$DESTDIR/usr/lib/sysusers.d/burn.conf"
+}
