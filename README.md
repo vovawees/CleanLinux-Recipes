@@ -135,7 +135,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `cairo` | platform | 1.18.6 | meson | cairo: 2D vector graphics (image, PNG, PDF, PS, SVG, X11 and XCB surfaces), drawn by pixman |
 | `ccache` | devel | 4.14.2 | cmake | Compiler cache: rebuilds of the same sources come from the cache (burn CCACHE=1) |
 | `cleanlinux-boot` | core | 0.2.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, zram, power, kernels in the ESP) |
-| `cleanlinux-install` | core | 0.2.0 | make | The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, systemd-boot, users |
+| `cleanlinux-install` | core | 0.3.0 | make | The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, systemd-boot, users |
 | `cleanlinux-profiles` | core | 2026.11.4 | custom | The hardware profiles of CleanLinux for burn: generic, native and the devices |
 | `cmake` | devel | 4.4.5 | custom | Cross-platform build system generator |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |

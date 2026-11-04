@@ -1,5 +1,5 @@
 name=cleanlinux-install
-version=0.2.0
+version=0.3.0
 release=1
 summary="The CleanLinux installer: GPT, ESP and btrfs, the running system's packages (burn clone), fstab, systemd-boot, users"
 homepage=https://github.com/vovawees/cleanlinux-install
@@ -10,4 +10,4 @@ category=core
 depends=(glibc util-linux libxcrypt dosfstools btrfs-progs shadow burn cleanlinux-boot)
 build_type=make
 source=(https://github.com/vovawees/cleanlinux-install/releases/download/v$version/cleanlinux-install-$version.tar.gz)
-sha256=(972da57b0aa45091fa03624da5c077b6d7f241639017a0eedeefc323a9c83e09)
+sha256=(8735212d5dfa587e878373a351eed51767ef58012b656f390a8e048096d36784)
