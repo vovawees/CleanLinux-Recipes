@@ -51,7 +51,7 @@ meson_extra() { meson_feature zlib; meson_feature lzma; meson_feature lz4; }
 |---|---|
 | `name`, `version`, `release` | имя (= имя каталога), версия upstream, номер сборки рецепта |
 | `summary`, `homepage`, `license` | описание |
-| `category` | слой базы: `core` `devel` `meta` `kernel` `firmware` `drivers` `platform` (см. «Категории») |
+| `category` | слой базы: `core` `devel` `meta` `kernel` `firmware` `drivers` `platform` `nonfree` (см. «Категории») |
 | `depends`, `makedepends` | зависимости времени работы / только сборки; `pkg:feat`, `pkg:!feat` — условные |
 | `features` | переключатели: `+feat` включена, `-feat` выключена по умолчанию |
 | `build_type` | `autotools` `meson` `cmake` `make` `cargo` `python` `custom` `meta` |
@@ -59,7 +59,7 @@ meson_extra() { meson_feature zlib; meson_feature lzma; meson_feature lz4; }
 | `patches`, `patch_strip` | патчи и уровень `-p` (по умолчанию 1) |
 | `configure_args`, `meson_args`, `cmake_args`, `make_args`, `make_install_args`, `cargo_args` | аргументы систем сборки |
 | `out_of_tree`, `meson_subdir`, `cmake_subdir`, `srcdir` | раскладка исходников |
-| `options` | `!lto` `!strip` `!hardening` `!prune` `!linker` (только GNU ld) `staticlibs` `emptydirs` `o3` (горячий код: -O3) |
+| `options` | `!lto` `!strip` `!hardening` `!prune` `!linker` (только GNU ld) `staticlibs` `emptydirs` `o3` (горячий код: -O3) `late` (`burn update` собирает пакет после применения обновления, против новой системы: внешние модули ядра) |
 | `backup` | конфиги, которые нельзя перезаписывать (новая версия ляжет как `.burnnew`) |
 | `split` | дополнительные пакеты из той же сборки (`split=(gcc-libs)`); для каждого: `files_KEY` (пути и glob-шаблоны внутри `$DESTDIR`, обязательно), `summary_KEY`, `depends_KEY`, `backup_KEY`, `license_KEY`, где `KEY` — имя с `_` вместо `-` и `.` |
 
@@ -78,6 +78,7 @@ meson_extra() { meson_feature zlib; meson_feature lzma; meson_feature lz4; }
 | `firmware` | hardware | firmware из upstream; на устройство ставится только нужное его профилю |
 | `drivers` | hardware | драйверы и поддержка железа в userspace: Mesa, ALSA UCM, правила и quirks устройств |
 | `platform` | platform | нейтральный фундамент для сборок: Wayland, libinput, seatd, D-Bus, PipeWire, … — в `base` не входит |
+| `nonfree` | hardware | драйверы под несвободной лицензией (NVIDIA): burn собирает и ставит их, только если в `burn.conf` стоит `ALLOW_NONFREE=1` |
 
 DE, WM, приложений и игр здесь нет: их рецепты живут в репозиториях сборок и личных оверлеях, с категорией `extra`.
 `tools/lint.sh` не пропускает в этот репозиторий рецепты без категории слоя.
@@ -189,6 +190,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `libevdev` | platform | 1.14.0 | meson | libevdev: the evdev input device interface for libinput (and its debugging tools) |
 | `libffi` | devel | 3.8.0 | autotools | Foreign function interface library: calls with argument lists built at run time (Python ctypes, GLib) |
 | `libfontenc` | platform | 1.1.9 | autotools | libfontenc: font encodings of the X11 font library |
+| `libglvnd` | drivers | 1.7.0 | meson | libglvnd: vendor-neutral dispatch of OpenGL, OpenGL ES, EGL and GLX, so Mesa and the NVIDIA driver live side by side |
 | `libinput` | platform | 1.32.0 | meson | libinput: input devices for Wayland compositors and X11 (touchpads, touchscreens, tablets, quirks) |
 | `libpipeline` | core | 1.5.8 | autotools | Library for running pipelines of subprocesses (man-db) |
 | `libpng` | platform | 1.6.59 | autotools | libpng: the PNG reference library (freetype's color glyphs, image loaders) |
@@ -232,6 +234,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `mtdev` | platform | 1.1.7 | autotools | mtdev: multitouch protocol A to B translation for libinput |
 | `ncurses` | core | 6.6 | autotools | Terminal handling library (wide character build) |
 | `ninja` | devel | 1.13.2 | cmake | Small build system with a focus on speed (the backend of meson and cmake) |
+| `nvidia` | nonfree | 595.104.02 | custom | NVIDIA driver: open kernel modules, GSP firmware, OpenGL, EGL, Vulkan, GBM, NVENC/NVDEC, the CUDA driver, nvidia-smi |
 | `openresolv` | core | 3.17.4 | custom | resolvconf: /etc/resolv.conf from DHCP clients, VPNs and local resolvers |
 | `openssl` | core | 3.5.9 | custom | TLS and cryptography library and the openssl tool (3.5 LTS) |
 | `pambase` | core | 2026.1 | custom | CleanLinux PAM stacks: system-auth, system-login, system-services, other |
