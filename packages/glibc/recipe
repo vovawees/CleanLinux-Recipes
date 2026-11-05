@@ -1,6 +1,6 @@
 name=glibc
 version=2.44
-release=1
+release=2
 summary="GNU C library: libc, the dynamic loader and friends"
 homepage=https://www.gnu.org/software/libc/
 license=(LGPL-2.1-or-later GPL-2.0-or-later)
@@ -32,5 +32,12 @@ do_configure() {
 do_install() {
 	bt_install
 	rm -f "$DESTDIR/etc/ld.so.cache"
-	# C.UTF-8 is built in; more locales: localedef -i ru_RU -f UTF-8 ru_RU.UTF-8
+	# C.UTF-8, the LANG of /etc/profile, is not built into glibc: the localedef of the build makes it
+	# (/usr/lib/locale/C.utf8) where the build runs what it built: natively, or for the arch of the
+	# host. More locales on the device: localedef -i ru_RU -f UTF-8 ru_RU.UTF-8
+	if ((!CROSS)) || [[ $CARCH == "$(uname -m)" ]]; then
+		make -C "$SRC/localedata" objdir="$BUILD" install_root="$DESTDIR" install-files-C.UTF-8/UTF-8
+	else
+		echo "glibc: C.UTF-8 is not made (no $CARCH programs here): localedef -i C -f UTF-8 C.UTF-8" >&2
+	fi
 }
