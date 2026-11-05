@@ -1,9 +1,11 @@
 /* io-nanosvg.c: an SVG loader module for gdk-pixbuf, drawn by NanoSVG (no librsvg, no Rust).
  *
  * Panels and apps load their SVG icons through gdk-pixbuf: sfwbar's gauges, the scalable icons of
- * hicolor, wallpapers for swaybg. NanoSVG draws paths, basic shapes, gradients, transforms and
- * opacity; it skips text, filters, masks, <style> sheets and XInclude (GTK's symbolic recolouring
- * of SVG icons needs those: the icon theme of the spin has PNGs for them).
+ * hicolor, wallpapers for swaybg. NanoSVG draws paths, basic shapes, gradients, transforms,
+ * opacity and class rules of <style>; it skips text, filters, masks and XInclude (GTK's symbolic
+ * recolouring of SVG icons needs XInclude: the icon theme of the spin has PNGs for them). Colours
+ * rgb() and rgba() in any letter case become #rrggbb first: sfwbar writes the colour of the theme
+ * into its gauges as Rgba(r,g,b,a), which NanoSVG does not read (the alpha is dropped).
  *
  * SPDX-License-Identifier: MIT
  */
@@ -51,6 +53,50 @@ static gboolean load_increment(gpointer data, const guchar *buf, guint size, GEr
 	return TRUE;
 }
 
+static int channel(double v)
+{
+	return v < 0.0 ? 0 : v > 255.0 ? 255 : (int)(v + 0.5);
+}
+
+/* the SVG text with every rgb(...) and rgba(...), in any letter case, as #rrggbb */
+static char *hex_colors(const char *s)
+{
+	GString *out = g_string_sized_new(strlen(s) + 1);
+	while (*s) {
+		if (g_ascii_strncasecmp(s, "rgb", 3) == 0) {
+			const char *p = s + 3;
+			double v[4];
+			int n = 0;
+			if (*p == 'a' || *p == 'A')
+				p++;
+			if (*p == '(') {
+				for (p++; n < 4; n++) {
+					char *end;
+					while (*p == ' ' || *p == ',' || *p == '/')
+						p++;
+					v[n] = g_ascii_strtod(p, &end);
+					if (end == p)
+						break;
+					p = end;
+					if (*p == '%') {
+						v[n] *= 2.55;
+						p++;
+					}
+				}
+				while (*p == ' ')
+					p++;
+				if (n >= 3 && *p == ')') {
+					g_string_append_printf(out, "#%02x%02x%02x", channel(v[0]), channel(v[1]), channel(v[2]));
+					s = p + 1;
+					continue;
+				}
+			}
+		}
+		g_string_append_c(out, *s++);
+	}
+	return g_string_free(out, FALSE);
+}
+
 static int clamp_side(int v)
 {
 	return v < 1 ? 1 : v > MAX_SIDE ? MAX_SIDE : v;
@@ -64,8 +110,10 @@ static gboolean stop_load(gpointer data, GError **error)
 	GdkPixbuf *pixbuf = NULL;
 	gboolean ok = FALSE;
 
-	g_byte_array_append(ctx->data, (const guint8 *)"", 1); /* nsvgParse wants a C string */
-	image = nsvgParse((char *)ctx->data->data, "px", 96.0f);
+	g_byte_array_append(ctx->data, (const guint8 *)"", 1); /* a C string */
+	char *text = hex_colors((const char *)ctx->data->data);
+	image = nsvgParse(text, "px", 96.0f); /* it parses in place */
+	g_free(text);
 	if (!image || !(image->width > 0.0f) || !(image->height > 0.0f)) {
 		g_set_error_literal(error, GDK_PIXBUF_ERROR, GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
 				    "Could not read the SVG image (or it has no size)");
