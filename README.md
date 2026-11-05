@@ -268,6 +268,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `python-build` | devel | 1.6.1 | custom | build: the PEP 517 front end; with installer, the python build type of burn |
 | `python-flit-core` | devel | 4.2.0 | custom | flit_core: the PEP 517 build backend of the pure Python packages (it builds itself, no pip) |
 | `python-installer` | devel | 1.1.0 | custom | installer: installs Python wheels into a destination root (the python build type of burn) |
+| `python-jinja` | devel | 3.1.6 | python | Jinja: the template engine that elogind's build renders its generated files with |
 | `python-mako` | devel | 1.4.3 | python | Mako: the template library that generates the sources of Mesa |
 | `python-markupsafe` | devel | 3.0.4 | python | MarkupSafe: escaped strings for templates (Mako, Jinja) |
 | `python-packaging` | devel | 26.3 | custom | packaging: versions, specifiers and markers of Python packages (Mesa, build) |
