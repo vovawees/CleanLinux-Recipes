@@ -1,0 +1,82 @@
+mkfs.btrfs --rootdir --shrink: allocate a data chunk only once the data needs it
+
+btrfs_try_chunk_alloc() allocates the next chunk once 70% of the space of its type is used. While
+--rootdir fills the filesystem the data never shrinks, and the 30% allocated in advance is still
+allocated and empty when --shrink cuts the device at the end of its last extent: the empty data
+chunks between and after the used ones stay in the image. Seen on a live image of CleanLinux
+(zstd:15): 736 MiB of data chunks for 512 MiB of data, the partition 797 MiB instead of ~570.
+With --shrink the fill allocates a data chunk once less than the extent and the 2 MiB margin of
+the caller is free, or when the free data space is in pieces too small for the extent; metadata
+keeps its reserve (the trees without a preallocation take their blocks from it).
+
+diff -ru a/kernel-shared/ctree.h b/kernel-shared/ctree.h
+--- a/kernel-shared/ctree.h	2026-11-05 23:32:25.512838242 +0000
++++ b/kernel-shared/ctree.h	2026-11-05 23:32:25.568353161 +0000
+@@ -356,6 +356,7 @@
+ 	unsigned int ignore_chunk_tree_error:1;
+ 	unsigned int avoid_meta_chunk_alloc:1;
+ 	unsigned int avoid_sys_chunk_alloc:1;
++	unsigned int lazy_data_chunk_alloc:1;
+ 	unsigned int finalize_on_close:1;
+ 	unsigned int hide_names:1;
+ 	unsigned int allow_transid_mismatch:1;
+diff -ru a/kernel-shared/extent-tree.c b/kernel-shared/extent-tree.c
+--- a/kernel-shared/extent-tree.c	2026-11-05 23:32:25.532822727 +0000
++++ b/kernel-shared/extent-tree.c	2026-11-05 23:33:09.429809070 +0000
+@@ -1737,6 +1737,15 @@
+ 		return 0;
+ 
+ 	thresh = div_factor(space_info->total_bytes, 7);
++	/*
++	 * mkfs --rootdir --shrink: a data chunk only once the data needs it.
++	 * The 30% kept free in advance otherwise stays allocated, empty, and
++	 * the shrunk filesystem keeps it (a third of a compressed image).
++	 */
++	if (fs_info->lazy_data_chunk_alloc &&
++	    (flags & BTRFS_BLOCK_GROUP_DATA) &&
++	    !(flags & BTRFS_BLOCK_GROUP_METADATA))
++		thresh = space_info->total_bytes;
+ 	if ((space_info->bytes_used + space_info->bytes_pinned +
+ 	     space_info->bytes_reserved + alloc_bytes) < thresh)
+ 		return 0;
+@@ -2381,6 +2390,24 @@
+ 			       search_start, search_end, hint_byte, ins,
+ 			       trans->alloc_exclude_start,
+ 			       trans->alloc_exclude_nr, profile);
++	if (ret == -ENOSPC && is_data && info->lazy_data_chunk_alloc) {
++		struct btrfs_space_info *space_info;
++
++		/* The free data space is in pieces too small: one more chunk */
++		space_info = btrfs_find_space_info(info, profile);
++		if (space_info && !space_info->full) {
++			ret = btrfs_try_chunk_alloc(trans, info,
++						    space_info->total_bytes,
++						    profile);
++			BUG_ON(ret);
++			ret = find_free_extent(trans, root, num_bytes,
++					       empty_size, search_start,
++					       search_end, hint_byte, ins,
++					       trans->alloc_exclude_start,
++					       trans->alloc_exclude_nr,
++					       profile);
++		}
++	}
+ 	if (ret < 0)
+ 		return ret;
+ 	clear_extent_dirty(&info->free_space_cache,
+diff -ru a/mkfs/main.c b/mkfs/main.c
+--- a/mkfs/main.c	2026-11-05 23:32:25.552808469 +0000
++++ b/mkfs/main.c	2026-11-05 23:32:25.569670431 +0000
+@@ -2495,10 +2495,12 @@
+ 				   rif->inode_path);
+ 		}
+ 
++		fs_info->lazy_data_chunk_alloc = shrink_rootdir;
+ 		ret = btrfs_mkfs_fill_dir(trans, source_dir, root,
+ 					  &subvols, &inode_flags_list,
+ 					  compression, compression_level,
+ 					  do_reflink);
++		fs_info->lazy_data_chunk_alloc = 0;
+ 		if (ret) {
+ 			errno = -ret;
+ 			error("error while filling filesystem: %m");
