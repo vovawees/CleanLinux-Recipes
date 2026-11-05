@@ -18,9 +18,10 @@ sha256=(
 )
 
 # zic runs where the package is built: the build machine's compiler, not the target's (a cross
-# build of an aarch64 image compiles the zones on x86-64; the files are the same on every arch)
+# build of an aarch64 image compiles the zones on x86-64; the files are the same on every arch).
+# CC on the command line: the Makefile takes CC from the environment, which is the cross compiler
 do_build() {
-	env -u CFLAGS -u CPPFLAGS -u LDFLAGS make cc="${HOSTCC:-gcc}" CFLAGS=-O2 LDFLAGS= zic
+	env -u CC -u CFLAGS -u CPPFLAGS -u LDFLAGS make CC=gcc cc=gcc CFLAGS=-O2 LDFLAGS= zic
 }
 
 # the zones in the compact "slim" format (glibc and musl read it), Link names as hard links;
