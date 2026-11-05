@@ -8,6 +8,7 @@ category=platform
 # for spins that need the logind API (KDE Plasma, GNOME, polkit's active sessions); seatd is the
 # small alternative. Started by D-Bus activation or by dinit (dinitctl enable elogind)
 depends=(glibc libcap util-linux eudev dbus linux-pam)
+makedepends=(gperf)
 build_type=meson
 source=(https://github.com/elogind/elogind/archive/v$version/elogind-$version.tar.gz elogind.dinit)
 sha256=(
