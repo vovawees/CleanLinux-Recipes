@@ -21,7 +21,13 @@ do_install() {
 	[[ -z ${FIRMWARE:-} ]] || firmware_select <WHENCE.all >WHENCE
 	./copy-firmware.sh --zstd "$DESTDIR/usr/lib/firmware"
 	install -Dm644 WHENCE.all "$DESTDIR/usr/share/licenses/linux-firmware/WHENCE"
-	install -Dm644 -t "$DESTDIR/usr/share/licenses/linux-firmware" LICEN[CS]E*
+	# the licenses: LICENCE.* and LICENSE.* at the top in older releases, under LICENSES/ in newer ones
+	local f
+	for f in LICEN[CS]E* LICENSES/*; do
+		if [[ -f $f ]]; then
+			install -Dm644 -t "$DESTDIR/usr/share/licenses/linux-firmware" "$f"
+		fi
+	done
 }
 
 # WHENCE on stdin -> the entries FIRMWARE needs on stdout
