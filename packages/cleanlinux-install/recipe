@@ -1,15 +1,16 @@
 name=cleanlinux-install
-version=0.5.0
+version=0.6.0
 release=1
-summary="The CleanLinux installer: GPT, ESP and btrfs (optionally in LUKS2), the running system's packages (burn clone), fstab, the boot loader of the profile, users"
+summary="The CleanLinux installer: cleanlinux-setup (screens) and cleanlinux-install (GPT, ESP, btrfs, optionally LUKS2, burn clone, the boot loader of the profile)"
 homepage=https://github.com/vovawees/cleanlinux-install
 license=(MIT)
 category=core
 # sfdisk and libblkid (util-linux), mkfs.vfat and mkfs.btrfs, useradd (shadow), yescrypt hashes
 # (libxcrypt); burn copies the packages, cleanlinux-boot puts the kernel and the loader in the ESP
 # (systemd-boot, extlinux, rpi or android, from /usr/lib/cleanlinux/boot.d); cryptsetup for
-# --encrypt (LUKS2, opened at boot by the initramfs of cleanlinux-boot)
-depends=(glibc util-linux libxcrypt dosfstools btrfs-progs shadow burn cleanlinux-boot cryptsetup)
+# --encrypt (LUKS2, opened at boot by the initramfs of cleanlinux-boot); cleanlinux-setup loads the
+# keymaps and fonts of kbd (loadkeys, setfont) and lists the time zones of tzdata (zone.tab)
+depends=(glibc util-linux libxcrypt dosfstools btrfs-progs shadow burn cleanlinux-boot cryptsetup kbd tzdata)
 build_type=make
 source=(https://github.com/vovawees/cleanlinux-install/releases/download/v$version/cleanlinux-install-$version.tar.gz)
-sha256=(8dc116185315ec74e797e354279bcb65762f7c5de193acf9f3ce04fbe94b7caa)
+sha256=(2ee8b1696ccf98c6b413e56fe29d2288b963eb873689c174495c6916f5b501e3)

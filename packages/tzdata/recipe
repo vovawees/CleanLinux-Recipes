@@ -1,0 +1,36 @@
+name=tzdata
+version=2026f
+release=1
+summary="The time zones of the world (IANA tz database): /usr/share/zoneinfo and zone.tab"
+homepage=https://www.iana.org/time-zones
+license=(LicenseRef-tz-public-domain)
+category=core
+build_type=custom
+# the data and the code of one release (both unpack into the same directory: zic comes from
+# tzcode); only the compiled zones are installed, glibc's own zic and zdump stay out
+source=(
+	https://data.iana.org/time-zones/releases/tzdata$version.tar.gz
+	https://data.iana.org/time-zones/releases/tzcode$version.tar.gz
+)
+sha256=(
+	01b4a91cec5167ed48c11e8ab78f2048cead78ce94b0cafcad0ae8c5a3044d3d
+	5a18da01393679ef2559214dc687563f7f3d05691f6f58b7fbc0166f3e796cd6
+)
+
+# zic runs where the package is built: the build machine's compiler, not the target's (a cross
+# build of an aarch64 image compiles the zones on x86-64; the files are the same on every arch)
+do_build() {
+	env -u CFLAGS -u CPPFLAGS -u LDFLAGS make cc="${HOSTCC:-gcc}" CFLAGS=-O2 LDFLAGS= zic
+}
+
+# the zones in the compact "slim" format (glibc and musl read it), Link names as hard links;
+# zone.tab and zone1970.tab list them by country (installers, tzselect), tzdata.zi is all of the
+# data in one file (date -f, other zic users), leap-seconds.list for chrony and ntpd
+do_install() {
+	local zi=$DESTDIR/usr/share/zoneinfo
+	./zic -b slim -d "$zi" africa antarctica asia australasia europe northamerica southamerica etcetera backward factory
+	install -m644 -t "$zi" zone.tab zone1970.tab zonenow.tab iso3166.tab leap-seconds.list
+	make tzdata.zi
+	install -m644 tzdata.zi "$zi/tzdata.zi"
+	install -Dm644 LICENSE "$DESTDIR/usr/share/licenses/tzdata/LICENSE"
+}

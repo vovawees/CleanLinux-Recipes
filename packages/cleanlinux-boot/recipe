@@ -1,16 +1,16 @@
 name=cleanlinux-boot
-version=0.3.1
+version=0.4.0
 release=1
-summary="Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, getty, zram, power, kernels for the boot loader of the device)"
+summary="Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, console, getty, zram, power, kernels for the boot loader of the device, initramfs with live boot)"
 homepage=https://github.com/vovawees/cleanlinux-boot
 license=(MIT)
 category=core
 # dinit runs the services; the helper loads modules through libkmod, probes disks through libblkid
 # (initramfs), compresses the initramfs with zstd and the kernel of Android boot images with gzip;
-# udevd and agetty/login do the rest
-depends=(glibc dinit eudev kmod util-linux zstd gzip)
+# udevd and agetty/login do the rest, loadkeys and setfont of kbd the keymap and font of the consoles
+depends=(glibc dinit eudev kmod util-linux zstd gzip kbd)
 build_type=make
 # /etc/dinit.d/boot.d: "dinitctl enable" puts the services started at boot there
 options=(emptydirs)
 source=(https://github.com/vovawees/cleanlinux-boot/releases/download/v$version/cleanlinux-boot-$version.tar.gz)
-sha256=(b0f33ec52ee0cee9c45ad19f141c3ca5b45d8b15340ef8caa32abc500c8a869e)
+sha256=(7e6bc283068c8195f574b2c0a3406c7bcb49d343360295ef233d56b5548a3c76)
