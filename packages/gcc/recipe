@@ -1,6 +1,6 @@
 name=gcc
 version=16.2.0
-release=3
+release=4
 summary="GNU Compiler Collection: C and C++ compilers"
 homepage=https://gcc.gnu.org/
 license=(GPL-3.0-or-later GPL-3.0-with-GCC-exception)
@@ -55,6 +55,11 @@ do_prepare() {
 	ln -sfn "../gmp-$_gmp" gmp
 	ln -sfn "../mpfr-$_mpfr" mpfr
 	ln -sfn "../mpc-$_mpc" mpc
+	# the modules for the build machine get CFLAGS_FOR_BUILD, but CXXFLAGS of the host (the target
+	# of a cross build: -mbranch-protection reached the build machine's g++ in build-libcpp); the
+	# Makefile drops command-line overrides (MAKEOVERRIDES=), so the fix goes into Makefile.in
+	sed -i 's/^EXTRA_BUILD_FLAGS = \\$/&\n\tCXXFLAGS="$(CXXFLAGS_FOR_BUILD)" \\/' Makefile.in
+	grep -q '^	CXXFLAGS="$(CXXFLAGS_FOR_BUILD)" \\$' Makefile.in
 	# merged /usr: 64-bit libraries live in /usr/lib, not lib64
 	case $CARCH in
 		x86_64) sed -i '/m64=/s/lib64/lib/' gcc/config/i386/t-linux64 ;;
