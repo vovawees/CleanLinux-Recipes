@@ -25,7 +25,8 @@ features=(+wayland -x11 -llvmpipe -nvk video_cards_amd video_cards_intel video_c
 depends=(glibc gcc-libs expat zlib-ng zstd libdrm libglvnd eudev libdisplay-info elfutils:video_cards_amd wayland:wayland
 	libx11:x11 libxcb:x11 libxext:x11 libxfixes:x11 libxshmfence:x11 libxxf86vm:x11 libxrandr:x11
 	llvm-libs:llvmpipe)
-makedepends=(python python-mako python-pyyaml python-packaging wayland-protocols:wayland xorgproto:x11
+makedepends=(python python-mako python-pyyaml python-packaging python-pycparser:video_cards_etnaviv
+	wayland-protocols:wayland xorgproto:x11
 	glslang:video_cards_amd glslang:video_cards_intel glslang:video_cards_freedreno glslang:llvmpipe
 	llvm:llvmpipe llvm:video_cards_intel llvm:video_cards_panfrost
 	spirv-llvm-translator:video_cards_intel spirv-llvm-translator:video_cards_panfrost

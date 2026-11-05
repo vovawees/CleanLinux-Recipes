@@ -1,0 +1,12 @@
+name=python-pycparser
+version=3.12
+release=1
+summary="pycparser: a C parser in Python (Mesa generates the hardware database of etnaviv with it)"
+homepage=https://github.com/eliben/pycparser
+license=(BSD-3-Clause)
+category=devel
+depends=(python)
+makedepends=(python-build python-installer python-setuptools)
+build_type=python
+source=(https://files.pythonhosted.org/packages/source/p/pycparser/pycparser-$version.tar.gz)
+sha256=(f03387877eab82ce01bbdfd0ba7252ee55a90b1c708d5129e2ce915475cf1db6)

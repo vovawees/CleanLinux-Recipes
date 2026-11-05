@@ -272,6 +272,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `python-mako` | devel | 1.4.3 | python | Mako: the template library that generates the sources of Mesa |
 | `python-markupsafe` | devel | 3.0.4 | python | MarkupSafe: escaped strings for templates (Mako, Jinja) |
 | `python-packaging` | devel | 26.3 | custom | packaging: versions, specifiers and markers of Python packages (Mesa, build) |
+| `python-pycparser` | devel | 3.12 | python | pycparser: a C parser in Python (Mesa generates the hardware database of etnaviv with it) |
 | `python-pyproject-hooks` | devel | 1.3.3 | custom | pyproject_hooks: the PEP 517 hooks that front ends (build) call |
 | `python-pyyaml` | devel | 6.0.3 | custom | PyYAML: the YAML parser of Python (Mesa's build scripts) |
 | `python-setuptools` | devel | 84.2.1 | python | setuptools: the build backend of most Python packages with C extensions (it builds itself) |
