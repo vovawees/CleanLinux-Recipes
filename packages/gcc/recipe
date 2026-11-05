@@ -1,6 +1,6 @@
 name=gcc
 version=16.2.0
-release=2
+release=3
 summary="GNU Compiler Collection: C and C++ compilers"
 homepage=https://gcc.gnu.org/
 license=(GPL-3.0-or-later GPL-3.0-with-GCC-exception)
@@ -64,6 +64,12 @@ do_prepare() {
 
 do_configure() {
 	export CFLAGS_FOR_TARGET=$CFLAGS CXXFLAGS_FOR_TARGET=$CXXFLAGS
+	# a cross build also compiles programs for the build machine (the gen* tools, build-*/libcpp):
+	# with its own compiler and plain flags, not the target's (-mbranch-protection, --sysroot)
+	if ((CROSS)); then
+		export CC_FOR_BUILD=gcc CXX_FOR_BUILD=g++ CFLAGS_FOR_BUILD='-O2 -pipe' CXXFLAGS_FOR_BUILD='-O2 -pipe' \
+			CPPFLAGS_FOR_BUILD='' LDFLAGS_FOR_BUILD=''
+	fi
 	bt_configure
 }
 
