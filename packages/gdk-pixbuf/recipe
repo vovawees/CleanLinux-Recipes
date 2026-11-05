@@ -1,6 +1,6 @@
 name=gdk-pixbuf
 version=2.44.8
-release=2
+release=3
 summary="GdkPixbuf: image loading for GTK and the icon checks of xdg-desktop-portal (PNG, GIF, ...)"
 homepage=https://gitlab.gnome.org/GNOME/gdk-pixbuf
 license=(LGPL-2.1-or-later)
@@ -18,4 +18,8 @@ meson_args=(-Dpng=enabled -Djpeg=disabled -Dtiff=disabled -Dgif=enabled -Dglycin
 	-Dothers=disabled -Dbuiltin_loaders=all -Dgtk_doc=false -Ddocumentation=false -Dintrospection=disabled
 	-Dman=false -Dtests=false -Dinstalled_tests=false -Dthumbnailer=disabled -Drelocatable=false
 	-Dgio_sniffing=false)
-meson_extra() { meson_feature nls; }
+# no nls option in meson (the translations of po/ are always built, msgfmt of gettext): -nls drops them
+do_install() {
+	bt_install
+	if ! use nls; then rm -rf "$DESTDIR/usr/share/locale"; fi
+}
