@@ -1,6 +1,6 @@
 name=linux
 version=7.3.1
-release=13
+release=14
 summary="The Linux kernel and modules (CleanLinux defaults + profile GPU drivers)"
 homepage=https://www.kernel.org/
 license=(GPL-2.0-only)
@@ -13,8 +13,8 @@ features=(-sched_ext)
 source=(kernel://kernel/v${version%%.*}.x/linux-$version.tar.xz cleanlinux.config x86.config arm64.config)
 sha256=(
 	fa595aad93734f829c963c2a90ef7c3673224fd7fdae7b49406e397cde2de231
-	b5ea3b24d6fb9af853053165d381e3a881b21885650f7c078cba78f77c61272c
-	40632503d4312f760dae3ae27b530dc6512f2741709a655a5694688e644eabdb
+	4921326323a3a1b0c9e759e4398594757f5613dc54cc364173cb4ba4c269d075
+	f5ee005d4952ace8bb08d90eae198d383692d08d1f9d7df67b4200b9415f2b8d
 	9afafac2dc14d98baaf41f7d8ffbfc06ffb3558e0a5341e39623d1a5d819f7e9
 )
 options=(!lto !strip !hardening)

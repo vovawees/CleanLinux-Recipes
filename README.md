@@ -137,7 +137,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `ca-certificates` | core | 2026.10.20 | custom | Mozilla's trusted root certificates for TLS (the NSS bundle as extracted by curl.se) |
 | `cairo` | platform | 1.18.6 | meson | cairo: 2D vector graphics (image, PNG, PDF, PS, SVG surfaces; X11 and XCB ones with x11), drawn by pixman |
 | `ccache` | devel | 4.14.2 | cmake | Compiler cache: rebuilds of the same sources come from the cache (burn CCACHE=1) |
-| `cleanlinux-boot` | core | 0.4.1 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, console, getty, zram, power, kernels for the boot loader of the device, initramfs with live boot) |
+| `cleanlinux-boot` | core | 0.5.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, console, getty, zram, power, kernels for the boot loader of the device, initramfs with the live boot of the USB image) |
 | `cleanlinux-install` | core | 0.6.3 | make | The CleanLinux installer: cleanlinux-setup (screens) and cleanlinux-install (GPT, ESP, btrfs, optionally LUKS2, burn clone, the boot loader of the profile) |
 | `cleanlinux-profiles` | core | 2026.11.5 | custom | The hardware profiles of CleanLinux for burn: generic, native and the devices |
 | `cmake` | devel | 4.4.5 | custom | Cross-platform build system generator |
