@@ -1,6 +1,6 @@
 name=flex
 version=2.6.4
-release=1
+release=2
 summary="Fast lexical analyser generator (lex)"
 homepage=https://github.com/westes/flex
 license=(BSD-2-Clause)
@@ -11,5 +11,10 @@ build_type=autotools
 source=(https://github.com/westes/flex/releases/download/v$version/flex-$version.tar.gz)
 sha256=(e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995)
 configure_args=(--disable-static)
+# AC_FUNC_MALLOC cannot run its test when cross-compiling and would put in rpl_malloc, whose
+# lib/malloc.c (void *malloc ();) GCC 15 and newer refuse as C23: glibc's malloc(0) is not NULL
+configure_extra() {
+	if ((CROSS)); then printf '%s\n' ac_cv_func_malloc_0_nonnull=yes ac_cv_func_realloc_0_nonnull=yes; fi
+}
 # lex for the programs that call it by that name
 post_install() { ln -s flex "$DESTDIR/usr/bin/lex"; }

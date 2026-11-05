@@ -241,6 +241,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `meson` | devel | 1.12.1 | custom | Build system: fast, user friendly (most of the base is built with it) |
 | `mold` | devel | 3.0.0 | cmake | Fast linker for ELF (burn LINKER=mold) |
 | `mtdev` | platform | 1.1.7 | autotools | mtdev: multitouch protocol A to B translation for libinput |
+| `nano` | core | 9.3 | autotools | Small and friendly text editor for the console (the editor of the live ISO and of the systems it installs) |
 | `ncurses` | core | 6.6 | autotools | Terminal handling library (wide character build) |
 | `nghttp2` | core | 1.71.0 | autotools | HTTP/2 library (libnghttp2): HTTP/2 of curl, git over HTTPS and the downloads of burn |
 | `ninja` | devel | 1.13.2 | cmake | Small build system with a focus on speed (the backend of meson and cmake) |
