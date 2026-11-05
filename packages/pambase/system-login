@@ -13,7 +13,7 @@ password   include    system-auth
 session    optional   pam_loginuid.so
 session    optional   pam_keyinit.so  force revoke
 session    include    system-auth
-session    optional   pam_motd.so
+# no pam_motd: login (util-linux) prints MOTD_FILE of /etc/login.defs itself, and sshd its PrintMotd
 session    optional   pam_mail.so     dir=/var/spool/mail standard quiet
 session    optional   pam_umask.so
 # seat and session tracking for spins that install elogind; skipped while it is missing

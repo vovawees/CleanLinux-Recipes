@@ -1,6 +1,6 @@
 name=pambase
 version=2026.1
-release=2
+release=3
 summary="CleanLinux PAM stacks: system-auth, system-login, system-services, other"
 homepage=https://github.com/vovawees/CleanLinux-Recipes
 license=(MIT)
@@ -9,7 +9,7 @@ depends=(linux-pam)
 build_type=custom
 source=(system-auth system-login system-local-login system-remote-login system-services other)
 sha256=(
-	5ae00c0a619fcc0872ba9e9b089ab7a899d93f2a479dc07a6684c4ec3ee6486c fdf88485bf74277eaf46dbea3c6f6d51367a90de96ff5b8c5e26abd2599ae852
+	5ae00c0a619fcc0872ba9e9b089ab7a899d93f2a479dc07a6684c4ec3ee6486c af2ba7bb3e8e02756ec711a0fdc82a6241a7915c2d5a26955879641f6d05e629
 	e6127c70cef010111f17292cfaf0f21c45b5a2508f605c8f16099eb736e79bfd e6127c70cef010111f17292cfaf0f21c45b5a2508f605c8f16099eb736e79bfd
 	1ffadeb93b97ffd3b110c66fa1738f5dd3cfcae479792a64bce0be880a0c5133 f8beac00d68c344843c7ab6a30eb64d335533f7807d5ffe59d5f958aa0d92a80
 )
