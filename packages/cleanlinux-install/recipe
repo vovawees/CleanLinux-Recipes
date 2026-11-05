@@ -14,4 +14,4 @@ category=core
 depends=(glibc util-linux libxcrypt dosfstools btrfs-progs shadow burn cleanlinux-boot kbd tzdata)
 build_type=make
 source=(https://github.com/vovawees/cleanlinux-install/releases/download/v$version/cleanlinux-install-$version.tar.gz)
-sha256=(063b2b421d7a047103716c456b7e38348e0c26a89e7865ffcb4e63f2a2eeec7b)
+sha256=(b0d8afbbcd3b2c1fee9ebb7352025048de3ef35477e7025300e0aaff704354fb)
