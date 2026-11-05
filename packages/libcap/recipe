@@ -12,9 +12,11 @@ sha256=(0d621e562fd932ccf67b9660fb018e468a683d7b827541df27813228c996bb11)
 
 _make() {
 	# CC on the command line: the Makefiles set it from CROSS_COMPILE; the helper programs that
-	# generate headers run on the build machine (BUILD_CC); no Go bindings, no pam_cap
+	# generate headers run on the build machine (BUILD_CC); no Go bindings, no pam_cap; OBJCOPY
+	# reads the loader of a test program of the target (the build machine's objcopy may be too
+	# old for its sections, .relr.dyn)
 	make prefix=/usr lib=lib sbindir=bin GOLANG=no PAM_CAP=no RAISE_SETFCAP=no CC="$CC" BUILD_CC=gcc \
-		AR="${AR:-ar}" RANLIB="${RANLIB:-ranlib}" "$@"
+		AR="${AR:-ar}" RANLIB="${RANLIB:-ranlib}" OBJCOPY="${OBJCOPY:-objcopy}" "$@"
 }
 do_build() { _make; }
 do_install() {
