@@ -1,10 +1,20 @@
 name=alsa-ucm-conf
 version=1.2.16.1
-release=1
+release=2
 summary="ALSA Use Case Manager profiles: sound routing of laptops, handhelds and SoCs (SOF, Snapdragon, ...)"
 homepage=https://github.com/alsa-project/alsa-ucm-conf
-license=(BSD-3-Clause)
+# upstream: BSD-3-Clause; the handheld profiles of ucm2/ here come from ROCKNIX (GPL-2.0)
+license=(BSD-3-Clause GPL-2.0-only)
 category=drivers
+# Snapdragon handhelds route their sound through the SoC's audio DSP: without a UCM profile of the
+# card nothing plays. Upstream has none for them yet, so ucm2/ here adds ROCKNIX's (see README.md):
+# AYN Odin (SDM845), Odin 2 / Mini / Portal and Thor (SM8550), Odin 3 (SM8750), AYANEO Pocket
+# ACE / DMG / DS / EVO (SM8550) and S2 (SM8650), Retroid Pocket 5 / Mini / Flip 2 (SM8250, with
+# HDMI over USB-C), Retroid Pocket Duo Lite (SM6125), AYN Thor Lite, Mangmi AIR Y Pro and Pocket
+# Max (SM8250), Mangmi AIR X and AIR Y (SM6115). Each profile matches only its card (the card's
+# driver and long name: the device tree's model, or vendor-product of the DMI tables on UEFI), so
+# other machines see upstream alone. The Steam Deck LCD is upstream's (acp5x), the OLED's profile
+# comes with steamdeck-dsp (nonfree).
 build_type=custom
 source=(https://www.alsa-project.org/files/pub/lib/alsa-ucm-conf-$version.tar.bz2)
 sha256=(cf3d1c07e089a83c4ece2c20f05dd6a8aab7fcd108768c38811386880575492b)
@@ -13,5 +23,8 @@ do_build() { :; }
 do_install() {
 	install -d "$DESTDIR/usr/share/alsa"
 	cp -r ucm2 "$DESTDIR/usr/share/alsa/"
+	# the handheld profiles over upstream's tree (new files only: no upstream file is replaced)
+	cp -R "$FILES/ucm2" "$DESTDIR/usr/share/alsa/"
 	install -Dm644 LICENSE "$DESTDIR/usr/share/licenses/alsa-ucm-conf/LICENSE"
+	install -Dm644 "$FILES/README.md" "$DESTDIR/usr/share/licenses/alsa-ucm-conf/handhelds.md"
 }
