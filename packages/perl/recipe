@@ -1,6 +1,6 @@
 name=perl
 version=5.44.0
-release=1
+release=2
 summary="The Perl 5 language: autoconf, automake, OpenSSL and kernel builds need it"
 homepage=https://www.perl.org
 license=(GPL-1.0-or-later Artistic-1.0-Perl)
@@ -27,5 +27,6 @@ do_configure() {
 		-Dpager="/usr/bin/less -isR" -Duseshrplib -Dusethreads -Dcc="$CC" \
 		-Doptimize="$CFLAGS" -Dldflags="$LDFLAGS" -Dlddlflags="-shared $LDFLAGS"
 }
-do_build() { make; }
-do_install() { make DESTDIR="$DESTDIR" install; }
+# libperl.so with its name as SONAME: perl needs it by that name, and burn knows who provides it
+do_build() { make SHRPLDFLAGS='$(LDDLFLAGS) -Wl,-soname,libperl.so'; }
+do_install() { make SHRPLDFLAGS='$(LDDLFLAGS) -Wl,-soname,libperl.so' DESTDIR="$DESTDIR" install; }
