@@ -1,16 +1,17 @@
 name=cleanlinux-install
-version=0.6.3
+version=0.7.0
 release=1
-summary="The CleanLinux installer: cleanlinux-setup (screens) and cleanlinux-install (GPT, ESP, btrfs, optionally LUKS2, burn clone, the boot loader of the profile)"
+summary="The CleanLinux installer: cleanlinux-setup (screens) and cleanlinux-install (GPT, ESP, btrfs, a copy of the live medium with its drivers and desktop, the boot loader of the profile)"
 homepage=https://github.com/vovawees/cleanlinux-install
 license=(MIT)
 category=core
 # sfdisk and libblkid (util-linux), mkfs.vfat and mkfs.btrfs, useradd (shadow), yescrypt hashes
-# (libxcrypt); burn copies the packages, cleanlinux-boot puts the kernel and the loader in the ESP
-# (systemd-boot, extlinux, rpi or android, from /usr/lib/cleanlinux/boot.d); cryptsetup for
-# --encrypt (LUKS2, opened at boot by the initramfs of cleanlinux-boot); cleanlinux-setup loads the
-# keymaps and fonts of kbd (loadkeys, setfont) and lists the time zones of tzdata (zone.tab)
-depends=(glibc util-linux libxcrypt dosfstools btrfs-progs shadow burn cleanlinux-boot cryptsetup kbd tzdata)
+# (libxcrypt); the system is copied from the live medium (no package is built or downloaded), burn
+# clones the packages with --clone; cleanlinux-boot puts the kernel and the loader in the ESP
+# (systemd-boot, extlinux, rpi or android, from /usr/lib/cleanlinux/boot.d); cleanlinux-setup loads
+# the keymaps and fonts of kbd (loadkeys, setfont) and lists the time zones of tzdata (zone.tab).
+# No disk encryption: the base system has no cryptsetup
+depends=(glibc util-linux libxcrypt dosfstools btrfs-progs shadow burn cleanlinux-boot kbd tzdata)
 build_type=make
 source=(https://github.com/vovawees/cleanlinux-install/releases/download/v$version/cleanlinux-install-$version.tar.gz)
-sha256=(4f158b17dcce605e5e1328a665dca9f817cd9952b2cfa593ab9c21e062c14479)
+sha256=(a171e455860fe0c1bc0d9fb3f3ad0f7d8ca103592bd1a9b02a8cfe12160b19e4)
