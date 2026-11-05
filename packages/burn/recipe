@@ -1,5 +1,5 @@
 name=burn
-version=0.9.2
+version=0.9.3
 release=1
 summary="The CleanLinux package manager: source based, rolling+++"
 homepage=https://github.com/vovawees/burn
@@ -13,7 +13,7 @@ build_type=make
 make_args=(CURL=1)
 source=(https://github.com/vovawees/burn/releases/download/v$version/burn-$version.tar.gz burn.sysusers)
 sha256=(
-	f0661ba0b83f2faaf44f19dd406a8646a47188cc16c6bb46a85b805dac259edd
+	2e62561d3c470c27517054093be8a2cad74c980b94bb423653514997d5d48574
 	17f344844d9f6418d11c3c8ef3cfb03b673f42270b4918c32629e94b43844a3a
 )
 

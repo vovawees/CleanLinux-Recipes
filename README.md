@@ -133,7 +133,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `bluez` | drivers | 5.87 | autotools | BlueZ: the Bluetooth daemon (bluetoothd), bluetoothctl and libbluetooth |
 | `btrfs-progs` | core | 7.3 | autotools | btrfs filesystem tools: mkfs.btrfs, btrfs (subvolumes, snapshots, scrub, send), btrfsck |
 | `bubblewrap` | platform | 0.13.1 | meson | bubblewrap (bwrap): unprivileged sandboxes in user namespaces (xdg-desktop-portal, Flatpak, Steam) |
-| `burn` | core | 0.9.2 | make | The CleanLinux package manager: source based, rolling+++ |
+| `burn` | core | 0.9.3 | make | The CleanLinux package manager: source based, rolling+++ |
 | `bzip2` | core | 1.0.8 | custom | Block-sorting file compressor and libbz2 |
 | `ca-certificates` | core | 2026.10.20 | custom | Mozilla's trusted root certificates for TLS (the NSS bundle as extracted by curl.se) |
 | `cairo` | platform | 1.18.6 | meson | cairo: 2D vector graphics (image, PNG, PDF, PS, SVG surfaces; X11 and XCB ones with x11), drawn by pixman |
