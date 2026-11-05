@@ -1,0 +1,43 @@
+gawk 5.4.1: an array element first used as a number or a condition prints "0" instead of ""
+
+5.4.1 turns a new (untyped) array element into a scalar as soon as it is used (eval.c
+elem_new_to_scalar() sets Node_val before unref, test mdim9), but elem_new_reset() before it
+clears fields that share their memory with stfmt, and force_string_fmt() of 5.4.1 reformats a
+value whose stfmt is not STFMT_UNUSED from its number. So
+
+    BEGIN { if (!a["k"]) x = 1; print "[" a["k"] "]" }
+
+prints [0], and libpng's scripts/options.awk writes a pnglibconf.h without PNG_READ_SUPPORTED
+and PNG_SETJMP_SUPPORTED (the native build of libpng 1.6.59 fails). An untyped element holds the
+null string: STFMT_UNUSED again wherever it becomes a value. The test suite of gawk passes.
+
+--- a/awk.h
++++ b/awk.h
+@@ -2043,6 +2043,7 @@
+ 	if (s->type == Node_elem_new) {
+ 		elem_new_reset(s);
+ 		s->type = Node_val;
++		s->stfmt = STFMT_UNUSED;	/* elem_new_reset() may clobber it */
+ 
+ 		return s;
+ 	}
+--- a/eval.c
++++ b/eval.c
+@@ -1952,6 +1952,7 @@
+ 	elem_new_reset(n);
+ 
+ 	n->type = Node_val;
++	n->stfmt = STFMT_UNUSED;	/* elem_new_reset() may clobber it */
+ 
+ 	if (n->valref > 1) {
+ 		unref(n);
+--- a/node.c
++++ b/node.c
+@@ -62,6 +62,7 @@
+ 	if (n->type == Node_elem_new) {
+ 		elem_new_reset(n);
+ 		n->type = Node_val;
++		n->stfmt = STFMT_UNUSED;	/* elem_new_reset() may clobber it */
+ 
+ 		return n;
+ 	}
