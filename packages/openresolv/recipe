@@ -1,6 +1,6 @@
 name=openresolv
 version=3.17.4
-release=1
+release=2
 summary="resolvconf: /etc/resolv.conf from DHCP clients, VPNs and local resolvers"
 homepage=https://roy.marples.name/projects/openresolv
 license=(BSD-2-Clause)
@@ -17,4 +17,9 @@ do_configure() {
 		--rundir=/run --mandir=/usr/share/man
 }
 do_build() { make; }
-do_install() { make DESTDIR="$DESTDIR" install; }
+do_install() {
+	make DESTDIR="$DESTDIR" install
+	# glibc is built without nscd: no "dinitctl restart nscd" (and dinit's complaint) on every update
+	printf '%s\n' '' '# glibc has no nscd here: no service to restart when resolv.conf changes' 'libc_restart=true' \
+		>>"$DESTDIR/etc/resolvconf.conf"
+}
