@@ -1,6 +1,6 @@
 name=libxkbcommon
 version=1.13.2
-release=3
+release=4
 summary="libxkbcommon: keymaps and keyboard state for Wayland compositors and clients, xkbregistry, xkbcli"
 homepage=https://xkbcommon.org/
 license=(MIT)
