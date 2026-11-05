@@ -1,0 +1,25 @@
+name=nano
+version=9.3
+release=1
+summary="Small and friendly text editor for the console (the editor of the live ISO and of the systems it installs)"
+homepage=https://www.nano-editor.org/
+license=(GPL-3.0-or-later)
+category=core
+features=(+nls)
+depends=(glibc ncurses)
+source=(gnu://nano/nano-$version.tar.xz)
+sha256=(a9affc52c9596ee0682bcdd4ceb3c0b235eb221d83d733dfd9b0dff45897cb0d)
+# no libmagic (the type of a file by its content): syntax highlighting goes by the file name
+configure_args=(--sysconfdir=/etc --disable-libmagic --enable-utf8)
+configure_extra() { use_enable nls; }
+backup=(etc/nanorc)
+
+# /etc/nanorc: the sample configuration, with the syntax highlighting of every language nano
+# knows switched on
+post_install() {
+	sed -e 's|@PKGDATADIR@|/usr/share/nano|g' \
+		-e 's|^# include /usr/share/nano/\*\.nanorc$|include /usr/share/nano/*.nanorc|' \
+		doc/sample.nanorc.in >nanorc
+	grep -qx 'include /usr/share/nano/\*\.nanorc' nanorc
+	install -Dm644 nanorc "$DESTDIR/etc/nanorc"
+}
