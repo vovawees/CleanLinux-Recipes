@@ -139,7 +139,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `ccache` | devel | 4.14.2 | cmake | Compiler cache: rebuilds of the same sources come from the cache (burn CCACHE=1) |
 | `cleanlinux-boot` | core | 0.4.1 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, console, getty, zram, power, kernels for the boot loader of the device, initramfs with live boot) |
 | `cleanlinux-install` | core | 0.6.3 | make | The CleanLinux installer: cleanlinux-setup (screens) and cleanlinux-install (GPT, ESP, btrfs, optionally LUKS2, burn clone, the boot loader of the profile) |
-| `cleanlinux-profiles` | core | 2026.11.4.2 | custom | The hardware profiles of CleanLinux for burn: generic, native and the devices |
+| `cleanlinux-profiles` | core | 2026.11.5 | custom | The hardware profiles of CleanLinux for burn: generic, native and the devices |
 | `cmake` | devel | 4.4.5 | custom | Cross-platform build system generator |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
 | `cryptsetup` | core | 2.8.8 | autotools | cryptsetup: disk encryption with dm-crypt (LUKS2, LUKS1, BitLocker, VeraCrypt), veritysetup, integritysetup |

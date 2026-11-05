@@ -1,5 +1,5 @@
 name=cleanlinux-profiles
-version=2026.11.4.2
+version=2026.11.5
 release=1
 summary="The hardware profiles of CleanLinux for burn: generic, native and the devices"
 homepage=https://github.com/vovawees/CleanLinux/tree/main/profiles
@@ -9,7 +9,7 @@ build_type=custom
 # profiles/ of the CleanLinux repository (tools/profiles-tarball.sh, release profiles-VERSION);
 # burn reads them from /usr/share/burn/profiles, /etc/burn/profiles comes first
 source=(https://github.com/vovawees/CleanLinux/releases/download/profiles-$version/cleanlinux-profiles-$version.tar.gz)
-sha256=(29587b8140e6a3dca742f98956b1972f2585c595d2534c8fc9da6c3af759d807)
+sha256=(f7c3d59039e471b0595ed80725356a16d00e8b66de6423e43179a3b9e11a2759)
 
 do_build() { :; }
 do_install() {
