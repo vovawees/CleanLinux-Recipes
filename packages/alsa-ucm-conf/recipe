@@ -1,6 +1,6 @@
 name=alsa-ucm-conf
 version=1.2.16.1
-release=2
+release=3
 summary="ALSA Use Case Manager profiles: sound routing of laptops, handhelds and SoCs (SOF, Snapdragon, ...)"
 homepage=https://github.com/alsa-project/alsa-ucm-conf
 # upstream: BSD-3-Clause; the handheld profiles of ucm2/ here come from ROCKNIX (GPL-2.0)
@@ -23,8 +23,9 @@ do_build() { :; }
 do_install() {
 	install -d "$DESTDIR/usr/share/alsa"
 	cp -r ucm2 "$DESTDIR/usr/share/alsa/"
-	# the handheld profiles over upstream's tree (new files only: no upstream file is replaced)
-	cp -R "$FILES/ucm2" "$DESTDIR/usr/share/alsa/"
+	# the handheld profiles over upstream's tree (new files only: no upstream file is replaced); a
+	# directory tree is no source= file (FILES holds those flat), it comes from the recipe's directory
+	cp -R "${RECIPE_DIR:?}/ucm2" "$DESTDIR/usr/share/alsa/"
 	install -Dm644 LICENSE "$DESTDIR/usr/share/licenses/alsa-ucm-conf/LICENSE"
-	install -Dm644 "$FILES/README.md" "$DESTDIR/usr/share/licenses/alsa-ucm-conf/handhelds.md"
+	install -Dm644 "$RECIPE_DIR/README.md" "$DESTDIR/usr/share/licenses/alsa-ucm-conf/handhelds.md"
 }
