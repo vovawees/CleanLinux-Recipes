@@ -1,6 +1,6 @@
 name=elogind
 version=257.16
-release=1
+release=2
 summary="elogind: the logind API of systemd without systemd (sessions, seats, device access, suspend)"
 homepage=https://github.com/elogind/elogind
 license=(LGPL-2.1-or-later GPL-2.0-or-later)
@@ -12,13 +12,15 @@ build_type=meson
 source=(https://github.com/elogind/elogind/archive/v$version/elogind-$version.tar.gz elogind.dinit)
 sha256=(
 	3c8146409bfb9daa77f272212c2b0bf0ae727c782ec87ece0d2d25e0e5bf5f4c
-	68b6b81d411e383ab6eef6ee7473a839d2ec34c4669710f0369238888b802a44
+	fa0bbe9b1151aa2e9b2b60cbceb1d0a73ed81a7cc7cdee96240458e76578b11b
 )
-# dinit powers off and reboots; PAM files go next to the other vendor files (/usr/lib/pam.d)
+# dinit powers off and reboots; PAM files go next to the other vendor files (/usr/lib/pam.d). polkit
+# decides who may power off, reboot and suspend (the active local user may: the policy of elogind), so
+# a desktop needs no sudo for its session menu; elogind only talks to polkitd over D-Bus
 meson_args=(-Dmode=release -Dman=disabled -Dhtml=disabled -Dtests=false -Dpamlibdir=/usr/lib/security
 	-Dpamconfdir=/usr/lib/pam.d -Dhalt-path=/usr/bin/halt -Dpoweroff-path=/usr/bin/poweroff
 	-Dreboot-path=/usr/bin/reboot -Dkexec-path=/usr/bin/kexec -Dnologin-path=/usr/bin/nologin
-	-Dpam=enabled -Dacl=disabled -Daudit=disabled -Dselinux=disabled -Dsmack=false -Dpolkit=disabled
+	-Dpam=enabled -Dacl=disabled -Daudit=disabled -Dselinux=disabled -Dsmack=false -Dpolkit=enabled
 	-Dutmp=false -Dzshcompletiondir=no -Dbashcompletiondir=no -Dtranslations=false)
 
 post_install() {

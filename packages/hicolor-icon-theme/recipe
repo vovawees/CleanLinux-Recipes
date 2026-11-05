@@ -1,0 +1,10 @@
+name=hicolor-icon-theme
+version=0.18
+release=1
+summary="hicolor: the fallback icon theme of freedesktop.org (its directories, where apps put their icons)"
+homepage=https://gitlab.freedesktop.org/xdg/default-icon-theme
+license=(GPL-2.0-or-later)
+category=platform
+build_type=meson
+source=(https://icon-theme.freedesktop.org/releases/hicolor-icon-theme-$version.tar.xz)
+sha256=(db0e50a80aa3bf64bb45cbca5cf9f75efd9348cf2ac690b907435238c3cf81d7)

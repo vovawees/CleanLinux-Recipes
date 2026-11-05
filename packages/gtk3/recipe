@@ -1,0 +1,30 @@
+name=gtk3
+version=3.24.52
+release=1
+summary="GTK 3: the widget toolkit of panels and small apps (Wayland only: no X11, no Broadway)"
+homepage=https://www.gtk.org/
+license=(LGPL-2.1-or-later)
+category=platform
+features=(+nls)
+# the Wayland backend only (wlroots compositors: labwc); printing to a file only (no CUPS), no colord,
+# no tracker, no introspection; the Adwaita theme is built in (dark with
+# gtk-application-prefer-dark-theme). Icons come from the spins: PNG (symbolic icons as .symbolic.png,
+# which GTK recolours), SVG through gdk-pixbuf-nanosvg
+depends=(glibc glib pango cairo gdk-pixbuf libepoxy at-spi2-core fribidi harfbuzz fontconfig libxkbcommon
+	wayland)
+makedepends=(wayland-protocols)
+build_type=meson
+source=(https://download.gnome.org/sources/gtk/${version%.*}/gtk-$version.tar.xz gtk3.trigger)
+sha256=(
+	80931fa472a77b9a164f6740e3c0b444fac6770054632d35a7ff9d679e5e7b9f
+	a54bf8d0e11db418ca39ed86725ec49761c61445784e0af2c7453afcfb5af882
+)
+meson_args=(-Dwayland_backend=true -Dx11_backend=false -Dbroadway_backend=false -Dwin32_backend=false
+	-Dquartz_backend=false -Dxinerama=no -Dcloudproviders=false -Dprofiler=false -Dtracker3=false
+	-Dprint_backends=file -Dcolord=no -Dintrospection=false -Ddemos=false -Dexamples=false -Dtests=false
+	-Dinstalled_tests=false -Dgtk_doc=false -Dman=false)
+
+post_install() {
+	# the schemas are compiled on the device (gtk3.trigger), as the font cache is
+	install -Dm644 "$FILES/gtk3.trigger" "$DESTDIR/usr/share/burn/triggers/gtk3.trigger"
+}

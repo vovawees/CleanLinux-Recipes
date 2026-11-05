@@ -1,5 +1,5 @@
 name=cleanlinux-install
-version=0.7.1
+version=0.8.0
 release=1
 summary="The CleanLinux installer: cleanlinux-setup (screens) and cleanlinux-install (GPT, ESP, btrfs, a copy of the live medium with its drivers and desktop, the boot loader of the profile)"
 homepage=https://github.com/vovawees/cleanlinux-install
@@ -14,4 +14,4 @@ category=core
 depends=(glibc util-linux libxcrypt dosfstools btrfs-progs shadow burn cleanlinux-boot kbd tzdata)
 build_type=make
 source=(https://github.com/vovawees/cleanlinux-install/releases/download/v$version/cleanlinux-install-$version.tar.gz)
-sha256=(bc580b329a246803285bf9e011e65ca5a00c49156b1092660404839f59399dd9)
+sha256=(46ef0a565bb93eca677926463743996b57d9ddcebcde035406b7fa9f513b5f8e)

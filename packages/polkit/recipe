@@ -1,6 +1,6 @@
 name=polkit
 version=128
-release=1
+release=2
 summary="polkit: authorization for privileged actions of unprivileged programs (rules in JavaScript)"
 homepage=https://github.com/polkit-org/polkit
 license=(LGPL-2.0-or-later)
@@ -8,10 +8,12 @@ category=platform
 # active sessions come from elogind; the rules run in Duktape; members of wheel are the admins
 depends=(glibc glib expat duktape linux-pam elogind)
 build_type=meson
-source=(https://github.com/polkit-org/polkit/archive/$version/polkit-$version.tar.gz polkit.sysusers)
+source=(https://github.com/polkit-org/polkit/archive/$version/polkit-$version.tar.gz polkit.sysusers
+	polkit.dinit)
 sha256=(
 	6edb06bf1448e49e428f9597a97af6a05d62146dd0b58f86eeaebcee3f5ecfaa
 	9b42c233390796c3c6fe09c4047c18cbb5c8bae7613cb2c31eaa71991c0505d0
+	1c11a094db124759fe3f20b765003e8a42c674075b9c2988cc9cdffc13d99b33
 )
 meson_args=(-Dsession_tracking=elogind -Dpolkitd_user=polkitd -Dprivileged_group=wheel -Dauthfw=pam
 	-Dpam_include=system-auth -Dpam_module_dir=/usr/lib/security -Dpam_prefix=/usr/lib/pam.d
@@ -19,5 +21,13 @@ meson_args=(-Dsession_tracking=elogind -Dpolkitd_user=polkitd -Dprivileged_group
 
 post_install() {
 	install -Dm644 "$FILES/polkit.sysusers" "$DESTDIR/usr/lib/sysusers.d/polkit.conf"
+	# dinit starts polkitd at boot, as the other system services (no D-Bus activation)
+	install -Dm644 "$FILES/polkit.dinit" "$DESTDIR/usr/lib/dinit.d/polkitd"
 	rm -rf "$DESTDIR/usr/lib/systemd"
+	# meson makes the rules directories 0700 for the user polkitd, which a package cannot own: the
+	# rules are no secret, polkitd has to read them
+	local d
+	for d in etc/polkit-1/rules.d usr/share/polkit-1/rules.d; do
+		if [[ -d $DESTDIR/$d ]]; then chmod 755 "$DESTDIR/$d"; fi
+	done
 }

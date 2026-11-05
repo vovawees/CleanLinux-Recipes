@@ -1,0 +1,13 @@
+name=gtk-layer-shell
+version=0.10.1
+release=1
+summary="gtk-layer-shell: GTK 3 windows as layers of a Wayland desktop (panels, docks, notifications)"
+homepage=https://github.com/wmww/gtk-layer-shell
+license=(LGPL-3.0-or-later MIT)
+category=platform
+depends=(glibc gtk3 wayland)
+makedepends=(wayland-protocols)
+build_type=meson
+source=(gtk-layer-shell-$version.tar.gz::https://github.com/wmww/gtk-layer-shell/archive/refs/tags/v$version.tar.gz)
+sha256=(88c3a3e0a5300532f3d368d5df64838a87f1fb85273f22d41df0a6b8d0ec59c6)
+meson_args=(-Dintrospection=false -Dvapi=false -Ddocs=false -Dexamples=false -Dtests=false)

@@ -1,0 +1,13 @@
+name=at-spi2-core
+version=2.62.1
+release=1
+summary="ATK, the accessibility interfaces that GTK 3 needs (at-spi2-core built as ATK only)"
+homepage=https://gitlab.gnome.org/GNOME/at-spi2-core
+license=(LGPL-2.1-or-later)
+category=platform
+# only the ATK library: the AT-SPI bus for screen readers (dbus-1, X11) is for the spins that need it
+depends=(glibc glib libxml2)
+build_type=meson
+source=(https://download.gnome.org/sources/at-spi2-core/${version%.*}/at-spi2-core-$version.tar.xz)
+sha256=(cca6b6a86e4389d89b370288761ce2385ddeceb10c4412da78689bc30c88af2d)
+meson_args=(-Datk_only=true -Dx11=disabled -Dintrospection=disabled -Ddocs=false -Duse_systemd=false)

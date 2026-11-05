@@ -1,0 +1,8 @@
+# polkitd: the authority that elogind and other services ask whether a user may do a privileged action
+type = process
+command = /usr/lib/polkit-1/polkitd --no-debug
+run-as = polkitd
+restart = true
+smooth-recovery = true
+log-type = buffer
+depends-on: dbus

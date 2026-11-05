@@ -121,6 +121,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `alsa-lib` | drivers | 1.2.16.1 | autotools | ALSA library: the userspace sound API of Linux (PCM, mixer, UCM, plugins) |
 | `alsa-ucm-conf` | drivers | 1.2.16.1 | custom | ALSA Use Case Manager profiles: sound routing of laptops, handhelds and SoCs (SOF, Snapdragon, ...) |
 | `alsa-utils` | drivers | 1.2.16 | autotools | ALSA tools: alsamixer, amixer, aplay, arecord, alsactl (mixer state across reboots) |
+| `at-spi2-core` | platform | 2.62.1 | meson | ATK, the accessibility interfaces that GTK 3 needs (at-spi2-core built as ATK only) |
 | `autoconf` | devel | 2.73 | autotools | GNU autoconf: configure scripts from configure.ac |
 | `automake` | devel | 1.19 | autotools | GNU automake: Makefile.in from Makefile.am |
 | `base-devel` | meta | 2026.1 | meta | Everything needed to build any recipe natively (meta package) |
@@ -137,8 +138,8 @@ Upstream определяется по ссылкам самого рецепт�
 | `ca-certificates` | core | 2026.10.20 | custom | Mozilla's trusted root certificates for TLS (the NSS bundle as extracted by curl.se) |
 | `cairo` | platform | 1.18.6 | meson | cairo: 2D vector graphics (image, PNG, PDF, PS, SVG surfaces; X11 and XCB ones with x11), drawn by pixman |
 | `ccache` | devel | 4.14.2 | cmake | Compiler cache: rebuilds of the same sources come from the cache (burn CCACHE=1) |
-| `cleanlinux-boot` | core | 0.5.0 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, console, getty, zram, power, kernels for the boot loader of the device, initramfs with the live boot of the USB image) |
-| `cleanlinux-install` | core | 0.7.1 | make | The CleanLinux installer: cleanlinux-setup (screens) and cleanlinux-install (GPT, ESP, btrfs, a copy of the live medium with its drivers and desktop, the boot loader of the profile) |
+| `cleanlinux-boot` | core | 0.5.1 | make | Boot of CleanLinux: dinit services and their C helper (early filesystems, devices, clock, console, getty, zram, power, kernels for the boot loader of the device, initramfs with the live boot of the USB image) |
+| `cleanlinux-install` | core | 0.8.0 | make | The CleanLinux installer: cleanlinux-setup (screens) and cleanlinux-install (GPT, ESP, btrfs, a copy of the live medium with its drivers and desktop, the boot loader of the profile) |
 | `cleanlinux-profiles` | core | 2026.11.5 | custom | The hardware profiles of CleanLinux for burn: generic, native and the devices |
 | `cmake` | devel | 4.4.5 | custom | Cross-platform build system generator |
 | `coreutils` | core | 9.12 | autotools | GNU core utilities: ls, cp, mv, cat, ... |
@@ -167,6 +168,7 @@ Upstream определяется по ссылкам самого рецепт�
 | `gawk` | core | 5.4.1 | autotools | GNU awk |
 | `gcc` | devel | 16.2.0 | autotools | GNU Compiler Collection: C and C++ compilers |
 | `gdbm` | core | 1.26 | autotools | GNU dbm: key/value database library (man-db's index) |
+| `gdk-pixbuf-nanosvg` | platform | 1.0 | custom | SVG for gdk-pixbuf without librsvg: a loader module drawn by NanoSVG (icons, wallpapers) |
 | `gdk-pixbuf` | platform | 2.44.8 | meson | GdkPixbuf: image loading for GTK and the icon checks of xdg-desktop-portal (PNG, GIF, ...) |
 | `gettext` | devel | 1.0 | autotools | GNU gettext tools: msgfmt, xgettext, autopoint (glibc has libintl itself) |
 | `git` | core | 2.56.0 | custom | Distributed version control system |
@@ -178,9 +180,12 @@ Upstream определяется по ссылкам самого рецепт�
 | `groff` | core | 1.24.2 | autotools | GNU troff: formats manual pages for the terminal |
 | `gst-plugins-base` | platform | 1.28.8 | meson | GStreamer base plugins and libraries (pbutils, audio, video, app): playback, conversion, ALSA |
 | `gstreamer` | platform | 1.28.8 | meson | GStreamer: the multimedia framework core (pipelines, plugin registry, gst-launch-1.0, gst-inspect-1.0) |
+| `gtk-layer-shell` | platform | 0.10.1 | meson | gtk-layer-shell: GTK 3 windows as layers of a Wayland desktop (panels, docks, notifications) |
+| `gtk3` | platform | 3.24.52 | meson | GTK 3: the widget toolkit of panels and small apps (Wayland only: no X11, no Broadway) |
 | `gzip` | core | 1.15 | autotools | GNU gzip compression utility |
 | `hardware` | drivers | 1 | custom | The hardware profile of the device: its quirks (udev rules, hwdb, modprobe.d, sysctl.d), boot modules, kernel command line and boot loader |
 | `harfbuzz` | platform | 15.0.0 | meson | HarfBuzz: the text shaping engine (OpenType layout of every script) |
+| `hicolor-icon-theme` | platform | 0.18 | meson | hicolor: the fallback icon theme of freedesktop.org (its directories, where apps put their icons) |
 | `hwdata` | platform | 0.413 | autotools | hwdata: PCI, USB and PNP id databases (lspci, lsusb, libdisplay-info) |
 | `iio-sensor-proxy` | platform | 3.9 | meson | iio-sensor-proxy: the accelerometer, light, compass and proximity sensors over D-Bus (screen rotation of desktops) |
 | `iproute2` | core | 7.3.0 | custom | IP routing utilities: ip, ss, bridge, tc |

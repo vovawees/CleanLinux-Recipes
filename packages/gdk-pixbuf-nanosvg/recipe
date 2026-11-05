@@ -1,0 +1,48 @@
+name=gdk-pixbuf-nanosvg
+version=1.0
+release=1
+_nanosvg=239e102ec2c691f2902e20ace2ed36ee4a35cfe6 # NanoSVG has no releases: a commit of 2026-07-09
+summary="SVG for gdk-pixbuf without librsvg: a loader module drawn by NanoSVG (icons, wallpapers)"
+homepage=https://github.com/memononen/nanosvg
+license=(MIT Zlib)
+category=platform
+# io-nanosvg.c is the loader (MIT, this repository); NanoSVG (zlib) is two headers it includes. It
+# draws paths, shapes, gradients and transforms, not text, filters or CSS: enough for the scalable
+# icons of apps and for wallpapers (swaybg, swaylock). The other loaders are built into gdk-pixbuf, so
+# loaders.cache lists this module only
+depends=(glibc glib gdk-pixbuf)
+build_type=custom
+source=(nanosvg-$_nanosvg.tar.gz::https://github.com/memononen/nanosvg/archive/$_nanosvg.tar.gz io-nanosvg.c)
+sha256=(
+	2bc68bdb518d7800252042e5cad50a0ab321596f0cbf49ef2a752926329063d2
+	bd342086a5db3544c73d0015c644b3b9eaeb544521ce7a607c675a4f1a351b52
+)
+srcdir=nanosvg-$_nanosvg
+
+_moddir=/usr/lib/gdk-pixbuf-2.0/2.10.0
+
+do_build() {
+	local -a cflags ldflags pc
+	read -ra cflags <<<"$CFLAGS"
+	read -ra ldflags <<<"$LDFLAGS"
+	read -ra pc <<<"$(pkg-config --cflags --libs gdk-pixbuf-2.0 gmodule-2.0)"
+	"$CC" "${cflags[@]}" -fPIC -shared -Isrc -o libpixbufloader-nanosvg.so "$FILES/io-nanosvg.c" "${ldflags[@]}" \
+		"${pc[@]}" -lm
+}
+
+do_install() {
+	install -Dm755 libpixbufloader-nanosvg.so "$DESTDIR$_moddir/loaders/libpixbufloader-nanosvg.so"
+	# what gdk-pixbuf-query-loaders writes (it cannot run the module of a cross build)
+	cat >"$DESTDIR$_moddir/loaders.cache" <<-CACHE
+		# GdkPixbuf Image Loader Modules file (gdk-pixbuf-nanosvg)
+		#
+		"$_moddir/loaders/libpixbufloader-nanosvg.so"
+		"svg" 6 "gdk-pixbuf" "Scalable Vector Graphics (NanoSVG)" "MIT"
+		"image/svg+xml" "image/svg" "image/svg-xml" "image/vnd.adobe.svg+xml" "text/xml-svg" ""
+		"svg" ""
+		" <svg" "*    " 100
+		" <!DOCTYPE svg" "*             " 100
+
+	CACHE
+	install -Dm644 LICENSE.txt "$DESTDIR/usr/share/licenses/$name/NanoSVG.txt"
+}
