@@ -1,6 +1,6 @@
 name=nvidia
 version=595.104.02
-release=1
+release=2
 summary="NVIDIA driver: open kernel modules, GSP firmware, OpenGL, EGL, Vulkan, GBM, NVENC/NVDEC, the CUDA driver, nvidia-smi"
 homepage=https://www.nvidia.com/en-us/drivers/unix/
 license=(LicenseRef-NVIDIA-Driver GPL-2.0-only MIT)
@@ -46,7 +46,9 @@ _kmake() {
 
 do_prepare() {
 	[[ $CARCH == x86_64 ]] || die "nvidia: the driver of this recipe is for x86_64"
-	sh "$FILES/$_nv.run" --extract-only --target "$WORK/$_nv" >/dev/null
+	# the archive keeps the owners of NVIDIA's build machine; as uid 0 of a user namespace
+	# (native build in the root) tar would chown to them and fail with "Extraction failed"
+	TAR_OPTIONS=--no-same-owner sh "$FILES/$_nv.run" --extract-only --target "$WORK/$_nv" >/dev/null
 }
 
 # the tree of the installed kernel: its config and exported symbols, then modules_prepare
